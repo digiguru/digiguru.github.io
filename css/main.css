@@ -103,9 +103,9 @@ ul.posts span {
   text-decoration: none;
 }
 .site header .logo :hover {
-  -webkit-transition: All 0.5s ease-in-out;
-  -moz-transition: All 0.5s ease-in-out;
-  -o-transition: All 0.5s ease-in-out;
+  -webkit-transition: All 2s ease-in-out;
+  -moz-transition: All 5s ease-in-out;
+  -o-transition: All 5s ease-in-out;
   -webkit-transform: rotate(-10deg) scale(1.2) translate(20px, -50px);
   -moz-transform: rotate(-10deg) scale(1.2) translate(20px, -50px);
   -o-transform: rotate(-10deg) scale(1.2) translate(20px, -50px);
