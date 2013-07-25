@@ -1,0 +1,257 @@
+/*****************************************************************************/
+/*
+/* Common
+/*
+/*****************************************************************************/
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+}
+a {
+  font-family: 'Indie Flower', cursive;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  font: 13.34px Helvetica, Arial, sans-serif;
+  font-size: small;
+  text-align: center;
+}
+body {
+  /* fallback/image non-cover color */
+
+  background-color: #f7f7f5;
+  /* fallback image 
+   background-image: url(images/fallback-gradient.png); */
+
+  /* Safari 4+, Chrome 1-9 */
+
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#d7ecec), to(#f7f7f5));
+  /* Safari 5.1+, Mobile Safari, Chrome 10+ */
+
+  background-image: -webkit-linear-gradient(top, #d7ecec, #f7f7f5);
+  /* Firefox 3.6+ */
+
+  background-image: -moz-linear-gradient(top, #d7ecec, #f7f7f5);
+  /* IE 10+ */
+
+  background-image: -ms-linear-gradient(top, #d7ecec, #f7f7f5);
+  /* Opera 11.10+ */
+
+  background-image: -o-linear-gradient(top, #d7ecec, #f7f7f5);
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 100%;
+}
+h1 {
+  margin-bottom: 1em;
+}
+p {
+  margin: 1em 0;
+}
+a {
+  color: #517076;
+}
+a:hover {
+  color: #000;
+}
+a:visited {
+  color: #669399;
+}
+/*****************************************************************************/
+/*
+/* Home
+/*
+/*****************************************************************************/
+ul.posts {
+  list-style-type: none;
+  margin-bottom: 2em;
+}
+ul.posts li {
+  line-height: 1.75em;
+}
+ul.posts span {
+  color: #aaa;
+  font-family: Monaco, "Courier New", monospace;
+  font-size: 80%;
+}
+/*****************************************************************************/
+/*
+/* Site
+/*
+/*****************************************************************************/
+.site {
+  font-size: 115%;
+  text-align: justify;
+  width: 42em;
+  margin: 3em auto 2em;
+  line-height: 1.5em;
+}
+.site header {
+  position: relative;
+}
+.site header a {
+  font-weight: bold;
+  text-decoration: none;
+}
+.site header .logo :hover {
+  -webkit-transition: All 0.5s ease-in-out;
+  -moz-transition: All 0.5s ease-in-out;
+  -o-transition: All 0.5s ease-in-out;
+  -webkit-transform: rotate(-10deg) scale(1.2) translate(20px, -50px);
+  -moz-transform: rotate(-10deg) scale(1.2) translate(20px, -50px);
+  -o-transform: rotate(-10deg) scale(1.2) translate(20px, -50px);
+}
+.site header .logo img {
+  position: absolute;
+  left: -120px;
+  top: 50px;
+  z-index: 5;
+}
+.site header h1.title {
+  font-family: 'Indie Flower', cursive;
+  display: inline-block;
+  font-size: 36px;
+}
+.site header h1.title a {
+  color: #a00;
+}
+.site header h1.title a:hover {
+  color: #000;
+}
+.site header h1.title a.extra {
+  color: #aaa;
+  margin-left: 1em;
+}
+.site header h1.title a.extra:hover {
+  color: #000;
+}
+.site header nav {
+  font-family: 'Indie Flower', cursive;
+  position: relative;
+  z-index: 10;
+  min-width: 800px;
+  left: -20px;
+  margin: 20px auto;
+  margin-bottom: 0px;
+}
+.site header nav ul,
+.site header nav li {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.site header nav ul li {
+  float: left;
+  list-style: none;
+  margin-right: 1em;
+}
+.site header nav ul li a {
+  /*color: #544738;*/
+
+  text-decoration: none;
+  float: left;
+  font-size: 21px;
+  padding: 20px;
+}
+.site header nav ul li a:hover {
+  /*color: #7eb9be;*/
+
+}
+.site header nav ul .odd a:hover {
+  -webkit-transition: All 0.5s ease-in-out;
+  -moz-transition: All 0.5s ease-in-out;
+  -o-transition: All 0.5s ease-in-out;
+  -webkit-transform: rotate(-10deg) scale(1.2);
+  -moz-transform: rotate(-10deg) scale(1.2);
+  -o-transform: rotate(-10deg) scale(1.2);
+}
+.site header nav ul .even a:hover {
+  -webkit-transition: All 0.5s ease-in-out;
+  -moz-transition: All 0.5s ease-in-out;
+  -o-transition: All 0.5s ease-in-out;
+  -webkit-transform: rotate(10deg) scale(1.2);
+  -moz-transform: rotate(10deg) scale(1.2);
+  -o-transform: rotate(10deg) scale(1.2);
+}
+/*Anitmation
+li a:hover {
+-webkit-animation-name: cssAnimation;
+-webkit-animation-duration:1s;
+-webkit-animation-iteration-count: 1;
+-webkit-animation-timing-function: ease
+}
+@-webkit-keyframes cssAnimation {
+from {
+-webkit-transform: rotate(360deg) scale(1) skew(1deg) translate(0px);
+}
+to {
+-webkit-transform: rotate(350deg) scale(1.1) skew(1deg) translate(0px)
+}
+}
+*/
+.site .meta {
+  color: #aaa;
+}
+.site .footer {
+  font-size: 80%;
+  color: #666;
+  border-top: 4px solid #eee;
+  margin-top: 2em;
+  overflow: hidden;
+}
+.site .footer .contact {
+  float: left;
+  margin-right: 3em;
+}
+.site .footer .contact a {
+  color: #8085C1;
+}
+.site .footer .rss {
+  margin-top: 1.1em;
+  margin-right: -0.2em;
+  float: right;
+}
+.site .footer .rss img {
+  border: 0;
+}
+/*****************************************************************************/
+/*
+/* Posts
+/*
+/*****************************************************************************/
+/* standard */
+.post pre {
+  border: 1px solid #ddd;
+  background-color: #eef;
+  padding: 0 .4em;
+}
+.post ul,
+.post ol {
+  margin-left: 1.35em;
+}
+.post code {
+  border: 1px solid #ddd;
+  background-color: #eef;
+  padding: 0 .2em;
+}
+.post pre code {
+  border: none;
+}
+/* terminal */
+.post pre.terminal {
+  border: 1px solid #000;
+  background-color: #333;
+  color: #FFF;
+}
+.post pre.terminal code {
+  background-color: #333;
+}
