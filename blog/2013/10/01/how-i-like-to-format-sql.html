@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>How I like to format SQL</title>
+        <meta name="viewport" content="width=device-width">
+
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Your New Jekyll Site</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>How I like to format SQL</h2>
+<p class="meta">01 Oct 2013</p>
+
+<div class="post">
+<p>I&#8217;ve seem lots of SQL coding styles over my time. Here are three most common formatting options.</p>
+
+<h1 id='ansi_89_equals_syntax'>ANSI 89 Equals Syntax</h1>
+<div class='highlight'><pre><code class='sql'>    <span class='k'>Select</span> <span class='o'>*</span>
+    <span class='k'>From</span> <span class='n'>customers</span><span class='p'>,</span>
+        <span class='n'>invoice</span><span class='p'>,</span>
+        <span class='n'>invoice_item</span><span class='p'>,</span>
+    <span class='k'>Where</span> <span class='n'>customers</span><span class='p'>.</span><span class='n'>id</span> <span class='o'>=</span> <span class='n'>invoice</span><span class='p'>.</span><span class='n'>customerid</span>
+    <span class='k'>And</span> <span class='n'>invoice</span><span class='p'>.</span><span class='n'>id</span> <span class='o'>=</span> <span class='n'>invoice_item</span><span class='p'>.</span><span class='n'>invoiceid</span>
+    <span class='k'>And</span> <span class='n'>invoice</span><span class='p'>.</span><span class='n'>isPaid</span> <span class='o'>=</span> <span class='k'>false</span>
+</code></pre></div>
+<p>I hate seeing this written. Firstly you bulk up your &#8220;Where&#8221; clause area, so it&#8217;s hard to see what is filtering the data. The more tables that get added to the query the harder it is to see. It&#8217;s also very hard to convert this sort of join to a Left, Right or Full join because it&#8217;s all hidden in there where clause. I would always advise people at the very minimum to convert it to the following.</p>
+
+<h1 id='ansi_92_join_syntax'>ANSI 92 Join Syntax</h1>
+<div class='highlight'><pre><code class='sql'>    <span class='k'>Select</span> <span class='o'>*</span>
+    <span class='k'>From</span> <span class='n'>customers</span>
+    <span class='k'>Inner</span> <span class='k'>Join</span> <span class='n'>invoice</span>          <span class='k'>on</span> <span class='n'>invoice</span><span class='p'>.</span><span class='n'>customerid</span> <span class='o'>=</span> <span class='n'>customers</span><span class='p'>.</span><span class='n'>id</span> 
+    <span class='k'>Inner</span> <span class='k'>Join</span> <span class='n'>invoice_item</span>     <span class='k'>on</span> <span class='n'>invoice</span><span class='p'>.</span><span class='n'>id</span>         <span class='o'>=</span> <span class='n'>invoice_item</span><span class='p'>.</span><span class='n'>invoiceid</span> 
+    <span class='k'>Where</span> <span class='n'>invoice</span><span class='p'>.</span><span class='n'>isPaid</span> <span class='o'>=</span> <span class='k'>false</span> 
+</code></pre></div>
+<p>This query is significantly better. You can easily see that the where clause has one filter, and thats to get only paid invoices. What the authoer has also done is aligned the joins along with each other. It makes it nice to scan down the line and see the join criteria. I however still think this doesn&#8217;t show the nesting of the joins clearly. Can you swap the join for invoice_item and invoice around? The formatting hints that you can, but it would create an error. Here&#8217;s my preferred solution&#8230;</p>
+
+<h1 id='ansi_92_nesting_syntax'>ANSI 92 Nesting Syntax</h1>
+<div class='highlight'><pre><code class='sql'>    <span class='k'>Select</span> <span class='o'>*</span>
+    <span class='k'>From</span> <span class='n'>customers</span>
+        <span class='k'>Inner</span> <span class='k'>join</span> <span class='n'>invoice_item</span>
+            <span class='k'>Inner</span> <span class='k'>join</span> <span class='n'>invoice</span>
+            <span class='k'>on</span> <span class='n'>invoice</span><span class='p'>.</span><span class='n'>id</span> <span class='o'>=</span> <span class='n'>invoice_item</span><span class='p'>.</span><span class='n'>invoiceid</span> 
+        <span class='k'>on</span> <span class='n'>invoice</span><span class='p'>.</span><span class='n'>customerid</span> <span class='o'>=</span> <span class='n'>customers</span><span class='p'>.</span><span class='n'>id</span> 
+    <span class='k'>Where</span> <span class='n'>invoice</span><span class='p'>.</span><span class='n'>isPaid</span> <span class='o'>=</span> <span class='k'>false</span> 
+        
+</code></pre></div>
+<p>You can see with this join that there is a clear structure to the query, and by moving the joins around it would break the flow of the query. When you put more joins in a query like this you find it very easy to see where things are nested and it often leads to spotting performance optimizations.</p>
+</div>
+
+
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Name<br />
+                  What You Are<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+    </body>
+</html>

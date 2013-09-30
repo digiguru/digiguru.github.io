@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Getting strongly typed objects out of the session in .Net</title>
+        <meta name="viewport" content="width=device-width">
+
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Your New Jekyll Site</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>Getting strongly typed objects out of the session in .Net</h2>
+<p class="meta">14 Dec 2012</p>
+
+<div class="post">
+I was doing the enjoyable task of removing warnings from the code base today. We had a bad period of being stung by bugs that could have been prevented if the developer had heeded the warnings.
+
+Visual studio gives you a nice way to see the warnings as errors to make them more urgent.
+
+Right Mouse On Project In Solution Explorer &gt; Properties &gt; Compile &gt; Treat all warnings as errors
+
+<strong><a href="http://digiguru69.wordpress.com/2012/12/14/getting-strongly-typed-objects-out-of-the-session-in-net/blog1/" rel="attachment wp-att-38"><img class="aligncenter size-full wp-image-38" alt="blog1" src="http://digiguru69.files.wordpress.com/2012/12/blog1.png" width="468" height="591" /></a></strong>
+
+I can across a lot of code pulling objects out of session variables. This is tricky because the session stores the variables as objects, so you'll get this kind of warning.
+<pre>Dim shopIDList As List(Of Guid)
+shopIDList = Session.Item(gplSessionIdent.ToString)</pre>
+<a href="http://digiguru69.wordpress.com/2012/12/14/getting-strongly-typed-objects-out-of-the-session-in-net/sessionerror/" rel="attachment wp-att-39"><img class="aligncenter size-full wp-image-39" alt="sessionerror" src="http://digiguru69.files.wordpress.com/2012/12/sessionerror.png" width="480" height="18" /></a>
+
+I looked at our code base and realised someone had made a helpful extension method on session
+<pre>If Session.TryGetValue(gplSessionIdent.ToString, shopIDList) Then</pre>
+Looking at the method body you can see that it still deals with object, so still outputs an error
+
+<code>Session.TryGetValue(param as String, ByRef value as Object)</code>
+
+<code><strong><a href="http://digiguru69.wordpress.com/2012/12/14/getting-strongly-typed-objects-out-of-the-session-in-net/sessionerror2/" rel="attachment wp-att-44"><img class="aligncenter size-full wp-image-44" alt="sessionerror2" src="http://digiguru69.files.wordpress.com/2012/12/sessionerror2.png" width="480" height="26" /></a></strong></code>
+
+Seemed similar to what I wanted but sadly casted the value back to an object, leaving me in the same position i was in before. I decided to write another extension.
+<pre>  &lt;Extension()&gt;
+    Public Function TryConvertValueOf(Of T)(ByVal sess As HttpSessionState, ByVal param As String, ByRef output As T)
+        Dim obj As Object = sess(param)
+        If TypeOf obj Is T Then
+            output = DirectCast(obj, T)
+            Return output IsNot Nothing
+        End If
+        Return False
+    End Function</pre>
+Happy I decided to show my co-workers. Thankfully they spotted a flaw in that structures would probably misbehave so enhanced it slightly.
+<pre>  &lt;Extension()&gt;
+    Public Function TryConvertValueOf(Of T <strong>As {Class}</strong>)(ByVal sess As HttpSessionState, ByVal param As String, ByRef output As T)
+        Dim obj As Object = sess(param)
+        If TypeOf obj Is T Then
+            output = DirectCast(obj, T)
+            Return output IsNot Nothing
+        End If
+        Return False
+    End Function</pre>
+So I was about to apply the code when my <a href="http://dotnetrene.blogspot.co.uk/">co-worker</a> stopped me. He said it was bad practice. He showed me the original <code>TryGetValue</code> code and that it actually throws errors itself.
+<pre> &lt;Extension()&gt;
+    Public Function TryGetValue(session As System.Web.SessionState.HttpSessionState,
+                                sessionItemName As String,
+                                ByRef result As Object) As Boolean
+        If session Is Nothing Then
+           <strong> Throw New ArgumentNullException("Session", "Session is nothing.")</strong>
+        End If
+        If String.IsNullOrEmpty(sessionItemName) Then
+            <strong>Throw New ArgumentException("SessionItemName is nothing or empty.", "SessionItemName")</strong>
+        End If
+        result = session(sessionItemName)
+        Return result IsNot Nothing
+    End Function</pre>
+You can find the full listing <a href="https://gist.github.com/4317308">here</a>
+
+I said that by naming a function <code>Try... </code>the developer assumes that the application will block any errors happening while it runs that code. Although he agreed, he insisted that code in this scenario <em>should throw</em> an exception. We've argued about this before. He hates it when code masks errors, and would far rather throw an error so that the developer <strong>knows there is a bug</strong>, rather than returning false, meaning that any error is now simply a <code>Boolean</code>.
+
+It's a good point. I think back to a lot of times where I've had to debug code only to find that actually the error was being eaten up in a try catch and never given to me so I had a stack trace.
+
+On the other hand I am also aware of times when we've had code that seems to work fine in the unit tests and in the QA tests, but when it got to the production system and a nasty bug appeared because it code finally hit an edge case that the APIs could have swallowed but actually deliberately told the developer that it was invalid (with a very useful message telling them how to fix it, as well as a stack trace).
+
+It makes me think about what is preferred. There's an insightful development law:
+
+<strong><a href="http://en.wikipedia.org/wiki/Robustness_principle">Postals Law</a></strong>
+<blockquote>Be conservative in what you send, liberal in what you accept.</blockquote>
+How does one interpret this? Is John Postal stating that you should allow any junk to be thrown into your function and you should output simply a true or false? Or is being conservative actually outputting a true if the value exists false if the value is empty and an error if the value is junk?
+
+I can certainly see uses for both, consider the following example:
+
+<code>If Session.TryConvertValueOf(Of Guid)("cus", CustomerId) Then</code>
+
+<code>' lookup customer and do something with itElseIf Session.TryConvertValueOf(Of Customer)("cus", Customer) Then</code>
+
+<code>' do something directly with the customerElse' no customer, assume there's nothing else to do. Maybe tell the user</code>
+
+<code>End If</code>
+
+Okay now consider the next developer adds a list of customers to the session object, but neglects to update the code above. Unless they remember to debug line by line they might not realise their list is now being forgotten, and happily push the code even though its faulty.
+
+To use the error throwing version you would have to write something pretty nasty to mask the error prone code.
+<pre> Try
+    success = Session.TryGetValue("cus", customerID)
+    If success Then
+       customer = LookupCustomer(customerID)
+    End If
+ Catch ex As Exception
+    success = Session.TryGetValue("cus", customer)
+  End Try
+  If success Then
+    ' do something with customer
+  Else
+    ' no customer, assume there's nothing else to do. Maybe tell the user
+  End If</pre>
+I think this is cumbersome and has little advantage in terms of readability, but certainly prevents stupidity.
+
+In summary I think that if you name a function <code>Try...</code> then you are telling the consumer of your API that there will be no error thrown. Generally the session is tricky to work with and if you store multiple types in the same value you are already setting yourself up for failure no matter how nice you wrap up an API to mask the underlying problem. Perhaps using a document storage database is the best practice. What do you think?
+
+</div>
+
+
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Name<br />
+                  What You Are<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+    </body>
+</html>

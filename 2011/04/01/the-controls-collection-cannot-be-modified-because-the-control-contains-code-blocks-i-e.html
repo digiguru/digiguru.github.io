@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>The Controls collection cannot be modified because the control contains code blocks (i.e. ).</title>
+        <meta name="viewport" content="width=device-width">
+
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Your New Jekyll Site</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>The Controls collection cannot be modified because the control contains code blocks (i.e. ).</h2>
+<p class="meta">01 Apr 2011</p>
+
+<div class="post">
+Had a really frustrating error in the web project where the following error message appeared...
+
+The Controls collection cannot be modified because the control contains code blocks (i.e. &lt;% ... %&gt;).
+
+I looked through my application and saw that I had the following code....
+<pre>&lt;head id="Head1" runat="server"&gt;
+    &lt;script language="javascript" type="text/javascript" src="/js/MasterJS.aspx?u=&lt;%=ConfigurationManager.AppSettings("UpdateNumber")%&gt;"&gt;&lt;/script&gt;
+    &lt;asp:ContentPlaceHolder ID="ScriptExtra" runat="server"&gt;&lt;/asp:ContentPlaceHolder&gt;
+&lt;/head&gt;</pre>
+but I also inject into the header Meta information and title pages from my application using a nice little function to keep our Meta information in check.
+
+As a result - I needed to change all references from
+<pre>&lt;%#ConfigurationManager.AppSettings("UpdateNumber")%&gt;</pre>
+to
+<pre>&lt;%=ConfigurationManager.AppSettings("UpdateNumber")%&gt;</pre>
+As I result I needed to change all my headers that are runat="server" to use
+
+I needed to change all references that are found in the head from an equals to a hash.
+
+I used the following regular expression to find all references of a head with a runat server...
+
+[\&lt;]head[^\&gt;]*runat="server"[^\&gt;]*&gt;
+
+152 files.
+
+&nbsp;
+
+&nbsp;
+
+</div>
+
+
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Name<br />
+                  What You Are<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+    </body>
+</html>
