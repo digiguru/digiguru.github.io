@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Introduction to generators - ECMA script 6 Harmony</title>
+        <meta name="viewport" content="width=device-width">
+
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Your New Jekyll Site</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>Introduction to generators - ECMA script 6 Harmony</h2>
+<p class="meta">01 Oct 2013</p>
+
+<div class="post">
+<p>I was just trying out the new formatting styles available in javascript, I was pretty stunned by the way the new Yeild iterator works.</p>
+
+<h1 id='a_very_simple_yeild_in_javascript'>A very simple yeild in javascript</h1>
+<div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>yeildingFunction</span> <span class='o'>=</span> <span class='kd'>function</span><span class='o'>*</span><span class='p'>()</span> <span class='p'>{</span>
+    <span class='nx'>yield</span> <span class='s2'>&quot;fred&quot;</span><span class='p'>;</span>
+    <span class='nx'>yield</span> <span class='s2'>&quot;bob&quot;</span><span class='p'>;</span>
+    <span class='k'>return</span> <span class='s2'>&quot;sue&quot;</span><span class='p'>;</span>
+<span class='p'>},</span>
+    <span class='nx'>i</span> <span class='o'>=</span> <span class='nx'>yeildingFunction</span><span class='p'>();</span>
+<span class='nx'>console</span><span class='p'>.</span><span class='nx'>log</span><span class='p'>(</span><span class='nx'>i</span><span class='p'>.</span><span class='nx'>next</span><span class='p'>());</span>
+<span class='nx'>console</span><span class='p'>.</span><span class='nx'>log</span><span class='p'>(</span><span class='nx'>i</span><span class='p'>.</span><span class='nx'>next</span><span class='p'>());</span>
+<span class='nx'>console</span><span class='p'>.</span><span class='nx'>log</span><span class='p'>(</span><span class='nx'>i</span><span class='p'>.</span><span class='nx'>next</span><span class='p'>());</span>
+</code></pre></div>
+<p>The output is as follows:</p>
+<div class='highlight'><pre><code class='javascript'><span class='c1'>//Object {value: &quot;fred&quot;, done: false}</span>
+<span class='c1'>//Object {value: &quot;bob&quot;, done: false}</span>
+<span class='c1'>//Object {value: &quot;sue&quot;, done: true} </span>
+</code></pre></div>
+<p>This is interesting. The yeild statement effectively will halt execution inside a function and allow us to step through values.</p>
+
+<p>Also of note if you try to iterte the function a further tiem after it is &#8220;done&#8221; you will see the following;</p>
+<div class='highlight'><pre><code class='javascript'><span class='nx'>console</span><span class='p'>.</span><span class='nx'>log</span><span class='p'>(</span><span class='nx'>i</span><span class='p'>.</span><span class='nx'>next</span><span class='p'>());</span>
+<span class='c1'>//Error: Generator has already finished</span>
+</code></pre></div>
+<p>Okay - so it&#8217;s probably best to loop through iterators until you see they are &#8220;done&#8221;&#8230;</p>
+<div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>yeildingFunction</span> <span class='o'>=</span> <span class='kd'>function</span><span class='o'>*</span><span class='p'>()</span> <span class='p'>{</span>
+    <span class='nx'>yield</span> <span class='s2'>&quot;fred&quot;</span><span class='p'>;</span>
+    <span class='nx'>yield</span> <span class='s2'>&quot;bob&quot;</span><span class='p'>;</span>
+    <span class='k'>return</span> <span class='s2'>&quot;sue&quot;</span><span class='p'>;</span>
+<span class='p'>},</span>
+    <span class='nx'>i</span> <span class='o'>=</span> <span class='nx'>yeildingFunction</span><span class='p'>(),</span>
+    <span class='nx'>next</span><span class='p'>;</span>
+<span class='k'>do</span> <span class='p'>{</span>
+    <span class='nx'>next</span> <span class='o'>=</span> <span class='nx'>i</span><span class='p'>.</span><span class='nx'>next</span><span class='p'>();</span>
+    <span class='nx'>console</span><span class='p'>.</span><span class='nx'>log</span><span class='p'>(</span><span class='nx'>next</span><span class='p'>.</span><span class='nx'>value</span><span class='p'>);</span>
+<span class='p'>}</span> <span class='k'>while</span><span class='p'>(</span><span class='o'>!</span><span class='nx'>next</span><span class='p'>.</span><span class='nx'>done</span><span class='p'>)</span>
+
+<span class='c1'>//fred</span>
+<span class='c1'>//bob</span>
+<span class='c1'>//sue</span>
+</code></pre></div>
+<p>That&#8217;s just a little exploration into generators. It&#8217;s an interesting paradigm, and it will definitely open the door to useful ways of writing code.</p>
+</div>
+
+
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Name<br />
+                  What You Are<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+    </body>
+</html>
