@@ -68,10 +68,12 @@ ul.posts span {
   margin: 3em auto 2em;
   line-height: 1.5em;
 }
-
+.site .header {
+ font-family: 'Audiowide', cursive;
+font-size: 200%;   
+}
 .site .header a {
-    font-family: 'Audiowide', cursive;
-
+  
   font-weight: bold;
   text-decoration: none;
 }
