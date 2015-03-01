@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Working with ruby on OSX</title>
+        <meta name="viewport" content="width=device-width">
+
+        <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+        
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Digiguru.co.uk</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>Working with ruby on OSX</h2>
+<p class="meta">01 Mar 2015</p>
+
+<div class="post">
+<p>I’ve been trying to get my head around how to be productive on OSX. I often come along script commands to facilitate the development process and take alot of the menial tasks off to a short script in a command line. However I’m often stumbling around in the dark. An example of this is using jekyll to compile my blog.</p>
+
+<p>Every time I come to write a blog post (once every 3 months going by history) I have to re-rememeber how to compile. Inevitably I think “How do I compile the site?” and type “Jeckyll” into google (Yes my spelling is atrocious).</p>
+
+<p>Then I realise it’s a simple case of putting the directory into the command window and running the following</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">$ jekyll</code></pre></div>
+
+<p>Which of course tells me</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">-bash: jekyll: command not found</code></pre></div>
+
+<p>Sigh - Did I uninstall it? Let’s install again then.</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">$ gem install jekyll</code></pre></div>
+
+<p>Tells me</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">ERROR:  While executing gem ... (Gem::FilePermissionError)
+    You don&#39;t have write permissions for the 
+    /Users/.../.rvm/gems/ruby-2.0.0-p247/bin directory.</code></pre></div>
+
+<p>Oh yes - I remeber I have a weird ruby setup - it’s installed using sudo - but I have another one in there…</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">$ rvm use 2.1.2
+
+Using /Users/digiguru/.rvm/gems/ruby-2.1.2
+
+$ gem install jekyll</code></pre></div>
+
+<p>This then fires off the install again. Phew.</p>
+
+<p>NB - If you don’t have rvm installed than I suggest the <a href="https://rvm.io">RVM site</a>.</p>
+
+<p>The jekyll command is now recognised - great time to build the site.</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">$ jekyll build
+Deprecation: The &#39;pygments&#39; configuration option has been renamed to &#39;highlighter&#39;.
+Please update your config file accordingly. 
+The allowed values are &#39;rouge&#39;, &#39;pygments&#39; or null.</code></pre></div>
+
+<p>Oh yes - I forgot. Every time you install software a fresh you run the risk of important pieces being depricated. Let’s try again after renaming the property in the _config.yml file.</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">Generating... 
+                    done.</code></pre></div>
+
+<p>Probably best to test it…</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">jekyll serve</code></pre></div>
+
+<p>And now I can publish my next blog post the post you’ve just read.</p>
+
+</div>
+
+
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Name<br />
+                  What You Are<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123008-9', 'digiguru.co.uk');
+ga('require', 'linkid', 'linkid.js');
+ga('send', 'pageview');
+
+</script>
+    </body>
+</html>

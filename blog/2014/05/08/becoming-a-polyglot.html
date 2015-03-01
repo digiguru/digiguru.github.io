@@ -28,132 +28,137 @@
 <p class="meta">08 May 2014</p>
 
 <div class="post">
-<p>Recently i&#8217;ve been sprinting preparing a very exciting new venture that has force me to write code in languages I had little experience in before. The amazing thing I have learnt is that it&#8217;s fairly striaghtforward to transfer skills from other languages fairly seemlessly once you&#8217;ve invested time in. The fundamental thing I have realised is good code architecture is universal.</p>
+<p>Recently i’ve been sprinting preparing a very exciting new venture that has force me to write code in languages I had little experience in before. The amazing thing I have learnt is that it’s fairly striaghtforward to transfer skills from other languages fairly seemlessly once you’ve invested time in. The fundamental thing I have realised is good code architecture is universal.</p>
 
-<p>What I like to bring to code is simplification, atomicity and structured design. Consider the following java code&#8230;</p>
-<div class='highlight'><pre><code class='java'><span class='kd'>public</span> <span class='kd'>class</span> <span class='nc'>SearchFragment</span> <span class='kd'>extends</span> <span class='n'>Fragment</span> <span class='o'>{</span>
-	<span class='kd'>private</span> <span class='kd'>final</span> <span class='n'>String</span> <span class='n'>SEARCH_URL</span> <span class='o'>=</span> <span class='n'>RequestConstants</span><span class='o'>.</span><span class='na'>SERVER_GUEST_URL</span><span class='o'>+</span><span class='s'>&quot;search/&quot;</span><span class='o'>;</span>
-	
-	<span class='kd'>private</span> <span class='n'>Handler</span> <span class='n'>searchServiceHandler</span> <span class='o'>=</span> <span class='k'>new</span> <span class='n'>Handler</span><span class='o'>()</span> <span class='o'>{</span>
+<p>What I like to bring to code is simplification, atomicity and structured design. Consider the following java code…</p>
 
-		<span class='kd'>public</span> <span class='kt'>void</span> <span class='nf'>handleMessage</span><span class='o'>(</span><span class='n'>Message</span> <span class='n'>msg</span><span class='o'>)</span> <span class='o'>{</span>
-            <span class='c1'>//Reads the data from a JSON response</span>
-            <span class='c1'>//Displays an alert if there is an error.</span>
-			<span class='c1'>//Puts data into an intent object on response. </span>
-            <span class='c1'>// (60 lines)</span>
-        <span class='o'>}</span>
-	<span class='o'>};</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java">public class SearchFragment extends Fragment {
+	private final String SEARCH_URL = RequestConstants.SERVER_GUEST_URL+&quot;search/&quot;;
 	
-	<span class='nd'>@Override</span>
-	<span class='kd'>public</span> <span class='n'>View</span> <span class='nf'>onCreateView</span><span class='o'>(</span><span class='n'>LayoutInflater</span> <span class='n'>inflater</span><span class='o'>,</span> <span class='n'>ViewGroup</span> <span class='n'>container</span><span class='o'>,</span>
-			<span class='n'>Bundle</span> <span class='n'>savedInstanceState</span><span class='o'>)</span> <span class='o'>{</span>
+	private Handler searchServiceHandler = new Handler() {
+
+		public void handleMessage(Message msg) {
+            //Reads the data from a JSON response
+            //Displays an alert if there is an error.
+			//Puts data into an intent object on response. 
+            // (60 lines)
+        }
+	};
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
         
-        <span class='c1'>//Gets saved data from local cache, reads from a JSON array</span>
-        <span class='c1'>//Displays an alert if there is an error.</span>
-        <span class='c1'>//Record some flurry events</span>
-        <span class='c1'>//Setup some user interaction - if text box is subitted start a task in another thread.</span>
-        <span class='c1'>// (90 lines)    </span>
+        //Gets saved data from local cache, reads from a JSON array
+        //Displays an alert if there is an error.
+        //Record some flurry events
+        //Setup some user interaction - if text box is subitted start a task in another thread.
+        // (90 lines)    
             
-	<span class='o'>}</span>
+	}
     
-	<span class='kd'>class</span> <span class='nc'>SearchServiceTask</span> <span class='kd'>extends</span> <span class='n'>AsyncTask</span><span class='o'>&lt;</span><span class='n'>String</span><span class='o'>,</span> <span class='n'>Void</span><span class='o'>,</span> <span class='n'>Void</span><span class='o'>&gt;</span>
-	<span class='o'>{</span>
-        <span class='c1'>//Kicking off a background task.</span>
-        <span class='c1'>//Display loading panel</span>
-        <span class='c1'>//Define HttpRequest</span>
-        <span class='c1'>//Submit request</span>
-        <span class='c1'>//Recieve response</span>
-        <span class='c1'>//Catch all errors and log, and copile a list</span>
+	class SearchServiceTask extends AsyncTask&lt;String, Void, Void&gt;
+	{
+        //Kicking off a background task.
+        //Display loading panel
+        //Define HttpRequest
+        //Submit request
+        //Recieve response
+        //Catch all errors and log, and copile a list
 
-		<span class='kd'>protected</span> <span class='kt'>void</span> <span class='nf'>onPreExecute</span><span class='o'>()</span> <span class='o'>{</span>
-			<span class='c1'>//Start Progress Dialog (Message)</span>
-            <span class='c1'>//(5 lines)</span>
-		<span class='o'>}</span>
+		protected void onPreExecute() {
+			//Start Progress Dialog (Message)
+            //(5 lines)
+		}
         
-		<span class='nd'>@Override</span>
-		<span class='kd'>protected</span> <span class='n'>Void</span> <span class='nf'>doInBackground</span><span class='o'>(</span><span class='n'>String</span><span class='o'>...</span> <span class='n'>details</span><span class='o'>)</span> <span class='o'>{</span>
-            <span class='c1'>//Make the request</span>
-            <span class='c1'>//Read the response</span>
-            <span class='c1'>//Log any errors</span>
-            <span class='c1'>//(50 lines)</span>
-		<span class='o'>}</span>
+		@Override
+		protected Void doInBackground(String... details) {
+            //Make the request
+            //Read the response
+            //Log any errors
+            //(50 lines)
+		}
 
-		<span class='kd'>protected</span> <span class='kt'>void</span> <span class='nf'>onPostExecute</span><span class='o'>(</span><span class='n'>Void</span> <span class='n'>unused</span><span class='o'>)</span> <span class='o'>{</span>
-			<span class='c1'>// Close progress dialog</span>
-            <span class='c1'>//If errors show a message</span>
-			<span class='c1'>//If successful result call the searchServiceHandler.</span>
-            <span class='c1'>//Update UI elements</span>
-            <span class='o'>(</span><span class='mi'>40</span> <span class='n'>lines</span><span class='o'>)</span>
-		<span class='o'>}</span>
-	<span class='o'>}</span>
-<span class='o'>}</span>
-</code></pre></div>
-<p>For me it just feels like it&#8217;s doing too much. Worse still the same style was duplicated in every web request.</p>
+		protected void onPostExecute(Void unused) {
+			// Close progress dialog
+            //If errors show a message
+			//If successful result call the searchServiceHandler.
+            //Update UI elements
+            (40 lines)
+		}
+	}
+}</code></pre></div>
+
+<p>For me it just feels like it’s doing too much. Worse still the same style was duplicated in every web request.</p>
 
 <p>The first thing I did was define an interface that I wanted this to follow fro an API level.</p>
-<div class='highlight'><pre><code class='java'><span class='c1'>//First let&#39;s define the completion block</span>
-<span class='c1'>//all we care about is &quot;What&#39;s the result?&quot; or &quot;Why did it fail?&quot; </span>
-<span class='kd'>interface</span> <span class='nc'>IBlockList</span><span class='o'>&lt;</span><span class='n'>listType</span><span class='o'>&gt;</span> <span class='o'>{</span>
-	<span class='kt'>void</span> <span class='nf'>success</span><span class='o'>(</span><span class='n'>List</span><span class='o'>&lt;</span><span class='n'>listType</span><span class='o'>&gt;</span> <span class='n'>list</span><span class='o'>);</span>
-	<span class='kt'>void</span> <span class='nf'>error</span><span class='o'>(</span><span class='n'>String</span> <span class='n'>message</span><span class='o'>);</span>
-<span class='o'>}</span>
 
-<span class='kd'>interface</span> <span class='nc'>IServiceWedding</span> <span class='o'>{</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java">//First let&#39;s define the completion block
+//all we care about is &quot;What&#39;s the result?&quot; or &quot;Why did it fail?&quot; 
+interface IBlockList&lt;listType&gt; {
+	void success(List&lt;listType&gt; list);
+	void error(String message);
+}
+
+interface IServiceWedding {
 	
-	<span class='kt'>void</span>  <span class='nf'>searchBySearchText</span> <span class='o'>(</span>
+	void  searchBySearchText (
         
-        <span class='n'>String</span> <span class='n'>searchText</span><span class='o'>,</span> 
-        <span class='n'>String</span> <span class='n'>domain</span><span class='o'>,</span> 
-        <span class='n'>IBlockList</span><span class='o'>&lt;</span><span class='n'>SearchResult</span><span class='o'>&gt;</span> <span class='n'>completeBlock</span><span class='o'>);</span>
+        String searchText, 
+        String domain, 
+        IBlockList&lt;SearchResult&gt; completeBlock);
 	
-<span class='o'>}</span>
-</code></pre></div>
+}</code></pre></div>
+
 <p>Very simple interface, I can drop that into any file and not care about JSON, HTTP Requests, Asyncronosity. Just raw input output.</p>
 
 <p>Now all I have to do is write each of the parts in isolation.</p>
-<div class='highlight'><pre><code class='java'><span class='kd'>public</span> <span class='kd'>class</span> <span class='nc'>DataService</span> <span class='kd'>implements</span> <span class='n'>IServiceWedding</span> <span class='o'>{</span>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java">public class DataService implements IServiceWedding {
 	
-    <span class='c1'>//These 2 functions will probably move to a base class.</span>
-	<span class='kd'>private</span> <span class='n'>HttpResponse</span> <span class='nf'>makeGetRequest</span><span class='o'>(</span><span class='n'>String</span> <span class='n'>url</span><span class='o'>)</span> <span class='kd'>throws</span> <span class='n'>Exception</span> 
-	<span class='o'>{</span>
-		<span class='c1'>//Make a get request with all the headers</span>
-        <span class='c1'>//(10 lines)</span>
-	<span class='o'>}</span>
-	<span class='kd'>private</span> <span class='n'>String</span> <span class='nf'>getResultText</span><span class='o'>(</span><span class='n'>String</span> <span class='n'>url</span><span class='o'>)</span> <span class='kd'>throws</span> <span class='n'>Exception</span> <span class='o'>{</span>
-		<span class='c1'>//Use a URL and call makeGetRequest, read the result into a string.</span>
-        <span class='c1'>//(20 lines)</span>
-	<span class='o'>}</span>
+    //These 2 functions will probably move to a base class.
+	private HttpResponse makeGetRequest(String url) throws Exception 
+	{
+		//Make a get request with all the headers
+        //(10 lines)
+	}
+	private String getResultText(String url) throws Exception {
+		//Use a URL and call makeGetRequest, read the result into a string.
+        //(20 lines)
+	}
 	
-    <span class='c1'>//These 2 functions could probably be reused for any service that returns the same data.</span>
-	<span class='kd'>private</span> <span class='n'>ArrayList</span><span class='o'>&lt;</span><span class='n'>SearchResult</span><span class='o'>&gt;</span> <span class='nf'>readSearchResultList</span> <span class='o'>(</span><span class='n'>String</span> <span class='n'>response</span><span class='o'>)</span> <span class='kd'>throws</span> <span class='n'>JSONException</span> <span class='o'>{</span>
-		<span class='c1'>//Read a JSON string into a list of SearchResult</span>
-        <span class='c1'>//(10 lines)</span>
-	<span class='o'>}</span>
+    //These 2 functions could probably be reused for any service that returns the same data.
+	private ArrayList&lt;SearchResult&gt; readSearchResultList (String response) throws JSONException {
+		//Read a JSON string into a list of SearchResult
+        //(10 lines)
+	}
 	
-	<span class='kd'>private</span> <span class='n'>SearchResult</span> <span class='nf'>readSearchResult</span> <span class='o'>(</span><span class='n'>String</span> <span class='n'>response</span><span class='o'>)</span> <span class='kd'>throws</span> <span class='n'>JSONException</span> <span class='o'>{</span>
-		<span class='c1'>//Read a JSON string into a SearchResult</span>
-        <span class='c1'>//(2 lines)</span>
-	<span class='o'>}</span>
+	private SearchResult readSearchResult (String response) throws JSONException {
+		//Read a JSON string into a SearchResult
+        //(2 lines)
+	}
 	
-    <span class='c1'>//Finally the implementation. Every time you want a new websevice, this is all you have to write!</span>
-	<span class='nd'>@Override</span>
-	<span class='kd'>public</span> <span class='kt'>void</span> <span class='nf'>searchWeddingBySearchText</span><span class='o'>(</span><span class='n'>String</span> <span class='n'>searchText</span><span class='o'>,</span> <span class='n'>String</span> <span class='n'>domain</span><span class='o'>,</span>
-			<span class='n'>IBlockList</span><span class='o'>&lt;</span><span class='n'>SearchResult</span><span class='o'>&gt;</span> <span class='n'>completeBlock</span><span class='o'>)</span> <span class='o'>{</span>
+    //Finally the implementation. Every time you want a new websevice, this is all you have to write!
+	@Override
+	public void searchWeddingBySearchText(String searchText, String domain,
+			IBlockList&lt;SearchResult&gt; completeBlock) {
             
-        <span class='n'>String</span> <span class='n'>url</span> <span class='o'>=</span> <span class='n'>getDomainUrl</span><span class='o'>(</span><span class='n'>domain</span><span class='o'>)</span> <span class='o'>+</span> <span class='s'>&quot;search/&quot;</span> <span class='o'>+</span> <span class='n'>searchText</span><span class='o'>;</span>
+        String url = getDomainUrl(domain) + &quot;search/&quot; + searchText;
 		
-		<span class='k'>try</span> <span class='o'>{</span>
-			<span class='n'>String</span> <span class='n'>textResult</span> <span class='o'>=</span> <span class='n'>getResultText</span><span class='o'>(</span><span class='n'>url</span><span class='o'>);</span>
-			<span class='n'>completeBlock</span><span class='o'>.</span><span class='na'>success</span><span class='o'>(</span><span class='k'>this</span><span class='o'>.</span><span class='na'>readSearchResultList</span><span class='o'>(</span><span class='n'>textResult</span><span class='o'>));</span>
-		<span class='o'>}</span> <span class='k'>catch</span> <span class='o'>(</span><span class='n'>JSONException</span> <span class='n'>e</span><span class='o'>)</span> <span class='o'>{</span>
-			<span class='n'>completeBlock</span><span class='o'>.</span><span class='na'>error</span><span class='o'>(</span><span class='s'>&quot;Could not process the data from the server&quot;</span><span class='o'>);</span>
-		<span class='o'>}</span> <span class='k'>catch</span> <span class='o'>(</span><span class='n'>Exception</span> <span class='n'>e1</span><span class='o'>)</span> <span class='o'>{</span>
-			<span class='n'>completeBlock</span><span class='o'>.</span><span class='na'>error</span><span class='o'>(</span><span class='s'>&quot;Error reading data from the server&quot;</span><span class='o'>);</span>
-		<span class='o'>}</span>
-	<span class='o'>}</span>
-<span class='o'>}</span>
-</code></pre></div>
-<p>I certainly prefer the second style. It&#8217;s how I&#8217;d write the code in any language, define the right interface and then use it.</p>
+		try {
+			String textResult = getResultText(url);
+			completeBlock.success(this.readSearchResultList(textResult));
+		} catch (JSONException e) {
+			completeBlock.error(&quot;Could not process the data from the server&quot;);
+		} catch (Exception e1) {
+			completeBlock.error(&quot;Error reading data from the server&quot;);
+		}
+	}
+}</code></pre></div>
+
+<p>I certainly prefer the second style. It’s how I’d write the code in any language, define the right interface and then use it.</p>
+
+
 </div>
 
 

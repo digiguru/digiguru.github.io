@@ -29,99 +29,102 @@
 
 <div class="post">
 <p>I was working on some code when I came across a behemoth of an inline SQL query nestled in the code behind of a page.</p>
-<div class='highlight'><pre><code class='sql'><span class='k'>Select</span> 
-    <span class='n'>a</span><span class='p'>.</span><span class='n'>list_id</span><span class='p'>,</span> 
-    <span class='n'>a</span><span class='p'>.</span><span class='n'>company_name</span><span class='p'>,</span> 
-    <span class='n'>a</span><span class='p'>.</span><span class='n'>company_description</span><span class='p'>,</span> 
-    <span class='n'>a</span><span class='p'>.</span><span class='n'>url</span><span class='p'>,</span>
-    <span class='p'>(</span>  <span class='k'>case</span> <span class='k'>when</span> <span class='p'>(</span>
-        <span class='k'>Select</span> <span class='k'>upper</span><span class='p'>(</span><span class='n'>County_Name</span><span class='p'>)</span> 
-        <span class='k'>from</span> <span class='n'>tbl_County</span> 
-        <span class='k'>where</span> <span class='n'>County_id</span><span class='o'>=</span><span class='n'>a</span><span class='p'>.</span><span class='n'>County_id</span>
-    <span class='p'>)</span> <span class='k'>is</span> <span class='k'>null</span> <span class='k'>then</span> <span class='p'>(</span>
-        <span class='k'>Select</span> <span class='k'>upper</span><span class='p'>(</span><span class='n'>Country_Name</span><span class='p'>)</span> 
-        <span class='k'>from</span> <span class='n'>tbl_description_Country</span> 
-        <span class='k'>where</span> <span class='n'>Country_id</span><span class='o'>=</span> <span class='n'>a</span><span class='p'>.</span><span class='n'>Country_id</span>
-    <span class='p'>)</span> <span class='k'>else</span> <span class='p'>(</span>
-        <span class='k'>Select</span> <span class='k'>upper</span><span class='p'>(</span><span class='n'>County_Name</span><span class='p'>)</span> <span class='k'>from</span> <span class='n'>tbl_County</span> <span class='k'>where</span> <span class='n'>County_id</span><span class='o'>=</span> <span class='n'>a</span><span class='p'>.</span><span class='n'>County_id</span><span class='p'>)</span> 
-    <span class='k'>end</span>     <span class='p'>)</span> <span class='k'>as</span> <span class='n'>County_name</span><span class='p'>,</span>
-    <span class='n'>b</span><span class='p'>.</span><span class='n'>review_approval</span><span class='p'>,</span>
-    <span class='p'>(</span> <span class='k'>case</span> <span class='k'>when</span> <span class='p'>(</span>
-        <span class='k'>Select</span> <span class='n'>county_id</span> 
-        <span class='k'>from</span> <span class='n'>tbl_County</span> 
-        <span class='k'>where</span> <span class='n'>County_id</span> <span class='o'>=</span> <span class='n'>a</span><span class='p'>.</span><span class='n'>County_id</span>
-    <span class='p'>)</span> <span class='o'>=</span> <span class='mi'>0</span> <span class='k'>then</span> <span class='p'>(</span>
-        <span class='k'>Select</span> <span class='n'>Country_id</span> 
-        <span class='k'>from</span> <span class='n'>tbl_description_Country</span> 
-        <span class='k'>where</span> <span class='n'>Country_id</span> <span class='o'>=</span> <span class='n'>a</span><span class='p'>.</span><span class='n'>Country_id</span>
-    <span class='p'>)</span> <span class='k'>else</span> <span class='p'>(</span>
-        <span class='k'>Select</span> <span class='n'>county_id</span> 
-        <span class='k'>from</span> <span class='n'>tbl_County</span> 
-        <span class='k'>where</span> <span class='n'>County_id</span><span class='o'>=</span> <span class='n'>a</span><span class='p'>.</span><span class='n'>County_id</span>
-    <span class='p'>)</span> <span class='k'>end</span> <span class='p'>)</span> <span class='k'>as</span> <span class='n'>CountryID</span><span class='p'>,</span>
-    <span class='n'>dbo</span><span class='p'>.</span><span class='n'>funcGetRatingSum</span> <span class='p'>(</span><span class='n'>a</span><span class='p'>.</span><span class='n'>list_id</span><span class='p'>)</span> <span class='k'>as</span> <span class='n'>ratingSum</span><span class='p'>,</span>
-    <span class='n'>dbo</span><span class='p'>.</span><span class='n'>funcGetRatingCount</span> <span class='p'>(</span><span class='n'>a</span><span class='p'>.</span><span class='n'>list_id</span><span class='p'>)</span> <span class='k'>as</span> <span class='n'>totalCount</span><span class='p'>,</span>
-    <span class='p'>(</span> <span class='k'>Select</span> <span class='k'>case</span> <span class='k'>when</span> <span class='p'>(</span> 
-        <span class='k'>select</span> <span class='n'>top</span> <span class='mi'>1</span> <span class='n'>banner_path</span> 
-        <span class='k'>from</span> <span class='n'>tbl_banners</span> 
-        <span class='k'>where</span> <span class='n'>list_id</span> <span class='o'>=</span> <span class='n'>a</span><span class='p'>.</span><span class='n'>list_id</span> 
-        <span class='k'>and</span> <span class='n'>a</span><span class='p'>.</span><span class='n'>subscription_id</span> <span class='o'>=</span> <span class='mi'>2</span>
-    <span class='p'>)</span> <span class='k'>is</span> <span class='k'>null</span> <span class='k'>then</span> <span class='s1'>&#39;&#39;</span>
-    <span class='k'>else</span> <span class='p'>(</span> 
-        <span class='k'>select</span> <span class='n'>top</span> <span class='mi'>1</span> <span class='n'>banner_path</span> 
-        <span class='k'>from</span> <span class='n'>tbl_banners</span> 
-        <span class='k'>where</span> <span class='n'>list_id</span> <span class='o'>=</span> <span class='n'>a</span><span class='p'>.</span><span class='n'>list_id</span> 
-        <span class='k'>and</span> <span class='n'>a</span><span class='p'>.</span><span class='n'>subscription_id</span> <span class='o'>=</span> <span class='mi'>2</span>
-    <span class='p'>)</span> <span class='k'>end</span> <span class='p'>)</span> <span class='k'>as</span> <span class='n'>bannerpath</span>
-<span class='k'>from</span> 
-    <span class='n'>tbl_directorylisting</span> <span class='n'>a</span><span class='p'>,</span> 
-    <span class='n'>tbl_preferences</span> <span class='k'>as</span> <span class='n'>b</span> <span class='p'>,</span>
-    <span class='n'>tbl_companymaster</span> <span class='k'>c</span> 
-<span class='k'>where</span> <span class='n'>a</span><span class='p'>.</span> <span class='n'>status</span> <span class='o'>=</span> <span class='mi'>1</span> 
-<span class='k'>and</span> <span class='p'>(</span> <span class='n'>a</span><span class='p'>.</span><span class='n'>company_id</span> <span class='o'>=</span> <span class='n'>b</span><span class='p'>.</span><span class='n'>company_id</span> <span class='k'>And</span> <span class='n'>a</span><span class='p'>.</span><span class='n'>status</span> <span class='o'>=</span> <span class='mi'>1</span><span class='p'>)</span> 
-<span class='k'>and</span> <span class='k'>c</span><span class='p'>.</span><span class='n'>category_id</span><span class='o'>=</span> <span class='o'>@</span><span class='n'>CategoryID</span>
-<span class='k'>and</span> <span class='n'>a</span><span class='p'>.</span><span class='n'>company_id</span><span class='o'>=</span> <span class='k'>c</span><span class='p'>.</span><span class='n'>company_id</span> <span class='k'>and</span> <span class='n'>a</span><span class='p'>.</span><span class='n'>subscription_id</span> <span class='k'>in</span> <span class='p'>(</span><span class='mi'>2</span><span class='p'>,</span><span class='mi'>3</span><span class='p'>)</span> 
-<span class='k'>and</span> <span class='n'>subscription_date</span> <span class='o'>&gt;=</span> <span class='p'>(</span><span class='n'>dateadd</span><span class='p'>(</span><span class='k'>year</span><span class='p'>,</span><span class='o'>-</span><span class='mi'>1</span><span class='p'>,</span><span class='n'>getdate</span><span class='p'>()))</span>
-<span class='k'>Order</span> <span class='k'>by</span> <span class='n'>county_name</span><span class='p'>,</span> <span class='n'>a</span><span class='p'>.</span><span class='n'>subscription_id</span> <span class='k'>asc</span><span class='p'>,</span> <span class='n'>a</span><span class='p'>.</span><span class='n'>date_fee_paid</span>
-</code></pre></div>
-<p>Actually it was within several lines of concatenated text values, and had no formatting whatsoever!. My first intention was try to make it a stored procedure, but doing so I couldn&#8217;t help but try to optimize it a little. Here&#8217;s my attempt&#8230;.</p>
-<div class='highlight'><pre><code class='sql'><span class='k'>Select</span>
-    <span class='n'>listing</span><span class='p'>.</span><span class='n'>list_id</span><span class='p'>,</span>
-    <span class='n'>listing</span><span class='p'>.</span><span class='n'>company_name</span><span class='p'>,</span>
-    <span class='n'>listing</span><span class='p'>.</span><span class='n'>company_description</span><span class='p'>,</span>
-    <span class='n'>listing</span><span class='p'>.</span><span class='n'>url</span><span class='p'>,</span>
-    <span class='n'>Coalesce</span><span class='p'>(</span><span class='n'>county</span><span class='p'>.</span><span class='n'>County_name</span><span class='p'>,</span> <span class='n'>country</span><span class='p'>.</span><span class='n'>Country_Name</span><span class='p'>)</span> <span class='k'>As</span> <span class='n'>County_name</span><span class='p'>,</span>
-    <span class='n'>prefs</span><span class='p'>.</span><span class='n'>review_approval</span><span class='p'>,</span>
-    <span class='n'>listing</span><span class='p'>.</span><span class='n'>Country_ID</span><span class='p'>,</span>
-    <span class='n'>dbo</span><span class='p'>.</span><span class='n'>funcGetRatingSum</span> <span class='p'>(</span><span class='n'>listing</span><span class='p'>.</span><span class='n'>list_id</span><span class='p'>)</span> <span class='k'>as</span> <span class='n'>ratingSum</span><span class='p'>,</span>
-    <span class='n'>dbo</span><span class='p'>.</span><span class='n'>funcGetRatingCount</span> <span class='p'>(</span><span class='n'>listing</span><span class='p'>.</span><span class='n'>list_id</span><span class='p'>)</span> <span class='k'>as</span> <span class='n'>totalCount</span><span class='p'>,</span>
-    <span class='n'>Coalesce</span><span class='p'>((</span>
-        <span class='k'>select</span> <span class='n'>top</span> <span class='mi'>1</span> <span class='n'>banner_path</span> 
-        <span class='k'>from</span> <span class='n'>tbl_banners</span> 
-        <span class='k'>where</span> <span class='n'>list_id</span> <span class='o'>=</span> <span class='n'>listing</span><span class='p'>.</span><span class='n'>list_id</span> 
-        <span class='k'>and</span> <span class='n'>listing</span><span class='p'>.</span><span class='n'>subscription_id</span> <span class='o'>=</span> <span class='mi'>2</span><span class='p'>),</span> <span class='s1'>&#39;&#39;</span>
-    <span class='p'>)</span> <span class='k'>as</span> <span class='n'>bannerpath</span>
-<span class='k'>FROM</span>
-    <span class='n'>tbl_directorylisting</span> <span class='n'>listing</span>
-    <span class='k'>Inner</span> <span class='k'>Join</span> <span class='n'>tbl_companymaster</span> <span class='n'>company</span>
-        <span class='k'>Inner</span> <span class='k'>Join</span> <span class='n'>tbl_preferences</span> <span class='n'>prefs</span>
-        <span class='k'>On</span> <span class='n'>listing</span><span class='p'>.</span><span class='n'>company_id</span> <span class='o'>=</span> <span class='n'>prefs</span><span class='p'>.</span><span class='n'>company_id</span>
-    <span class='k'>On</span> <span class='n'>listing</span><span class='p'>.</span><span class='n'>company_id</span> <span class='o'>=</span> <span class='n'>company</span><span class='p'>.</span><span class='n'>company_id</span>
-    <span class='k'>Left</span> <span class='k'>Outer</span> <span class='k'>Join</span> <span class='n'>tbl_county</span> <span class='n'>county</span>
-        <span class='k'>Inner</span> <span class='k'>Join</span> <span class='n'>tbl_country</span> <span class='n'>country</span>
-        <span class='k'>On</span> <span class='n'>listing</span><span class='p'>.</span><span class='n'>country_id</span> <span class='o'>=</span> <span class='n'>country</span><span class='p'>.</span><span class='n'>country_id</span>
-    <span class='k'>On</span> <span class='n'>listing</span><span class='p'>.</span><span class='n'>county_id</span> <span class='o'>=</span> <span class='n'>county</span><span class='p'>.</span><span class='n'>county_id</span>
-<span class='k'>where</span> <span class='n'>listing</span><span class='p'>.</span><span class='n'>status</span> <span class='o'>=</span> <span class='mi'>1</span>
-    <span class='k'>And</span> <span class='n'>company</span><span class='p'>.</span><span class='n'>category_id</span><span class='o'>=</span> <span class='o'>@</span><span class='n'>CategoryID</span>
-    <span class='k'>and</span> <span class='n'>listing</span><span class='p'>.</span><span class='n'>subscription_id</span> <span class='k'>in</span> <span class='p'>(</span><span class='mi'>2</span><span class='p'>,</span><span class='mi'>3</span><span class='p'>)</span>
-    <span class='k'>and</span> <span class='n'>listing</span><span class='p'>.</span><span class='n'>subscription_date</span> <span class='o'>&gt;=</span> <span class='p'>(</span><span class='n'>dateadd</span><span class='p'>(</span><span class='k'>year</span><span class='p'>,</span><span class='o'>-</span><span class='mi'>1</span><span class='p'>,</span><span class='n'>getdate</span><span class='p'>()))</span>
-<span class='k'>Order</span> <span class='k'>by</span> <span class='n'>county_name</span><span class='p'>,</span> <span class='n'>listing</span><span class='p'>.</span><span class='n'>subscription_id</span> <span class='k'>asc</span><span class='p'>,</span> <span class='n'>listing</span><span class='p'>.</span><span class='n'>date_fee_paid</span>
-</code></pre></div>
-<p>Firstly you&#8217;ll notice the second query is far easier to read (hopefully). I dont stand for the old skool method of joining tables, join with a join and it&#8217;s obvious what is going on, plus it prepares isolation of results for the where clause afterwards.</p>
 
-<p>Secondly there are fewer joins in the Column definition part of the select. I have included one of the original selects, because when optimizing the stored procedure it was siginificantly fast enough to use select top 1 &#8230; than it was to Left Outer Join. I did however Coalesce so that the case statement didn&#8217;t repeat iteself.</p>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql">Select 
+    a.list_id, 
+    a.company_name, 
+    a.company_description, 
+    a.url,
+    (  case when (
+        Select upper(County_Name) 
+        from tbl_County 
+        where County_id=a.County_id
+    ) is null then (
+        Select upper(Country_Name) 
+        from tbl_description_Country 
+        where Country_id= a.Country_id
+    ) else (
+        Select upper(County_Name) from tbl_County where County_id= a.County_id) 
+    end     ) as County_name,
+    b.review_approval,
+    ( case when (
+        Select county_id 
+        from tbl_County 
+        where County_id = a.County_id
+    ) = 0 then (
+        Select Country_id 
+        from tbl_description_Country 
+        where Country_id = a.Country_id
+    ) else (
+        Select county_id 
+        from tbl_County 
+        where County_id= a.County_id
+    ) end ) as CountryID,
+    dbo.funcGetRatingSum (a.list_id) as ratingSum,
+    dbo.funcGetRatingCount (a.list_id) as totalCount,
+    ( Select case when ( 
+        select top 1 banner_path 
+        from tbl_banners 
+        where list_id = a.list_id 
+        and a.subscription_id = 2
+    ) is null then &#39;&#39;
+    else ( 
+        select top 1 banner_path 
+        from tbl_banners 
+        where list_id = a.list_id 
+        and a.subscription_id = 2
+    ) end ) as bannerpath
+from 
+    tbl_directorylisting a, 
+    tbl_preferences as b ,
+    tbl_companymaster c 
+where a. status = 1 
+and ( a.company_id = b.company_id And a.status = 1) 
+and c.category_id= @CategoryID
+and a.company_id= c.company_id and a.subscription_id in (2,3) 
+and subscription_date &gt;= (dateadd(year,-1,getdate()))
+Order by county_name, a.subscription_id asc, a.date_fee_paid</code></pre></div>
+
+<p>Actually it was within several lines of concatenated text values, and had no formatting whatsoever!. My first intention was try to make it a stored procedure, but doing so I couldn’t help but try to optimize it a little. Here’s my attempt….</p>
+
+<div class="highlight"><pre><code class="language-sql" data-lang="sql">Select
+    listing.list_id,
+    listing.company_name,
+    listing.company_description,
+    listing.url,
+    Coalesce(county.County_name, country.Country_Name) As County_name,
+    prefs.review_approval,
+    listing.Country_ID,
+    dbo.funcGetRatingSum (listing.list_id) as ratingSum,
+    dbo.funcGetRatingCount (listing.list_id) as totalCount,
+    Coalesce((
+        select top 1 banner_path 
+        from tbl_banners 
+        where list_id = listing.list_id 
+        and listing.subscription_id = 2), &#39;&#39;
+    ) as bannerpath
+FROM
+    tbl_directorylisting listing
+    Inner Join tbl_companymaster company
+        Inner Join tbl_preferences prefs
+        On listing.company_id = prefs.company_id
+    On listing.company_id = company.company_id
+    Left Outer Join tbl_county county
+        Inner Join tbl_country country
+        On listing.country_id = country.country_id
+    On listing.county_id = county.county_id
+where listing.status = 1
+    And company.category_id= @CategoryID
+    and listing.subscription_id in (2,3)
+    and listing.subscription_date &gt;= (dateadd(year,-1,getdate()))
+Order by county_name, listing.subscription_id asc, listing.date_fee_paid</code></pre></div>
+
+<p>Firstly you’ll notice the second query is far easier to read (hopefully). I dont stand for the old skool method of joining tables, join with a join and it’s obvious what is going on, plus it prepares isolation of results for the where clause afterwards.</p>
+
+<p>Secondly there are fewer joins in the Column definition part of the select. I have included one of the original selects, because when optimizing the stored procedure it was siginificantly fast enough to use select top 1 … than it was to Left Outer Join. I did however Coalesce so that the case statement didn’t repeat iteself.</p>
 
 <p>What do you think? Is that better or worse?</p>
+
 </div>
 
 

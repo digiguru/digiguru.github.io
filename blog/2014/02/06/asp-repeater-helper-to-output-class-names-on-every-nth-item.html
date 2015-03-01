@@ -28,57 +28,64 @@
 <p class="meta">06 Feb 2014</p>
 
 <div class="post">
-<p>I came across a need to output a &#8220;clear&#8221; class to every 5th item in an asp:repeater. Here&#8217;s an over-simplified example of the code that was written.</p>
-<div class='highlight'><pre><code class='aspx-vb'><span class='nt'>&lt;ul&gt;</span>
-<span class='nt'>&lt;asp:Repeater</span> <span class='na'>runat=</span><span class='s'>&#39;server&#39;</span><span class='nt'>&gt;</span>
-    <span class='nt'>&lt;ItemTemplate&gt;</span>
-        <span class='nt'>&lt;li</span> <span class='na'>class=</span><span class='s'>&#39;</span><span class='nt'>&lt;%#</span> <span class='k'>If</span><span class='p'>((</span><span class='n'>Container</span><span class='p'>.</span><span class='n'>DataItemIndex</span> <span class='o'>+</span> <span class='mi'>1</span> <span class='ow'>Mod</span> <span class='mi'>5</span><span class='p'>).</span><span class='n'>Equals</span><span class='p'>(</span><span class='mi'>0</span><span class='p'>),</span> <span class='s'>&quot;clear&quot;</span><span class='p'>,</span> <span class='s'>&quot;&quot;</span><span class='p'>)</span> <span class='nt'>%&gt;</span>&#39;&gt;
-            <span class='nt'>&lt;%#</span> <span class='n'>Container</span><span class='p'>.</span><span class='n'>DataItem</span><span class='p'>.</span><span class='n'>Title</span> <span class='nt'>%&gt;</span>
-        <span class='nt'>&lt;/li&gt;</span>
-    <span class='nt'>&lt;/ItemTemplate&gt;</span>
-<span class='nt'>&lt;/asp:Repeater&gt;</span>
-<span class='nt'>&lt;/ul&gt;</span>
-</code></pre></div>
-<p>I say we could to better. First - let&#8217;s work out what we want to say. Every 5th item output a new class. To determine if we are the fith item, we need to know the currentIndex and add 1 as it&#8217;s 0 based.</p>
+<p>I came across a need to output a “clear” class to every 5th item in an asp:repeater. Here’s an over-simplified example of the code that was written.</p>
 
-<p>So let&#8217;s write pseudo code of what we actually want:</p>
-<div class='highlight'><pre><code class='aspx-vb'><span class='nt'>&lt;li</span> <span class='na'>class=</span><span class='s'>&#39;</span><span class='nt'>&lt;%#</span> <span class='n'>Container</span><span class='p'>.</span><span class='n'>Every5thItem</span><span class='p'>(</span><span class='s'>&quot;clear&quot;</span><span class='p'>)</span> <span class='nt'>%&gt;</span>&#39;&gt;...<span class='nt'>&lt;/li&gt;</span>
-</code></pre></div>
-<p>Okay - that feels better, but I think we could improve it by having &#8216;5&#8217; as a parameter, I know that we might decide to change the width of this repeater later, and thus need to change which item clears.</p>
-<div class='highlight'><pre><code class='aspx-vb'><span class='nt'>&lt;li</span> <span class='na'>class=</span><span class='s'>&#39;</span><span class='nt'>&lt;%#</span> <span class='n'>Container</span><span class='p'>.</span><span class='n'>Every</span><span class='p'>(</span><span class='mi'>5</span><span class='p'>).</span><span class='n'>Output</span><span class='p'>(</span><span class='s'>&quot;clear&quot;</span><span class='p'>)</span> <span class='nt'>%&gt;</span>&#39;&gt;...<span class='nt'>&lt;/li&gt;</span>
-</code></pre></div>
-<p>Nice - that&#8217;s a descriptive way of outputting a the &#8220;clear&#8221; class on every 5th item, and allows us to change the params depending on our needs. But how do we write the code?</p>
-<div class='highlight'><pre><code class='vbnet'><span class='k'>Public</span> <span class='k'>Module</span> <span class='nn'>RepeaterHelper</span>
-    <span class='o'>&lt;</span><span class='n'>System</span><span class='p'>.</span><span class='n'>Runtime</span><span class='p'>.</span><span class='n'>CompilerServices</span><span class='p'>.</span><span class='n'>Extension</span><span class='p'>()</span><span class='o'>&gt;</span>
-    <span class='k'>Public</span> <span class='k'>Function</span> <span class='nf'>Every</span><span class='p'>(</span><span class='n'>container</span> <span class='ow'>As</span> <span class='n'>IDataItemContainer</span><span class='p'>,</span> <span class='n'>nthItem</span> <span class='ow'>As</span> <span class='kt'>Integer</span><span class='p'>)</span> <span class='ow'>As</span> <span class='p'>...</span>
+<div class="highlight"><pre><code class="language-aspx-vb" data-lang="aspx-vb">&lt;ul&gt;
+&lt;asp:Repeater runat=&#39;server&#39;&gt;
+    &lt;ItemTemplate&gt;
+        &lt;li class=&#39;&lt;%# If((Container.DataItemIndex + 1 Mod 5).Equals(0), &quot;clear&quot;, &quot;&quot;) %&gt;&#39;&gt;
+            &lt;%# Container.DataItem.Title %&gt;
+        &lt;/li&gt;
+    &lt;/ItemTemplate&gt;
+&lt;/asp:Repeater&gt;
+&lt;/ul&gt;</code></pre></div>
+
+<p>I say we could to better. First - let’s work out what we want to say. Every 5th item output a new class. 
+To determine if we are the fith item, we need to know the currentIndex and add 1 as it’s 0 based.</p>
+
+<p>So let’s write pseudo code of what we actually want:</p>
+
+<div class="highlight"><pre><code class="language-aspx-vb" data-lang="aspx-vb">&lt;li class=&#39;&lt;%# Container.Every5thItem(&quot;clear&quot;) %&gt;&#39;&gt;...&lt;/li&gt;</code></pre></div>
+
+<p>Okay - that feels better, but I think we could improve it by having ‘5’ as a parameter, I know that we might decide to change the width of this repeater later, and thus need to change which item clears.</p>
+
+<div class="highlight"><pre><code class="language-aspx-vb" data-lang="aspx-vb">&lt;li class=&#39;&lt;%# Container.Every(5).Output(&quot;clear&quot;) %&gt;&#39;&gt;...&lt;/li&gt;</code></pre></div>
+
+<p>Nice - that’s a descriptive way of outputting a the “clear” class on every 5th item, and allows us to change the params depending on our needs. But how do we write the code?</p>
+
+<div class="highlight"><pre><code class="language-vbnet" data-lang="vbnet">Public Module RepeaterHelper
+    &lt;System.Runtime.CompilerServices.Extension()&gt;
+    Public Function Every(container As IDataItemContainer, nthItem As Integer) As ...
         
-    <span class='k'>End</span> <span class='k'>Function</span>
-<span class='k'>End</span> <span class='k'>Module</span>
-</code></pre></div>
-<p>So this is the skeleton that allows us to extend the &#8220;Container&#8221; object in a repeater, adding &#8220;Every&#8221; as a function to any IDataItemContainer in your project. Now we need to return an object that exposes an Output function&#8230;</p>
-<div class='highlight'><pre><code class='vbnet'><span class='k'>Public</span> <span class='k'>Module</span> <span class='nn'>RepeaterHelper</span>
+    End Function
+End Module</code></pre></div>
 
-    <span class='o'>&lt;</span><span class='n'>System</span><span class='p'>.</span><span class='n'>Runtime</span><span class='p'>.</span><span class='n'>CompilerServices</span><span class='p'>.</span><span class='n'>Extension</span><span class='p'>()</span><span class='o'>&gt;</span>
-    <span class='k'>Public</span> <span class='k'>Function</span> <span class='nf'>Every</span><span class='p'>(</span><span class='n'>container</span> <span class='ow'>As</span> <span class='n'>IDataItemContainer</span><span class='p'>,</span> <span class='n'>nthItem</span> <span class='ow'>As</span> <span class='kt'>Integer</span><span class='p'>)</span> <span class='ow'>As</span> <span class='n'>Itemiser</span>
-        <span class='k'>Return</span> <span class='k'>New</span> <span class='n'>Itemiser</span><span class='p'>(</span><span class='n'>container</span><span class='p'>.</span><span class='n'>DataItemIndex</span><span class='p'>,</span> <span class='n'>nthItem</span><span class='p'>)</span>
-    <span class='k'>End</span> <span class='k'>Function</span>
+<p>So this is the skeleton that allows us to extend the “Container” object in a repeater, adding “Every” as a function to any IDataItemContainer in your project. Now we need to return an object that exposes an Output function…</p>
+
+<div class="highlight"><pre><code class="language-vbnet" data-lang="vbnet">Public Module RepeaterHelper
+
+    &lt;System.Runtime.CompilerServices.Extension()&gt;
+    Public Function Every(container As IDataItemContainer, nthItem As Integer) As Itemiser
+        Return New Itemiser(container.DataItemIndex, nthItem)
+    End Function
 
 
-    <span class='k'>Public</span> <span class='k'>Class</span> <span class='nc'>Itemiser</span>
-        <span class='k'>Public</span> <span class='k'>Sub</span> <span class='nf'>New</span><span class='p'>(</span><span class='k'>ByVal</span> <span class='n'>currentIndex</span> <span class='ow'>As</span> <span class='kt'>Integer</span><span class='p'>,</span> <span class='k'>ByVal</span> <span class='n'>item</span> <span class='ow'>As</span> <span class='kt'>Integer</span><span class='p'>)</span>
-            <span class='k'>Me</span><span class='p'>.</span><span class='n'>ItemCount</span> <span class='o'>=</span> <span class='n'>item</span>
-            <span class='k'>Me</span><span class='p'>.</span><span class='n'>CurrentIndex</span> <span class='o'>=</span> <span class='n'>currentIndex</span>
-        <span class='k'>End</span> <span class='k'>Sub</span>
-        <span class='k'>Property</span> <span class='nf'>ItemCount</span> <span class='ow'>As</span> <span class='kt'>Integer</span>
-        <span class='k'>Property</span> <span class='nf'>CurrentIndex</span> <span class='ow'>As</span> <span class='kt'>Integer</span>
-        <span class='k'>Public</span> <span class='k'>Function</span> <span class='nf'>Output</span><span class='p'>(</span><span class='k'>ByVal</span> <span class='n'>text</span> <span class='ow'>As</span> <span class='kt'>String</span><span class='p'>)</span> <span class='ow'>As</span> <span class='kt'>String</span>
-            <span class='k'>Return</span> <span class='k'>If</span><span class='p'>(((</span><span class='n'>CurrentIndex</span> <span class='o'>+</span> <span class='mi'>1</span><span class='p'>)</span> <span class='ow'>Mod</span> <span class='mi'>5</span><span class='p'>).</span><span class='n'>Equals</span><span class='p'>(</span><span class='mi'>0</span><span class='p'>),</span> <span class='n'>text</span><span class='p'>,</span> <span class='s'>&quot;&quot;</span><span class='p'>)</span>
-        <span class='k'>End</span> <span class='k'>Function</span>
-    <span class='k'>End</span> <span class='k'>Class</span>
+    Public Class Itemiser
+        Public Sub New(ByVal currentIndex As Integer, ByVal item As Integer)
+            Me.ItemCount = item
+            Me.CurrentIndex = currentIndex
+        End Sub
+        Property ItemCount As Integer
+        Property CurrentIndex As Integer
+        Public Function Output(ByVal text As String) As String
+            Return If(((CurrentIndex + 1) Mod 5).Equals(0), text, &quot;&quot;)
+        End Function
+    End Class
 
-<span class='k'>End</span> <span class='k'>Module</span>
-</code></pre></div>
-<p>ANd that&#8217;s it - outputting a class on every 5th item in a repeater.</p>
+End Module</code></pre></div>
+
+<p>ANd that’s it - outputting a class on every 5th item in a repeater.</p>
+
 </div>
 
 

@@ -30,46 +30,51 @@
 <div class="post">
 <p>I was just trying out the new formatting styles available in javascript, I was pretty stunned by the way the new Yeild iterator works.</p>
 
-<h1 id='a_very_simple_yeild_in_javascript'>A very simple yeild in javascript</h1>
-<div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>yeildingFunction</span> <span class='o'>=</span> <span class='kd'>function</span><span class='o'>*</span><span class='p'>()</span> <span class='p'>{</span>
-    <span class='nx'>yield</span> <span class='s2'>&quot;fred&quot;</span><span class='p'>;</span>
-    <span class='nx'>yield</span> <span class='s2'>&quot;bob&quot;</span><span class='p'>;</span>
-    <span class='k'>return</span> <span class='s2'>&quot;sue&quot;</span><span class='p'>;</span>
-<span class='p'>},</span>
-    <span class='nx'>i</span> <span class='o'>=</span> <span class='nx'>yeildingFunction</span><span class='p'>();</span>
-<span class='nx'>console</span><span class='p'>.</span><span class='nx'>log</span><span class='p'>(</span><span class='nx'>i</span><span class='p'>.</span><span class='nx'>next</span><span class='p'>());</span>
-<span class='nx'>console</span><span class='p'>.</span><span class='nx'>log</span><span class='p'>(</span><span class='nx'>i</span><span class='p'>.</span><span class='nx'>next</span><span class='p'>());</span>
-<span class='nx'>console</span><span class='p'>.</span><span class='nx'>log</span><span class='p'>(</span><span class='nx'>i</span><span class='p'>.</span><span class='nx'>next</span><span class='p'>());</span>
-</code></pre></div>
+<h1 id="a-very-simple-yeild-in-javascript">A very simple yeild in javascript</h1>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">var yeildingFunction = function*() {
+    yield &quot;fred&quot;;
+    yield &quot;bob&quot;;
+    return &quot;sue&quot;;
+},
+    i = yeildingFunction();
+console.log(i.next());
+console.log(i.next());
+console.log(i.next());</code></pre></div>
+
 <p>The output is as follows:</p>
-<div class='highlight'><pre><code class='javascript'><span class='c1'>//Object {value: &quot;fred&quot;, done: false}</span>
-<span class='c1'>//Object {value: &quot;bob&quot;, done: false}</span>
-<span class='c1'>//Object {value: &quot;sue&quot;, done: true} </span>
-</code></pre></div>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">//Object {value: &quot;fred&quot;, done: false}
+//Object {value: &quot;bob&quot;, done: false}
+//Object {value: &quot;sue&quot;, done: true}</code></pre></div>
+
 <p>This is interesting. The yeild statement effectively will halt execution inside a function and allow us to step through values.</p>
 
-<p>Also of note if you try to iterte the function a further tiem after it is &#8220;done&#8221; you will see the following;</p>
-<div class='highlight'><pre><code class='javascript'><span class='nx'>console</span><span class='p'>.</span><span class='nx'>log</span><span class='p'>(</span><span class='nx'>i</span><span class='p'>.</span><span class='nx'>next</span><span class='p'>());</span>
-<span class='c1'>//Error: Generator has already finished</span>
-</code></pre></div>
-<p>Okay - so it&#8217;s probably best to loop through iterators until you see they are &#8220;done&#8221;&#8230;</p>
-<div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>yeildingFunction</span> <span class='o'>=</span> <span class='kd'>function</span><span class='o'>*</span><span class='p'>()</span> <span class='p'>{</span>
-    <span class='nx'>yield</span> <span class='s2'>&quot;fred&quot;</span><span class='p'>;</span>
-    <span class='nx'>yield</span> <span class='s2'>&quot;bob&quot;</span><span class='p'>;</span>
-    <span class='k'>return</span> <span class='s2'>&quot;sue&quot;</span><span class='p'>;</span>
-<span class='p'>},</span>
-    <span class='nx'>i</span> <span class='o'>=</span> <span class='nx'>yeildingFunction</span><span class='p'>(),</span>
-    <span class='nx'>next</span><span class='p'>;</span>
-<span class='k'>do</span> <span class='p'>{</span>
-    <span class='nx'>next</span> <span class='o'>=</span> <span class='nx'>i</span><span class='p'>.</span><span class='nx'>next</span><span class='p'>();</span>
-    <span class='nx'>console</span><span class='p'>.</span><span class='nx'>log</span><span class='p'>(</span><span class='nx'>next</span><span class='p'>.</span><span class='nx'>value</span><span class='p'>);</span>
-<span class='p'>}</span> <span class='k'>while</span><span class='p'>(</span><span class='o'>!</span><span class='nx'>next</span><span class='p'>.</span><span class='nx'>done</span><span class='p'>)</span>
+<p>Also of note if you try to iterte the function a further tiem after it is “done” you will see the following;</p>
 
-<span class='c1'>//fred</span>
-<span class='c1'>//bob</span>
-<span class='c1'>//sue</span>
-</code></pre></div>
-<p>That&#8217;s just a little exploration into generators. It&#8217;s an interesting paradigm, and it will definitely open the door to useful ways of writing code.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">console.log(i.next());
+//Error: Generator has already finished</code></pre></div>
+
+<p>Okay - so it’s probably best to loop through iterators until you see they are “done”…</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">var yeildingFunction = function*() {
+    yield &quot;fred&quot;;
+    yield &quot;bob&quot;;
+    return &quot;sue&quot;;
+},
+    i = yeildingFunction(),
+    next;
+do {
+    next = i.next();
+    console.log(next.value);
+} while(!next.done)
+
+//fred
+//bob
+//sue</code></pre></div>
+
+<p>That’s just a little exploration into generators. It’s an interesting paradigm, and it will definitely open the door to useful ways of writing code.</p>
+
 </div>
 
 
