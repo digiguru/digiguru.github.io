@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Take a shortcut, and suffer the concequences</title>
+        <title>Posts Tagged &ldquo;git&rdquo;</title>
         <meta name="viewport" content="width=device-width">
 
         <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
@@ -24,26 +24,132 @@
               <a class="extra" href="/">home</a>
             </div>
 
-                <h2>Take a shortcut, and suffer the concequences</h2>
-<p class="meta">08 Jun 2011</p>
-
-<div class="post">
-I have recently started programming in a more jquery centric style, to make sure that all the javascript on our sites are AWESOME!
-
-I was testing our latest control cross browser and found that IE 8 and lower didn't like my plugin. Digging into developer tools (f12) the following line was throwing an error.
-
-<code>thumbnailImage: $("<span style="color:#ff0000;"><img alt="" /><span style="color:#800000;">&lt;img /&gt;</span></span>", { <span style="color:#0000ff;">class</span>: "<span style="color:#800000;">imgThumb</span>", alt: "<span style="color:#800000;">thumbnail</span>", src: "<span style="color:#800000;">/images/hba/noImage.gif</span>" }),</code>
-
-I could see in developer tools that it had written the word "class" in blue in IE Developer tools, meaning it is reserved as a function, not allowed in my jQuery string.
-
-This is easily fixed...
-
-<code>thumbnailImage: $("<span style="color:#800000;">&lt;img /&gt;</span>", { "<span style="color:#800000;">class</span>": "<span style="color:#800000;">imgThumb</span>", alt: "<span style="color:#800000;">thumbnail</span>", src: "<span style="color:#800000;">/images/hba/noImage.gif</span>" }),</code>
-
-Removes the error. NICE!
-
-</div>
-
+                <h2 class="post_title">{.{page.title}}</h2>
+<ul>
+  
+      
+          
+      
+          
+      
+          
+          <li class="archive_list">
+            <time style="color:#666;font-size:11px;" datetime='2015-03-02'>{.{post.date | date: "%m/%d/%y"}}</time> <a class="archive_list_article_link" href='/blog/2015/03/02/move-a-repository-from-svn-to-git.html'>Move a repository from svn to git</a>
+            <p class="summary">
+            <ul class="tag_list">
+              
+              <li class="inline archive_list"><a class="tag_list_link" href="/tag/bash">bash</a></li>
+              
+              <li class="inline archive_list"><a class="tag_list_link" href="/tag/svn">svn</a></li>
+              
+              <li class="inline archive_list"><a class="tag_list_link" href="/tag/git">git</a></li>
+              
+            </ul>
+          </li>
+          
+      
+  
+      
+          
+      
+          
+      
+          
+      
+          
+      
+  
+      
+          
+      
+          
+      
+          
+      
+  
+      
+          
+      
+          
+      
+          
+      
+  
+      
+          
+      
+          
+      
+          
+      
+  
+      
+          
+      
+          
+      
+          
+      
+  
+      
+          
+      
+          
+      
+          
+      
+  
+      
+          
+      
+          
+      
+  
+      
+          
+      
+          
+      
+          
+      
+  
+      
+  
+      
+  
+      
+  
+      
+  
+      
+  
+      
+  
+      
+          
+      
+          
+      
+  
+      
+  
+      
+  
+      
+  
+      
+  
+      
+  
+      
+          
+      
+          
+      
+  
+      
+  
+</ul>
 
               
               
@@ -77,15 +183,6 @@ ga('create', 'UA-123008-9', 'digiguru.co.uk');
 ga('require', 'linkid', 'linkid.js');
 ga('send', 'pageview');
 
-</script>
-        
-<script type="text/javascript">
-    var disqus_shortname = 'digigurucouk';
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
 </script>
         
   
