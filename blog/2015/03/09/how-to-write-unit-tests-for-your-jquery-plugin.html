@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>How to write a unit test for your jQuery plugin</title>
+        <meta name="viewport" content="width=device-width">
+
+        <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+        
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Digiguru.co.uk</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>How to write a unit test for your jQuery plugin</h2>
+<p class="meta">09 Mar 2015</p>
+
+<div class="post">
+<p>I think alot of people think that javascript is untestable, even less write tests for the jQuery plugins.</p>
+
+<p>This is a real shame, as there are libraries out there like qUnit that allow test classes to be written for your javascript plugins.</p>
+
+<p>Firstly let’s set up your environment. You can use various testing tools or libraries - but I myself prefer to use <a href="http://brackets.io">brackets</a>, and you’ll find an extension called <a href="http://brackets-xunit.github.io/">Brackets xUnit</a> that allows you to test javascrit files simply by writing a test and hitting save!</p>
+
+<p>Firstly you want to put the following at the top of your javascript file…</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">/*jslint plusplus: true */
+/*jslint nomen: true*/
+/*global $, test, ok, equal, module */
+/* brackets-xunit: qunit */
+/* brackets-xunit: includes=include1.js,include2.js,myfile.js* */</code></pre></div>
+
+<p>Let’s disect this line by line.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">/*jslint plusplus: true */</code></pre></div>
+
+<p>This allows you to have ++ in your file. Some people don’t like code in this way, but I find unless i am including an underscore dependancy then I will often just write loops using</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">for(var i=0, l=arr.length; i &lt; l; i++) {
+ ...
+}</code></pre></div>
+
+<p>which will result in a JSLint error unless you use plusplus: true.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">/*jslint nomen: true*/</code></pre></div>
+
+<p>This actually allows you to use the underscore character in your javascript variables - specifically it allows _ to be used. Once again, feel free to drop it.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">/*global $, test, ok, equal, module */</code></pre></div>
+
+<p>Here we are defining objects that we will use in this file. I am assuming if you want to write a jquery plugin then $ is mandatory, and test, ok, equal, module are all references to methos in qUnit.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">/* brackets-xunit: qunit */</code></pre></div>
+
+<p>Tells the X-Unit plugin that we are writing a qUnit test. It will attempt to automatically detect it from the method names in the file, but there’s no harm in telling the app what sort of test it is for sure.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">/* brackets-xunit: includes=jquery.js,dependancy1.js,dependancy2.js,myfile.js* */</code></pre></div>
+
+<p>These are listing out dependancy files. For example you may have a plugin called “Modal.js” and it has a dependancy on fancybox.js and jquery. In that case you should write the following…</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">/* brackets-xunit: includes=jquery.js,fancybox.js,Modal.js* */</code></pre></div>
+
+<p>This will include those files in the qunit.html file before it runs the tests.</p>
+
+<p>Notice the last bit…</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">Modal.js*</code></pre></div>
+
+<p>The star is a useful helper, it tells the testing library to run code coverage on this file. You wouldn’t want to put the star on any dependancy - could you imagine how many lines in jquery you don’t use in your library? However it’s useful to have on the file you are writing tests for.</p>
+
+<h1 id="writing-your-first-test">Writing your first test</h1>
+
+<p>Okay, so you are all setup - let’s add some skeleton code to get the test running.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">(function () {
+    &quot;use strict&quot;;     
+    
+    module(&quot;My First Tests&quot;);
+
+    test(&quot;Works on a plugin&quot;, function () {
+    
+        var $modal = $(&quot;&lt;div&gt;&lt;/div&gt;&quot;);
+        $(&quot;body&quot;).append($modal);
+        
+        $modal.modal();
+        
+        equal($modal.length, 1, &quot;Has one node&quot;);
+        equal($modal.data(&quot;modal&quot;), true, &quot;Has modal&quot;);
+        
+    });
+
+})();</code></pre></div>
+
+<p>So it’s a very simple test - our modal.js library is going to be tested on a brand new div added to the UI dynamically.</p>
+
+<p>Note the last line - we are making sure that there is a data attribute in the root element. This is a really fundamental thing I advise when writing plugins - try to show the state of the plugin in data attributes. The following line should be run inside the plugin to stamp the state on the root.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">$(this).data(&quot;modal&quot;, true);</code></pre></div>
+
+<p>Whenever an interaction updates the state try to make sure data attriibutes are used to describe the state. It makes it easier to see what the plugin is doing, especially from a test class. As long as the parameters inside the library are described by data attributes, it will make it easy to find the changes and assert the new state.</p>
+
+<p>You’re now free to start writing a whole load of tests for your library. I suggest one of the things you make sure you test is applying the plugin to multiple nodes in the dom - this is often an oversight in many developments.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">test(&quot;Open - trigger 2 nodes&quot;, function () {
+        
+        var $modal = $(&quot;&lt;div class=&#39;multiple&#39;&gt;&lt;/div&gt;&quot;);
+        $(&quot;body&quot;)
+            .append($modal)
+            .append($modal);
+            
+        $(&quot;.multiple&quot;).modal();
+        
+        equal($(&quot;.multiple&quot;).length, 2, &quot;Has 2 nodes&quot;);
+        $(&quot;.multiple&quot;).each(function(i, v) {
+            equal($(v).data(&quot;modal&quot;), true, &quot;Has modal&quot;);
+        });
+    });</code></pre></div>
+
+<p>This is a fundamental test I always write. Expand it with as much behaviour is necessary to ensure the logic is working.</p>
+
+<p>Now to go for some more detailed tests. You should try to consume all the API endpoints to your plugin - work out the entropy and write a test for it. Luckily we have code coverage so it soon tells you when you are missing logic in the test.</p>
+
+<p>Let’s write another test</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">test(&quot;Show action&quot;, function () {
+    
+        var $modal = $(&quot;&lt;div&gt;&lt;/div&gt;&quot;);
+        $(&quot;body&quot;).append($modal);
+        
+        $modal.modal();
+        
+        equal($modal.find(&quot;.popup:visible&quot;), true, &quot;Popup is visible&quot;);
+        
+        $modal.find(&quot;.show&quot;).click();
+        
+        equal($modal.find(&quot;.popup:visible&quot;), true, &quot;Popup is visible&quot;);
+        
+    });</code></pre></div>
+
+<p>There are a few things wrong with this test, and all of these items are a result of tight coupling. We have a needed to check inside the document element to find things to test against, and then to trigger behaviour. Anywhere you see &lt;pre&gt;.find()&lt;/pre&gt; in a test you know you have a problem. Firstly let’s change look at the plugin itself.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">var $modal = $(this);
+    
+    $modal.find(&quot;.show&quot;).on(&quot;click&quot;, function() {
+        $modal.find(&quot;.popup&quot;).show();
+    });</code></pre></div>
+
+<p>When you are writing your plugin, try to expose any state changes as events that you can trigger, rather than through just interaction events from inside the library.</p>
+
+<p>Consider the following alternative</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">var $modal = $(this);
+    
+    $modal.on(&quot;show&quot;, function() {
+        $modal.find(&quot;.popup&quot;).show();
+    });
+    
+    $modal.find(&quot;.show&quot;).on(&quot;click&quot;, function() {
+        $modal.trigger(&quot;show&quot;);
+    });</code></pre></div>
+
+<p>This is not only easier to consume for consumers of your plugin but also makes more sense in tests.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">test(&quot;Show action&quot;, function () {
+        var $modal = $(&quot;&lt;div&gt;&lt;/div&gt;&quot;);
+        $(&quot;body&quot;).append($modal);
+        
+        $modal.modal();
+        
+        equal($modal.find(&quot;.popup:visible&quot;), true, &quot;Popup is visible&quot;);
+        
+        //$modal.find(&quot;.show&quot;).click();
+        $modal.trigger(&quot;show&quot;);
+        
+        equal($modal.find(&quot;.popup:visible&quot;), true, &quot;Popup is visible&quot;);
+        
+    });</code></pre></div>
+
+<p>This is better. Now let’s update the state so we don’t have to reach inside the plugin to discover the state…</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">var $modal = $(this);
+    $modal.data(&quot;isShowing&quot;, false);
+    
+    $modal.on(&quot;show&quot;, function() {
+        $modal.find(&quot;.popup&quot;).show();
+        $modal.data(&quot;isShowing&quot;, true);
+    });
+    
+    $modal.find(&quot;.show&quot;).on(&quot;click&quot;, function() {
+        $modal.trigger(&quot;show&quot;);
+    });</code></pre></div>
+
+<p>Excellent - basically we’ve created an abstraction for what the state feels like. Now we can write a test that is based on state rather than implementation.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">test(&quot;Works on a plugin&quot;, function () {
+        var $modal = $(&quot;&lt;div&gt;&lt;/div&gt;&quot;);
+        $(&quot;body&quot;).append($modal);
+        
+        $modal.modal();
+        
+        //equal($modal.find(&quot;.popup:visible&quot;), false, &quot;Popup is visible&quot;);
+        equal($modal.data(&quot;isShowing&quot;), false, &quot;Starts not showing&quot;);
+        
+        $modal.trigger(&quot;show&quot;);
+        
+        //equal($modal.find(&quot;.popup:visible&quot;), true, &quot;Popup is visible&quot;);
+        equal($modal.data(&quot;isShowing&quot;), true, &quot;Starts not showing&quot;);
+    });</code></pre></div>
+
+<p>Much better.</p>
+
+<p>Finally - by writing the tests in the way we did we are actually rendering the plugin in the test page for every test. If you drop in some CSS you should be able to view every permiatation of the UI listed out one after the other because we’ve just been dropping the elements into the page at the end of the body tag. This is really cool. If you load your qunit.html page you should see all the variations rendered out one after the other.</p>
+
+<h1 id="in-conclusion">In Conclusion</h1>
+
+<p>Once you’ve setup your environment - it’s important to think about the following features when writing testable jquery plugins.</p>
+
+<ul>
+  <li>Use data on the plugin element to help describe the state.</li>
+  <li>Create custom events so they can be consumed outside your plugin.</li>
+  <li>Use the API you have written and test every permiatation</li>
+  <li>Use the qunit.html to display all the states in one go</li>
+</ul>
+
+
+</div>
+
+
+              
+              
+              <div id="disqus_thread"></div>
+              
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Name<br />
+                  What You Are<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123008-9', 'digiguru.co.uk');
+ga('require', 'linkid', 'linkid.js');
+ga('send', 'pageview');
+
+</script>
+        
+<script type="text/javascript">
+    var disqus_shortname = 'digigurucouk';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+        
+  
+    </body>
+</html>
