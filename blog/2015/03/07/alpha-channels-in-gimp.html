@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Alpha Channels in GIMP</title>
+        <meta name="viewport" content="width=device-width">
+
+        <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+        
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Digiguru.co.uk</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>Alpha Channels in GIMP</h2>
+<p class="meta">07 Mar 2015</p>
+
+<div class="post">
+<p>I have recently been asked to cut some photos up for a friend and put the subjects into new photos.</p>
+
+<p>This is a common request that is often though of as easy. Sadly it’s not that straightforward, but one I’ve been known to do in Photoshop using Alpha Channels.</p>
+
+<p>An alpha channel is amazing because you can literally paint a selection by using a white brush, and then “undo” it by using a black brush. If your undo went too far you can paint it back in with white. Shades of grey represent the transparency / opacity of the layer - so you can even paint shadows into the photos. It’s very cool.</p>
+
+<p>To do this in GIMP do the following.</p>
+
+<h1 id="step-1---duplicate-the-layer">Step 1 - Duplicate the layer.</h1>
+
+<p>Use the double photo icon at the bottom (Between Green arrow and anchor)</p>
+
+<h1 id="step-2---cut-around-an-object">Step 2 - Cut around an object</h1>
+
+<p>Find the scissors tool - click the newly duplicated image layer and then click on the image to choose the first “cut corner”. Unlike other programs, you don’t drag a selection, instead you click on every corner or edge. Carry on clicking around the object you want to cut out - be as rough as you like because you can smarten it up later. When you complete the object hit Enter to complete the selection</p>
+
+<h1 id="step-3---add-layer-mask">Step 3 - Add layer mask</h1>
+
+<p>Now go to the Menu at the top and choose Layer &gt; Mask &gt; Add layer mask. The menu will ask what you want to use as a starting point. Choose “Selection” in the menu that pops up. Now the selected area is “White” for your alpha channel (As in opaque) and the remainder of the image is “Black” (as in transparent).</p>
+
+<p>I suggest you preview this now by clicking the Eye icon on the layer below the one you have just cut out. You should witness the background suddenly turns into a chequered pattern. That’s the object you just cut out. You can smarten up the edges by ensuring you have selected the quick-mask layer in layer window, and using the airbrush tool - white will fill the image in, black will remove the image.</p>
+
+<p>It’s easy to undo an over-zelous cut by just painting the quick mask back in.</p>
+
+<h1 id="step-4---move-the-layers">Step 4 - Move the layers</h1>
+
+<p>Now that you have created an object you need to Link the mask to the image - you do this by clicking the empty box next to the image. Now you can move the layers together. If you don’t do this you will only move either the image or the mask and weird things will happen.</p>
+
+<p>Now drag the object to a new position, or copy it into a new picture.</p>
+
+<h1 id="other-ideas">Other ideas</h1>
+
+<ul>
+  <li>If you want to put an object from one image into another file, copy it into the photo before you do it - I can’t find a way to copy a masked layer into another GIMP file yet.</li>
+  <li>Use rubber stamp to remove areas</li>
+  <li>Select an area where you want to “pull a background” across and use smudge to pull background across an area without it bleeding into anything else.</li>
+  <li>Use 1 to zoom to the whole pic, and 5 to zoom into 1600% zoom</li>
+</ul>
+
+
+</div>
+
+
+              
+              
+              <div id="disqus_thread"></div>
+              
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Name<br />
+                  What You Are<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123008-9', 'digiguru.co.uk');
+ga('require', 'linkid', 'linkid.js');
+ga('send', 'pageview');
+
+</script>
+        
+<script type="text/javascript">
+    var disqus_shortname = 'digigurucouk';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+        
+  
+    </body>
+</html>
