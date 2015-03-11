@@ -41,11 +41,11 @@
 
 <p>Effectively we use the <a href="https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow">gitflow worklow</a>, but with rigid naming conventions.</p>
 
-<p>Sadly we are part way through the project and it comes with alot of history, so we really should go back and fix all the branch names. To do this I am using the following process.</p>
+<p>Sadly we are part way through the project and it comes with a lot of history, so we really should go back and fix all the branch names. To do this I am using the following process.</p>
 
 <h1 id="synchronize-the-solution">Synchronize the solution</h1>
 
-<p>If I havn’t already done so I need to synchronize the solution. In Github it’s a simple case of hitting the “Clone on Desktop” button and letting the GUI do the hard work.</p>
+<p>If I haven’t already done so I need to synchronize the solution. In Github it’s a simple case of hitting the “Clone on Desktop” button and letting the GUI do the hard work.</p>
 
 <p>In command line I believe it’s the following…</p>
 
@@ -78,7 +78,7 @@ Total 33 (delta 25), reused 24 (delta 16)
 To http://www.github.com/path/repo.git
  * [new branch]      MyBadlyNamedBranch -&gt; MyBetterNamedBranch</code></pre></div>
 
-<p>Not quite out of the woods yet - technically everyone who consumes the repo needs to delete the old branch from their local repos. Quite frankly - it’s up to them what they do. I do it becasue I just want to see branches that are current, but it’s up to the individual.</p>
+<p>Not quite out of the woods yet - technically everyone who consumes the repo needs to delete the old branch from their local repos. Quite frankly - it’s up to them what they do. I do it because I just want to see branches that are current, but it’s up to the individual.</p>
 
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">$ git checkout Master
 $ git branch -D MyBadlyNamedBranch</code></pre></div>
