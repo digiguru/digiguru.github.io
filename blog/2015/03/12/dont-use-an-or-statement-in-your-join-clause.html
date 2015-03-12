@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Don't use an OR statement in your join clasue</title>
+        <meta name="viewport" content="width=device-width">
+
+        <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+        
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Digiguru.co.uk</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>Don't use an OR statement in your join clasue</h2>
+<p class="meta">12 Mar 2015</p>
+
+<div class="post">
+<p>Found an interesting little problem recently. We had a query we wanted to upgrade for the next release, and added an OR statement to allow us to pre-release the functionality for the new code drop. This had a really big impact on performance and caused lots of issues.</p>
+
+<p>When we investigated it turns out that OR queries in a join are really expensive. Consider the following statement.</p>
+
+<div class="highlight"><pre><code class="language-sql" data-lang="sql">Select 
+    child.FirstName,
+    child.Surname,
+    parent.FirstName,
+    parent.Surname
+From Children child
+    Inner Join Parents parent
+    On child.MothersOriginalSurname = parent.MaidenName
+    Or child.Surname = parent.Surname</code></pre></div>
+
+<p>The sql query analyser can’t do anythign to optimize this query, and effectively runs the following…</p>
+
+<div class="highlight"><pre><code class="language-sql" data-lang="sql">Select 
+    child.FirstName,
+    child.Surname,
+    parent.FirstName,
+    parent.Surname
+From Children child
+    Inner Join Parents parent
+    On child.MothersOriginalSurname = parent.MaidenName
+Union 
+Select 
+    child.FirstName,
+    child.Surname,
+    parent.FirstName,
+    parent.Surname
+From Children child
+    Inner Join Parents parent
+    On child.Surname = parent.Surname</code></pre></div>
+
+<p>If you want to squeeze performance out of it - consider the following alternative…</p>
+
+<div class="highlight"><pre><code class="language-sql" data-lang="sql">Select 
+    child.FirstName,
+    child.Surname,
+    Coalesce(father.FirstName, mother.FirstName) As Firstname,
+    Coalesce(father.Surname, mother.Surname) As Surname
+From Children child
+    Left Outer Join Parents mother
+    On child.MothersOriginalSurname = mother.MaidenName
+    Left Outer Join Parents father
+    On child.Surname = mother.Surname</code></pre></div>
+
+<p>This runs more quickly.</p>
+
+<p>Obviously the most ideal scenario is you refactor the data and add a proper key!</p>
+
+<div class="highlight"><pre><code class="language-sql" data-lang="sql">Select 
+    child.FirstName,
+    child.Surname,
+    Coalesce(father.FirstName, mother.FirstName) As Firstname,
+    Coalesce(father.Surname, mother.Surname) As Surname
+From Children child
+    Left Outer Join Parents father
+    On child.FatherID = father.ID
+    Left Outer Join Parents mother
+    On child.MotherID = mother.ID</code></pre></div>
+
+
+</div>
+
+
+              
+              
+              <div id="disqus_thread"></div>
+              
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Name<br />
+                  What You Are<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123008-9', 'digiguru.co.uk');
+ga('require', 'linkid', 'linkid.js');
+ga('send', 'pageview');
+
+</script>
+        
+<script type="text/javascript">
+    var disqus_shortname = 'digigurucouk';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+        
+  
+    </body>
+</html>
