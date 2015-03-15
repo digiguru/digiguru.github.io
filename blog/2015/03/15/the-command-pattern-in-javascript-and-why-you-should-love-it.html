@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>The Command Pattern in Javascript and why you should love it</title>
+        <meta name="viewport" content="width=device-width">
+
+        <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+        
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Digiguru.co.uk</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>The Command Pattern in Javascript and why you should love it</h2>
+<p class="meta">15 Mar 2015</p>
+
+<div class="post">
+<p>One pattern that I love to use in rich javascript applications is the Command Pattern. By embracing it you unlike your program to the ability to have multi-undo events, macro recording, but more and more prevalent in the sort of sites you see today, the way to distribute events to multiple clients (browsers) at once. Another advantage is it makes you app really easy to test - you can fire the Commands at your app and do some very deep tests on rich interfaces.</p>
+
+<p>The pattern is described by having the following objects…</p>
+
+<ul>
+  <li><em>Client</em> - Think of this as the page / browser window. You may decide to have multiple clients - thus being able to push events across multiple sessions. I find it best to setup the command object to have a Name and an args object.</li>
+  <li><em>Command</em> - Think of this as an abstraction to perform a specific action on your page. If you could pass in the minimum data necessary - what would that need to be?</li>
+  <li><em>Receiver</em> - Think of this as an object in your page that knows how to do something. The command object will be running events in a receiver.</li>
+  <li><em>Invoker</em> - The object that needs to store the events as they pass in, which allows you to keep a log of them for recording macros, storing undo/redo events or pushing the events to other clients.</li>
+</ul>
+
+<p>So what does this look like in a real app? Following is an exampel command obejct that I use in a <a href="https://github.com/digiguru/dylanSeating">table planning library</a>.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">var invokr = myApp.getInvoker();
+invokr.Call(&quot;AddGuest&quot;,
+    {
+        id: 1,
+        name: &quot;Test Guest&quot;,
+        x: 10,
+        y: 10
+    });
+invokr.Call(&quot;AddTable&quot;, 
+    {
+        id: 1,
+        type: &quot;table&quot;,
+        x: 200,
+        y: 200,
+        seatCount: 5
+    });</code></pre></div>
+
+<p>As you can see, the commands are easily serialized.</p>
+
+<p>Now, if you have a rich UI I’ve found it best to make these return promises. Why? Then you can have short animations between commands, allowing you to fire up a load of commands in sequence but honouring any complciated behaviour your UI might have - making it easier to gurentee the UI doesn’t go out of sync with the data.</p>
+
+<p>As a result, my test classes can look like this…</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">var invokr = myApp.getInvoker();
+invokr.Call(&quot;AddGuest&quot;, {
+    id: 1,
+    name: &quot;Test Guest&quot;,
+    x: 10,
+    y: 10
+}).then(function() {
+    invokr.Call(&quot;AddTable&quot;, 
+    {
+        id: 1,
+        type: &quot;table&quot;,
+        x: 200,
+        y: 200,
+        seatCount: 5
+    }).then(function() {
+        //Ensure that the UI has updated
+        // and the new Guest and Table 
+        // have been added to the page.
+    });
+});</code></pre></div>
+
+<p>This is really nice, because the test is describing the actions fired but not having to reach into objects on the pages, clicking buttons and updating form elements - definately my preferred way to write a test.</p>
+
+<p>This has given an overview of the command object, I intend to show examples of some of the other objects used to complete the command pattern in a future post.</p>
+
+</div>
+
+
+              
+              
+              <div id="disqus_thread"></div>
+              
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Name<br />
+                  What You Are<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123008-9', 'digiguru.co.uk');
+ga('require', 'linkid', 'linkid.js');
+ga('send', 'pageview');
+
+</script>
+        
+<script type="text/javascript">
+    var disqus_shortname = 'digigurucouk';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+        
+  
+    </body>
+</html>
