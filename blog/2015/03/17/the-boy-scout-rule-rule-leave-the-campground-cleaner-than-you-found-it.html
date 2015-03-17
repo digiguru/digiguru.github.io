@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>The boy scout rule - Leave the Campground Cleaner then when you found it</title>
+        <meta name="viewport" content="width=device-width">
+
+        <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+        
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Digiguru.co.uk</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>The boy scout rule - Leave the Campground Cleaner then when you found it</h2>
+<p class="meta">17 Mar 2015</p>
+
+<div class="post">
+<p>I was uploading a release for an app tonight, but I got a warning on the submission process explaining that I was missing a recommended icon 120x120 pixels.</p>
+
+<p>I thought this should be an easy thing to fix, all I need to do is drop in another icon. Firstly I open the Images.xcassets file to investigate…</p>
+
+<p><img src="/images/2015-03-17-an-example-of-a-missing-icon.png" alt="an example of a missing icon" longdesc="An xcode image asset library file with 17 icons, but one is missing." /></p>
+
+<p>There’s the missing image. The job is simple, I just have to rescale the laregest icon down to the right size. Next I open up the file hierarchy to find the larest of the assets, so I can scale it down…</p>
+
+<p><img src="/images/2015-03-17-badly-named-icons.png" alt="badly named icons" longdesc="Directory listing the following file names 144x144-6.png 144x144-10.png Contents.json Icon-40.png Icon-40@2x-1.png Icon-40@2x.png Icon-72.png Icon-76.png Icon-76@2x.png Icon-Small-1.png Icon-Small-50.png Icon-Small-50@2x.png Icon-Small.png Icon-small@2x-1.png Icon-Small@2x.png Icon.png Icon@2x.png" /></p>
+
+<p>Wow - the developer that last added to this folder should be ashamed. How did they know which is the biggest copy? Is it <code>144x144-6.png</code> or <code>144x144-10.png</code> (actually it’s <code>Icon-76@2x.png</code> - but finding that is a pain).</p>
+
+<p>So a sigh, a beer and a few spare moments later I have organised the file structure…</p>
+
+<p><img src="/images/2015-03-17-badly-named-icons.png" alt="badly named icons" longdesc="Directory listing the following file names Contents.json Icon-29@1x.png Icon-29@2x.png Icon-29@3x.png Icon-40@1x.png Icon-40@2x.png Icon-40@3x.png Icon-50@1x.png Icon-50@2x.png Icon-57@1x.png Icon-57@2x.png Icon-60@2x.png Icon-60@3x.png Icon-72@1x.png Icon-72@2x.png Icon-76@1x.png Icon-76@2x.png" /></p>
+
+<p>Question… How does it ever come to this? Is the developer just blindly dropping in assets into the GUI without a care to the naming? I far prefer to have well named files, as it helps me identify bugs and inconsistencies. This is why you should check over your file changes on every commit. Does this commit look clean? If so… commit!</p>
+
+</div>
+
+
+              
+              
+              <div id="disqus_thread"></div>
+              
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Name<br />
+                  What You Are<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123008-9', 'digiguru.co.uk');
+ga('require', 'linkid', 'linkid.js');
+ga('send', 'pageview');
+
+</script>
+        
+<script type="text/javascript">
+    var disqus_shortname = 'digigurucouk';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+        
+  
+    </body>
+</html>
