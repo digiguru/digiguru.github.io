@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>The command pattern - invoker object</title>
+        <meta name="viewport" content="width=device-width">
+
+        <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+        
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Digiguru.co.uk</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>The command pattern - invoker object</h2>
+<p class="meta">18 Mar 2015</p>
+
+<div class="post">
+<p>When dealing with the command pattern, we have to identify an invoker object.</p>
+
+<p>This object will process our concrete commands and store a list of events that have been applied. What does this invoker object look like. I identified the following interface. Firstly we know we want the ability to “undo” and “redo”.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">this.UndoActions = [];
+this.RedoActions = [];
+this.Undo = function Undo(callback) {
+    var action = this.UndoActions.pop();
+    this.RedoActions.push(action.Opposite());
+    return action.Run();
+};
+this.Redo = function Redo(callback) {
+    var action = this.RedoActions.pop();
+    this.UndoActions.push(action.Opposite());
+    return action.Run();
+};</code></pre></div>
+
+<p>This is fairly straight forward. We store a list of undo actions, and redo actions. Every time you perform an Undo action, you need to record the opposite action in the Redo list, and then perform the action, the finally return a promise. (for those who like to pass in a callback, you can also do this as an optional parameter).</p>
+
+<p>Okay - so given this, what does the action object look like? These are the concerete commands, so need to be assigned for each different command you have.</p>
+
+<p>For all of the concrete commands you need a core object.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">this.reverse = false;
+this.Run = function(callback) {
+    if(reverse) {
+        return this.forward(callback);
+    } else {
+        return this.backward(callback);
+    }
+};
+this.Opposite = function () {
+    reverse = !reverse;
+};</code></pre></div>
+
+<p>But you need to also add the following functions to each concrete command. Here is an example for “moveTable”.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">this.forward = function (callback) {
+    var table = getTable(args.table);
+    console.log(&quot;MoveTable&quot;, args);
+    return table.animateTable(args.current, callback); 
+};
+this.backward = function (callback) {
+    var table = getTable(args.table);
+    console.log(&quot;UndoMoveTable&quot;, args);
+    return table.animateTable(args.previous, callback);
+};</code></pre></div>
+
+<p>This ends the description of the Undo / Redo functionality. In a later post we will put it all together and try creating some fully functional examples.</p>
+
+</div>
+
+
+              
+              
+              <div id="disqus_thread"></div>
+              
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Name<br />
+                  What You Are<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123008-9', 'digiguru.co.uk');
+ga('require', 'linkid', 'linkid.js');
+ga('send', 'pageview');
+
+</script>
+        
+<script type="text/javascript">
+    var disqus_shortname = 'digigurucouk';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+        
+  
+    </body>
+</html>
