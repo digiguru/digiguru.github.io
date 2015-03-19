@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>The command pattern - an example in javascript</title>
+        <meta name="viewport" content="width=device-width">
+
+        <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+        
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Digiguru.co.uk</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>The command pattern - an example in javascript</h2>
+<p class="meta">19 Mar 2015</p>
+
+<div class="post">
+<p>So in previous article I showed some examples of the command pattern, now I will detail a simple application.</p>
+
+<p>Firstly let’s create a simple bit of HTML to help us visualise what we are doing.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&lt;h3&gt;Console&lt;/h3&gt;
+&lt;ul id=&quot;console&quot;&gt;&lt;/ul&gt;</code></pre></div>
+
+<p>Now - let’s build a simple Client. This client will have 1 responsibility - to update the HTML.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">function Client () {
+    this.log = function(msg) {
+        var c = document.getElementById(&quot;console&quot;),
+            li = document.createElement(&quot;li&quot;);
+        li.innerHTML = msg;
+        c.appendChild(li);
+        console.log(msg);
+    }
+}</code></pre></div>
+
+<p>You can test it out right away by posting a log event.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">var c = new Client();
+c.log(&quot;it works!&quot;);
+c.log(&quot;See?&quot;);</code></pre></div>
+
+<p>See <a href="http://codepen.io/digiguru/pen/OPrpBg" target="_blank">the client object running</a> in a new window.</p>
+
+<p>It outputs the following</p>
+
+<ul>
+  <li>it works!</li>
+  <li>See?</li>
+</ul>
+
+<p>No surprises there, but it’s great to see our client works 100% as expected. This is a beautiful example of separation of concerns. If the client is broken, we can test it’s API directly to see what’s broken and how to fix it.</p>
+
+<p>Now onto the reciever…</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">function Receiver () {
+    this.data = 1;
+    c.log(&quot;Data starts off with &quot; + this.data);
+  this.increase = function() {
+    this.data++;
+    c.log(&quot;Increment. My data is now &quot; + this.data);
+  }
+  this.decrease = function() {
+    this.data--;
+    c.log(&quot;Decrement. My data is now &quot; + this.data);
+  }
+}</code></pre></div>
+
+<p>It’s very simple - all it does is increase and decrease it’s data by one.</p>
+
+<p>Let’s test it…</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">...
+var r = new Receiver();
+r.increase();
+r.decrease();</code></pre></div>
+
+<p>And now you can see <a href="http://codepen.io/digiguru/pen/bNOqOa" target="_blank">the reciever object can take actions and apply them to the client</a>.</p>
+
+<p>The outputs the following</p>
+
+<ul>
+  <li>Data starts off with 1</li>
+  <li>Increment. My data is now 2</li>
+  <li>Decrement. My data is now 1</li>
+</ul>
+
+<p>Great - still easy. Now let’s write the commands.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">function BaseCommand() {
+    this.reverse = false;
+}
+BaseCommand.prototype.run = function() {
+    if(!this.reverse) {
+        return this.forward();
+    } else {
+        return this.backward();
+    }
+};
+BaseCommand.prototype.opposite = function() {
+    this.reverse = !this.reverse;
+    return this;
+};
+
+ExampleCommand.prototype = new BaseCommand();
+ExampleCommand.prototype.constructor = ExampleCommand;
+function ExampleCommand(){};
+ExampleCommand.prototype.forward = function() {
+    r.increase();
+};
+ExampleCommand.prototype.backward = function() {
+    r.decrease();
+};</code></pre></div>
+
+<p>BaseCommand exposes a small number of functions, basically you can only run the command or flip the command the opposite way. You can see how the invoker will utualize it as follows…</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">var example = new ExampleCommand();
+example.run();
+example.opposite().run();</code></pre></div>
+
+<p>This outputs</p>
+
+<ul>
+  <li>Data starts off with 1</li>
+  <li>Increment. My data is now 2</li>
+  <li>Decrement. My data is now 1</li>
+</ul>
+
+<p>You can see the <a href="http://codepen.io/digiguru/pen/GgPWzW" target="_blank">ConcreteCommand implementation here</a>.</p>
+
+<p>Now finally - how do we get the invoker working?</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">function Invoker() {
+    this.undoActions = [];
+    this.redoActions = [];
+    this.undo = function () {
+        var action = this.undoActions.pop();
+        if(action) {
+            this.redoActions.push(action.opposite());
+            return action.run();
+        } else {
+          c.log(&quot;can&#39;t undo - no more actions&quot;);
+        }
+
+    };
+    this.redo = function () {
+        var action = this.redoActions.pop();
+        if(action) {
+          this.undoActions.push(action.opposite());
+            return action.run();
+        } else {
+          c.log(&quot;can&#39;t redo - no more actions&quot;);
+        }
+    };
+    this.call = function (action) {
+        this.undoActions.push(action);
+        return action.run();
+    }
+}</code></pre></div>
+
+<p>It’s very simple - it’s sole responsibility is to push actions into it’s list of undoable actions, and then process the opposite when we request an undo. So now we have the 4 very distinct objects, how do we put it all together?</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">var c = new Client(),
+    r = new Receiver(),
+    i = new Invoker(); 
+i.call(new ExampleCommand());
+i.call(new ExampleCommand());
+i.undo();
+i.undo();
+i.undo();
+i.redo();
+i.redo();
+i.redo();</code></pre></div>
+
+<p>You can see the <a href="http://codepen.io/digiguru/pen/XJoMZO" target="_blank">output of the command pattern</a> below…</p>
+
+<ul>
+  <li>Data starts off with 1</li>
+  <li>Increment. My data is now 2</li>
+  <li>Increment. My data is now 3</li>
+  <li>Decrement. My data is now 2</li>
+  <li>Decrement. My data is now 1</li>
+  <li>can’t undo - no more actions</li>
+  <li>Increment. My data is now 2</li>
+  <li>Increment. My data is now 3</li>
+  <li>can’t redo - no more actions</li>
+</ul>
+
+<p>You push commands into the invoker one by one, but at any time you request the invoker to undo or redo an action. If it get’s too far it will alert you.</p>
+
+<p>In this post I’ve detailed very simplistic versions of the command pattern. In future posts I will focus on how you can use it to facilitate more complex behaviour.</p>
+
+
+</div>
+
+
+              
+              
+              <div id="disqus_thread"></div>
+              
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Name<br />
+                  What You Are<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123008-9', 'digiguru.co.uk');
+ga('require', 'linkid', 'linkid.js');
+ga('send', 'pageview');
+
+</script>
+        
+<script type="text/javascript">
+    var disqus_shortname = 'digigurucouk';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+        
+  
+    </body>
+</html>

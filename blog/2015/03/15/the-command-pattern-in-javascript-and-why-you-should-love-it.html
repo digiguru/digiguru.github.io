@@ -33,8 +33,8 @@
 <p>The pattern is described by having the following objects…</p>
 
 <ul>
-  <li><em>Client</em> - Think of this as the page / browser window. You may decide to have multiple clients - thus being able to push events across multiple sessions. I find it best to setup the command object to have a Name and an args object.</li>
-  <li><em>Command</em> - Think of this as an abstraction to perform a specific action on your page. If you could pass in the minimum data necessary - what would that need to be?</li>
+  <li><em>Client</em> - Think of this as the page / browser window. You may decide to have multiple clients - thus being able to push events across multiple sessions.</li>
+  <li><em>Command</em> - Think of this as an abstraction to perform a specific action on your page. If you could pass in the minimum data necessary - what would that need to be? I find it best to setup the command object to have a Name and an args object.</li>
   <li><em>Receiver</em> - Think of this as an object in your page that knows how to do something. The command object will be running events in a receiver.</li>
   <li><em>Invoker</em> - The object that needs to store the events as they pass in, which allows you to keep a log of them for recording macros, storing undo/redo events or pushing the events to other clients.</li>
 </ul>
