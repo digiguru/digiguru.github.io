@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>The command pattern - using it on deferred objects in javascript</title>
+        <meta name="viewport" content="width=device-width">
+
+        <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+        
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Digiguru.co.uk</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>The command pattern - using it on deferred objects in javascript</h2>
+<p class="meta">20 Mar 2015</p>
+
+<div class="post">
+<p>In the previous article we created some commands an ran them through the system.</p>
+
+<p>In this article I will show how easy it is to make these events wait for each other to complete.</p>
+
+<p>It really is a case of making each function take a callback.</p>
+
+<p>First we will make the log event take a few moments by performing a jquery slidedown.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">function Client() {
+    this.log = function (msg, callback) {
+        var $li = $(&quot;&lt;li&gt;&quot; + msg + &quot;&lt;/li&gt;&quot;).hide();
+        $li.appendTo($(&quot;#console&quot;)).slideDown(callback);
+    };
+}</code></pre></div>
+
+<p>Importantly we have added a second arguement, callback.</p>
+
+<p>Now just assing up the callbacks…</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">function Receiver() {
+    this.data = 1;
+    c.log(&quot;Data starts off with &quot; + this.data);
+    this.increase = function (callback) {
+        this.data++;
+        c.log(&quot;Increment. My data is now &quot; + this.data, callback);
+    };
+    this.decrease = function (callback) {
+        this.data--;
+        c.log(&quot;Decrement. My data is now &quot; + this.data, callback);
+    };
+}
+
+
+function Invoker() {
+    this.undoActions = [];
+    this.redoActions = [];
+    this.undo = function (callback) {
+        var action = this.undoActions.pop();
+        if (action) {
+            this.redoActions.push(action.opposite());
+            return action.run(callback);
+        } else {
+            c.log(&quot;can&#39;t undo - no more actions&quot;, callback);
+        }
+
+    };
+    this.redo = function (callback) {
+        var action = this.redoActions.pop();
+        if (action) {
+            this.undoActions.push(action.opposite());
+            return action.run(callback);
+        } else {
+            c.log(&quot;can&#39;t redo - no more actions&quot;, callback);
+        }
+    };
+    this.call = function (action, callback) {
+        this.undoActions.push(action);
+        return action.run(callback);
+    };
+}
+
+function BaseCommand() {
+    this.reverse = false;
+}
+BaseCommand.prototype.run = function (callback) {
+    if (!this.reverse) {
+        return this.forward(callback);
+    } else {
+        return this.backward(callback);
+    }
+};
+BaseCommand.prototype.opposite = function () {
+    this.reverse = !this.reverse;
+    return this;
+};
+
+ExampleCommand.prototype = new BaseCommand();
+ExampleCommand.prototype.constructor = ExampleCommand;
+
+function ExampleCommand() {};
+
+ExampleCommand.prototype.forward = function (callback) {
+    r.increase(callback);
+};
+ExampleCommand.prototype.backward = function (callback) {
+    r.decrease(callback);
+};</code></pre></div>
+
+<p>So what effect does this have on the calls? I have a warning, it looks really nasty!</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">var c = new Client();
+var r = new Receiver();
+var i = new Invoker();
+i.call(new ExampleCommand(), function () {
+    i.call(new ExampleCommand(), function () {
+
+        i.undo(function () {
+            i.undo(function () {
+                i.undo(function () {
+                    i.redo(function () {
+                        i.redo(function () {
+                            i.redo();
+                        });
+                    });
+                });
+
+            });
+        });
+    });
+});</code></pre></div>
+
+<p>As you can see in <a href="http://codepen.io/digiguru/pen/embMLE" target="_blank">the callback example</a> all the commands are run in sequence. This is important so that the state of the UI is predictable.</p>
+
+<p>In a future post we will look at making the commands run by user interaction.</p>
+
+
+</div>
+
+
+              
+              
+              <div id="disqus_thread"></div>
+              
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Name<br />
+                  What You Are<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123008-9', 'digiguru.co.uk');
+ga('require', 'linkid', 'linkid.js');
+ga('send', 'pageview');
+
+</script>
+        
+<script type="text/javascript">
+    var disqus_shortname = 'digigurucouk';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+        
+  
+    </body>
+</html>
