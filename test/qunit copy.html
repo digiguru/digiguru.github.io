@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>QUnit Test Results for: test.js</title>
+<link rel="stylesheet" href="qunit.css">
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src='qunit.js'></script>
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+
+<script>
+    var myParent = window.parent,
+        myFailures = 0;
+    
+    QUnit.done(function (obj) {
+        var result = {};
+        if (obj.failed) {
+            result.status = "failed";
+            result.message = myFailures + " failures";
+        } else {
+            result.status = "passed";
+            result.message = "Success! " + obj.passed + " passed";
+        }
+        if(myParent.reportComplete) {
+            myParent.reportComplete(result);
+        }
+        var totals = document.querySelectorAll(".grand-total .rs");
+        if(myParent.coverageComplete) {
+            myParent.coverageComplete({
+                message: totals && totals[0] ? totals[0].innerHTML + " coverage" : "No coverage"
+            });
+        }
+    });
+    QUnit.testDone(function (obj) {
+        var msg = "Running",
+            result = {};
+        if (obj.failed) {
+            myFailures++;
+            msg += " with " + myFailures + " failures";
+        }
+        result.message = msg;
+        if(myParent.reportUpdate) {
+            myParent.reportUpdate(result);
+        }
+       
+    }); 
+
+    
+    /*brackets-xunit: includes=//code.jquery.com/jquery-1.11.0.min.js */
+
+var Data = {getData: function() {}};
+
+$(function () {
+function resolveAfter (time, args) {
+    var dfd = new $.Deferred();
+    window.setTimeout(function () {
+        dfd.resolve(args);
+    }, time || 1000);
+    return dfd.promise();
+}
+function failAfter (time, args) {
+    var dfd = new $.Deferred();
+    window.setTimeout(function () {
+        dfd.reject(args);
+    }, time || 1000);
+    return dfd.promise();
+}
+ 
+
+
+$.fn.examplePlugin = function() {
+ 
+    return this.each(function() {
+        
+        var $this = $(this);
+        $this.on("click", function() {
+            Data.getData().
+                then(function(d) {
+                    $this.data("pass", true);
+                    $this.html(d.message);
+                    $this.tigger("updated");
+                }).
+                fail(function(args) {
+                    $this.data("pass", false);
+                    $this.text("Could not get any data");
+                    $this.tigger("updated");
+                });
+        });
+        
+    });
+ 
+};
+
+
+
+test("Control updates after a pass", function () {
+    stop();
+    
+    //First setup a mock of the data service.
+    Data.getData = function() {
+        return resolveAfter(1000, {message: "example data"});
+    };
+    var $div = $("<div></div>").appendTo("body");
+    $div.exampleData();
+    $div.on("update", function() {
+        start();
+        ok($div.data("pass"), "Sucessful service sets pass to true");
+        equal($div.html(), "example data", "Data returned updates the UI");
+    });
+});
+
+test("Control updates after a pass", function () {
+    stop();
+    
+    //First setup a mock of the data service.
+    Data.getData = function() {
+        return failAfter(1000, {message: "example data"});
+    };
+    var $div = $("<div></div>").appendTo("body");
+    $div.exampleData();
+    $div.on("update", function() {
+        start();
+        ok(!$div.data("pass"), "Failes data set pass to false");
+        equal($div.text(), "Could not get any data", "Failed data message");
+    });
+});
+    
+});
+
+</script>
+</body>
+</html>
