@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Querystring helpers in .NET</title>
+        <meta name="viewport" content="width=device-width">
+
+        <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+        
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Digiguru.co.uk</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>Querystring helpers in .NET</h2>
+<p class="meta">24 Mar 2015</p>
+
+<div class="post">
+<p>Often we have pages that have multiple optional querystrings. Here is a simple function that allows developers to write really clear code to get parameters from the querystring (or any other object that derives from NameValueCollection.</p>
+
+<div class="highlight"><pre><code class="language-csharp" data-lang="csharp">public static class QuerystringHelper
+{
+	[Extension()]
+	public static int? GetNullableInt(
+        NameValueCollection querystring, 
+        string param)
+	{
+		string str = querystring(param);
+		int result = 0;
+		if (!string.IsNullOrWhiteSpace(str) &amp;&amp; int.TryParse(str, result)) {
+			return result;
+		}
+		return null;
+	}
+}</code></pre></div>
+
+<p>or in vb…</p>
+
+<div class="highlight"><pre><code class="language-vb" data-lang="vb">Public Module QuerystringHelper
+
+    &lt;Extension()&gt;
+    Public Function GetNullableInt(
+        querystring As NameValueCollection, 
+        param As String) As Integer?
+        Dim str As String = querystring(param)
+        Dim result As Integer
+        If Not String.IsNullOrWhiteSpace(str) AndAlso 
+            Integer.TryParse(str, result) Then
+            Return result
+        End If
+        Return Nothing
+    End Function
+
+End Module</code></pre></div>
+
+<p>To use it you simply use the following syntax:
+VB</p>
+
+<div class="highlight"><pre><code class="language-csharp" data-lang="csharp">int? categoryID = default(int?);
+categoryID = Request.Querystring.GetNullableInt(&quot;CategoryID&quot;);
+if (categoryID.HasValue) {
+	//Filter by categoryID
+}</code></pre></div>
+
+<p>CSharp</p>
+
+<div class="highlight"><pre><code class="language-vb" data-lang="vb">Dim categoryID As Integer?
+categoryID = Request.Querystring.GetNullableInt(&quot;CategoryID&quot;)
+If categoryID.HasValue Then
+  &#39;Filter by categoryID
+End If</code></pre></div>
+
+<p>Another quite common thing we do from querystring params is cast them to an enum.</p>
+
+<p>I use the following helper to cast it to an enum, or default it to a patciular type.</p>
+
+<p>Csharp</p>
+
+<div class="highlight"><pre><code class="language-csharp" data-lang="csharp">public static class QuerystringHelper
+{
+
+
+	[Extension()]
+	public static T GetEnumOrDefault&lt;T&gt;(
+        NameValueCollection querystring, 
+        string param, 
+        T defaultEnum) where T : struct
+	{
+		T myEnum = default(T);
+		if (Enum.TryParse(querystring(param), myEnum)) {
+			return myEnum;
+		} else {
+			return defaultEnum;
+		}
+	}
+
+}</code></pre></div>
+
+<p>VB</p>
+
+<div class="highlight"><pre><code class="language-vb" data-lang="vb">Imports System.Runtime.CompilerServices
+
+Public Module QuerystringHelper
+
+    &lt;Extension&gt; _
+	Public Shared Function GetEnumOrDefault(Of T As Structure)(
+        querystring As NameValueCollection, 
+        param As String, 
+        defaultEnum As T) As T
+		Dim myEnum As T = Nothing
+		If [Enum].TryParse(querystring(param), myEnum) Then
+			Return myEnum
+		Else
+			Return defaultEnum
+		End If
+	End Function
+  
+End Module</code></pre></div>
+
+<p>This is awesome, because we can use even less code - and I think it’s really clear code to read.</p>
+
+<p>CSharp</p>
+
+<div class="highlight"><pre><code class="language-csharp" data-lang="csharp">enum Category {Javascript, dotNet, html};
+Category a = Request.QueryString.
+    GetEnumOrDefault&lt;Category&gt;(&quot;CategoryType&quot;, Category.Javascript);</code></pre></div>
+
+<p>VB</p>
+
+<div class="highlight"><pre><code class="language-vb" data-lang="vb">Public Enum Category
+	Javascript
+	dotNet
+	html
+End Enum
+Dim a As Category = Request.QueryString.
+    GetEnumOrDefault(Of Category)(&quot;Category&quot;, Category.Javascript)</code></pre></div>
+
+
+</div>
+
+
+              
+              
+              <div id="disqus_thread"></div>
+              
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Adam Hall<br />
+                  Web Developer<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123008-9', 'digiguru.co.uk');
+ga('require', 'linkid', 'linkid.js');
+ga('send', 'pageview');
+
+</script>
+        
+<script type="text/javascript">
+    var disqus_shortname = 'digigurucouk';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+        
+  
+    </body>
+</html>
