@@ -40,10 +40,10 @@
 
 <p>This showed me a directory overflowing with log files. I sorted by date and found the following log file lines…</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">[2015-03-25 12:00:56] [info]  [25576] Commons Daemon procrun (1.0.15.0 64-bit) started
-[2015-03-25 12:00:56] [info]  [25576] Running &#39;Tomcat7&#39; Service...
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">[2015-03-25 12:00:56] [info]  [25576] Running &#39;Tomcat7&#39; Service...
 [2015-03-25 12:00:56] [info]  [24308] Starting service...
-[2015-03-25 12:00:56] [error] [24308] Failed creating java C:\Program Files\Java\jre1.8.0_25\bin\server\jvm.dll
+[2015-03-25 12:00:56] [error] [24308] Failed creating java 
+C:\Program Files\Java\jre1.8.0_25\bin\server\jvm.dll
 [2015-03-25 12:00:56] [error] [24308] The system cannot find the path specified.</code></pre></div>
 
 <p>Okay - we are getting there… I tried to hit find the jvm.dll and discovered it wasn’t on the server - at least not in that directory.</p>
