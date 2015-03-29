@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Writing Gherkin on an existing application</title>
+        <meta name="viewport" content="width=device-width">
+
+        <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+        
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Digiguru.co.uk</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>Writing Gherkin on an existing application</h2>
+<p class="meta">29 Mar 2015</p>
+
+<div class="post">
+<p>We’ve been supporting our codebase for many years, but we are starting to look into  describing our core site tests as a load of Gherkin features. This is the first step as we move to a more highly automated testing process.</p>
+
+<p>Now - what is Gherkin? It’s a way of describing what your application does in a way that anyone from the business can understand. The way the language has been designed it stands as a template that can be understood by testing frameworks.</p>
+
+<p>It looks like the following (this example is found on <a href="https://github.com/cucumber/cucumber/wiki/Feature-Introduction">the wiki description</a>:</p>
+
+<div class="highlight"><pre><code class="language-gherkin" data-lang="gherkin">Feature: Serve coffee
+    Coffee should not be served until paid for
+    Coffee should not be served until the button has been pressed
+    If there is no coffee left then money should be refunded
+
+  Scenario: Buy last coffee
+    Given there are 1 coffees left in the machine
+    And I have deposited 1$
+    When I press the coffee button
+    Then I should be served a coffee</code></pre></div>
+
+<p>The idea is to write these for core parts of the site.</p>
+
+<p>Originally I thought it was an easy task. I have a list of core site tests, so I grabbed the list and started on the very first core feature.</p>
+
+<div class="highlight"><pre><code class="language-gherkin" data-lang="gherkin">* Standard registration
+* Quick regsitration</code></pre></div>
+
+<p>That was all I needed to know what to test, but I can’t hand that over to anyone who doesn’t really understand the domain. The objective of writing these features is to make sure anyone can read these specs and understand how to test them, even an automation engine.</p>
+
+<p>As I started to write the tests I realised that Gherkin is far more verbose. You need to describe the exact state in every scenario, look at this.</p>
+
+<div class="highlight"><pre><code class="language-gherkin" data-lang="gherkin">Scenario: User should be able to register through quick registration
+    Given I am not logged in
+    And I am on a page describing the planning tool
+    When I register with an email address that has never been used before
+    Then I should be registered
+    And I should be logged in
+    And I should be on the planning tool</code></pre></div>
+
+<p>This was originally described as the concept</p>
+
+<div class="highlight"><pre><code class="language-gherkin" data-lang="gherkin">* Quick registration</code></pre></div>
+
+<p>But that’s not enough - I also need to describe what “not” being logged in is…</p>
+
+<div class="highlight"><pre><code class="language-gherkin" data-lang="gherkin">Scenario: Unauthenticated users cannot access planning tool
+    Given I am not logged in
+    When I go to the Planning tool page
+    Then I should see the introduction page
+    And I should be asked to register or sign in to continue</code></pre></div>
+
+<p>Only once these two tests are satisfied.</p>
+
+<p>As I started to look at all the different scenarios that the user can follow, it quickly escalated to a much more complicated set of scenarios. The problem is, the concept of Gherkin is BDD - Behaviour Driven Development (Or Design). As we haven’t driven the development spec first, we are starting to pay the tax. BDD would have alerted us to all the crazy minor edge cases, and helped us simplify the design.</p>
+
+<p>Where does it leave us? We need to do a lot of work writing our scenarios if we want to cover the core site areas, but there’s no urgent need - we can evolve our existing regression tests into Gherkin over time. Anything we learn we can feed into future developments - ones in which we can start considering BDD upfront.</p>
+
+</div>
+
+
+              
+              
+              <div id="disqus_thread"></div>
+              
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Adam Hall<br />
+                  Web Developer<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123008-9', 'digiguru.co.uk');
+ga('require', 'linkid', 'linkid.js');
+ga('send', 'pageview');
+
+</script>
+        
+<script type="text/javascript">
+    var disqus_shortname = 'digigurucouk';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+        
+  
+    </body>
+</html>
