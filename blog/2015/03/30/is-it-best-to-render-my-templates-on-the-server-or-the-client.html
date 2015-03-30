@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Is it best to render my templates on the server or the client?</title>
+        <meta name="viewport" content="width=device-width">
+
+        <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+        
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Digiguru.co.uk</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>Is it best to render my templates on the server or the client?</h2>
+<p class="meta">30 Mar 2015</p>
+
+<div class="post">
+<p>A question that I sometimes get asked is “Should I render my templates on the client or the server?”. The trick answer is “Both”.</p>
+
+<p>The best thing I’ve done in the past year is to make some code that would render my templates on the server in exactly the same way that they would be rendered if they happened to be on the client as well. Why is this? Well firstly - the most important thing for any application is …</p>
+
+<h1 id="does-your-site-content-appear-for-every-user">Does your site content appear for every user?</h1>
+
+<p>There is no excuse. Make sure your users recieve the content. That is HTML marking up the words you wanted to display them. This is useful for Acceessibility. It’s useful for robots. It’s useful for mobile. It’s useful for everyone just downlaod the data to them as HTML.</p>
+
+<p>Consider the following UserControl.</p>
+
+<div class="highlight"><pre><code class="language-asp" data-lang="asp">&lt;asp:Repeater&gt;
+    &lt;ItemTemplate&gt;
+        &lt;p&gt;Hello, my name is &lt;%# Container.DataItem.Name %&gt;&lt;/p&gt;
+        &lt;p&gt;I am from &lt;%# Container.DataItem.Hometown %&gt;.&lt;/p&gt;
+        &lt;p&gt;I have &lt;%# Container.DataItem.Kids.Count %&gt; kids:&lt;/p&gt;
+        &lt;ul&gt;
+        &lt;asp:Repeater&gt;
+            &lt;ItemTemplate&gt;
+                &lt;li&gt;&lt;%# Container.DataItem.Name %&gt; 
+                is 
+                &lt;%# Container.DataItem.Age %&gt;&lt;/li&gt;
+            &lt;/%#&gt;ItemTemplate&gt;
+        &lt;/asp:Repeater&gt; 
+        &lt;/ul&gt;
+    &lt;/ItemTemplate&gt;
+&lt;/asp:Repeater&gt;</code></pre></div>
+
+<p>I alos write a load of Binding data in the back end in VB or cSharp, and eventually I have fulfilled the first requirement to ouptut the data on the server.</p>
+
+<h1 id="do-you-have-rich-content">Do you have rich content?</h1>
+
+<p>Next you want to be able to make the site sing when you are dealing with a browser that is capable of javascript, AJAX and rich content. Do you have the ability to enhance the experience for the user? The only way I can get to do that is to rewrite the above code in a way javascript will understand. There are many templating libraries in javascript but Mustache seems to be the lowest common denominator between most of them.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">{{#.}}
+
+&lt;p&gt;Hello, my name is {{name}}.&lt;/p&gt;
+&lt;p&gt;I am from {{hometown}}.&lt;/p&gt;
+&lt;p&gt;I have {{kids.length}} kids:&lt;/p&gt;
+&lt;ul&gt;
+{{#kids}}
+    &lt;li&gt;{{name}} is {{age}}&lt;/li&gt;
+{{/kids}}
+&lt;/ul&gt;
+{{#.}}</code></pre></div>
+
+<p>The best thing about the above code, is it requires almost no plumbing to work - just send in some JSON and it will render.</p>
+
+<p>Does this mean you need to have a separate UserControl and mustache template for anything on your site?</p>
+
+<p>No!</p>
+
+<p>If you use a library like <a href="https://github.com/jdiamond/Nustache">Nustache</a> you can actually render the mustache templates server side as you would client side. It also does something far more powerful in my opinion - it abstracts away your server side programming language.</p>
+
+<p>By using Mustache templates I am saying “It doesn’t matter if I decide to do away with .NET on the server, I can find any of the <a href="http://mustache.github.io/">other languages that support it</a> (36 at the time of writing) so that I can always send server requests to another app - and even optimize the server depending on the best performance.</p>
+
+
+</div>
+
+
+              
+              
+              <div id="disqus_thread"></div>
+              
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Adam Hall<br />
+                  Web Developer<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123008-9', 'digiguru.co.uk');
+ga('require', 'linkid', 'linkid.js');
+ga('send', 'pageview');
+
+</script>
+        
+<script type="text/javascript">
+    var disqus_shortname = 'digigurucouk';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+        
+  
+    </body>
+</html>
