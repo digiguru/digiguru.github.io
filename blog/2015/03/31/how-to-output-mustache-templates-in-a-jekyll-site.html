@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>How to output mustache templates in a jekyll site</title>
+        <meta name="viewport" content="width=device-width">
+
+        <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+        
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Digiguru.co.uk</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>How to output mustache templates in a jekyll site</h2>
+<p class="meta">31 Mar 2015</p>
+
+<div class="post">
+<p>I was having difficulty rendering a mustache template out as a code sample.</p>
+
+<p>Here was my code sample…</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">{{#.}}
+
+&lt;p&gt;Hello, my name is {{name}}.&lt;/p&gt;
+&lt;p&gt;I am from {{hometown}}.&lt;/p&gt;
+&lt;p&gt;I have {{kids.length}} kids:&lt;/p&gt;
+&lt;ul&gt;
+{{#kids}}
+    &lt;li&gt;{{name}} is {{age}}&lt;/li&gt;
+{{/kids}}
+&lt;/ul&gt;
+{{#.}}</code></pre></div>
+
+<p>So you write the above in a markdown file, and try wrapping it in <code> {% highlight html %} </code></p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">{% highlight html %} 
+...
+{% endhighlight %}</code></pre></div>
+
+<p>And the output looks on the page as follows…</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">&lt;p&gt;Hello, my name is .&lt;/p&gt;
+&lt;p&gt;I am from .&lt;/p&gt;
+&lt;p&gt;I have  kids:&lt;/p&gt;
+&lt;ul&gt;
+
+    &lt;li&gt; is &lt;/li&gt;
+
+&lt;/ul&gt;</code></pre></div>
+
+<p>Hmm - not right. Perhaps I need a different highlighter - mustache?</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">{% highlight mustache %} 
+...
+{% endhighlight %}</code></pre></div>
+
+<p>But there was no change.</p>
+
+<p>After a bit of research I discovered the <code>raw</code> blocks, so wrapping the code in raw it output like this…</p>
+
+<p>{{#.}}</p>
+
+<p>Hello, my name is {{name}}.</p>
+<p>I am from {{hometown}}.</p>
+<p>I have {{kids.length}} kids:</p>
+<ul>
+{{#kids}}
+    <li>{{name}} is {{age}}</li>
+{{/kids}}
+</ul>
+<p>{{#.}}</p>
+
+<p>Not working at all, how about if we wrap the comment in code blocks…?</p>
+
+<p><code>{{#.}}</code></p>
+
+<p>Hello, my name is {{name}}.</p>
+<p>I am from {{hometown}}.</p>
+<p>I have {{kids.length}} kids:</p>
+<ul>
+{{#kids}}
+    <li>{{name}} is {{age}}</li>
+{{/kids}}
+</ul>
+<p>{{#.}}
+&lt;/code&gt;</p>
+
+<p>I tried various methods of outputting it until I finally realised I need to start the output with:</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">{% highlight html %}
+{% raw %}
+...
+{% endraw %}
+{% endhighlight %}</code></pre></div>
+
+<p>You think that’s crasy - it gets even weird when you see what I had to write to make jekyll output the above line…</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">{{ &quot;{% highlight html &quot;}}%}
+{{ &quot;{% raw &quot;}}%}
+...
+{{ &quot;{% endraw &quot;}}%}
+{{ &quot;{% endhighlight &quot;}}%}</code></pre></div>
+
+<p>Basically I am using escaped code to output the “raw” tag. If I don’t do that then liquid templates attempt to compile the interior as raw text, and get’s a bit confused by opening and closing tags.</p>
+
+
+</div>
+
+
+              
+              
+              <div id="disqus_thread"></div>
+              
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Adam Hall<br />
+                  Web Developer<br />
+                  digiguru@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/digiguru/">github.com/digiguru</a><br />
+                  <a href="http://twitter.com/thedigiguru/">twitter.com/thedigiguru</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123008-9', 'digiguru.co.uk');
+ga('require', 'linkid', 'linkid.js');
+ga('send', 'pageview');
+
+</script>
+        
+<script type="text/javascript">
+    var disqus_shortname = 'digigurucouk';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+        
+  
+    </body>
+</html>
