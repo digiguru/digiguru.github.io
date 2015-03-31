@@ -83,7 +83,7 @@
 </ul>
 <p>{{#.}}</p>
 
-<p>Not working at all, how about if we wrap the comment in code blocks…?</p>
+<p>Almost - but there’s no code tag wrapped around it. How about if we just add the code tag around it in the markdown file…</p>
 
 <p><code>{{#.}}</code></p>
 
@@ -98,7 +98,9 @@
 <p>{{#.}}
 &lt;/code&gt;</p>
 
-<p>I tried various methods of outputting it until I finally realised I need to start the output with:</p>
+<p>No - the code black only works on the first line before it’s auto closed by the browser.</p>
+
+<p>I tried various methods of outputting it until I finally realised I need to wrap the original code script with.</p>
 
 <div class="highlight"><pre><code class="language-html" data-lang="html">{% highlight html %}
 {% raw %}
@@ -106,7 +108,23 @@
 {% endraw %}
 {% endhighlight %}</code></pre></div>
 
-<p>You think that’s crasy - it gets even weird when you see what I had to write to make jekyll output the above line…</p>
+<p>And this works!</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">{{#.}}
+
+&lt;p&gt;Hello, my name is {{name}}.&lt;/p&gt;
+&lt;p&gt;I am from {{hometown}}.&lt;/p&gt;
+&lt;p&gt;I have {{kids.length}} kids:&lt;/p&gt;
+&lt;ul&gt;
+{{#kids}}
+    &lt;li&gt;{{name}} is {{age}}&lt;/li&gt;
+{{/kids}}
+&lt;/ul&gt;
+{{#.}}</code></pre></div>
+
+<p>Excellent!</p>
+
+<p>But… you think that’s crazy? - it gets even weirder when you see what I had to write to make jekyll output the wrapper script I described above…</p>
 
 <div class="highlight"><pre><code class="language-html" data-lang="html">{{ &quot;{% highlight html &quot;}}%}
 {{ &quot;{% raw &quot;}}%}
