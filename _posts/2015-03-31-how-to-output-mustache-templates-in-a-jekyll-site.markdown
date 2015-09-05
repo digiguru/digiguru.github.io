@@ -14,7 +14,7 @@ I was having difficulty rendering a mustache template out as a code sample.
 
 Here was my code sample...
 
-
+<!--break-->
 {% highlight html %}
 {% raw %}
 {{#.}}

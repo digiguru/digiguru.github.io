@@ -18,7 +18,7 @@ The other day I was trying to describe some branching and merging strategies ove
 I realised the best thing to do was to try and share some diagrams. Now being clued up on javascript, and having a few minutes spare I researched to see if there is anything I could use to generate descriptive diagrams for me.
 
 Luckily I stumbled across <a href="http://gitgraphjs.com/">Git Graph JS</a>. It's a really simple library for showing git concepts. Without further ado - let's see some code.
-
+<!--break-->
 First we setup some objects...
 
 {% highlight javascript %}
