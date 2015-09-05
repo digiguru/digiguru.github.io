@@ -12,7 +12,7 @@ tags:
 Found an interesting little problem recently. We had a query we wanted to upgrade for the next release, and added an OR statement to allow us to pre-release the functionality for the new code drop. This had a really big impact on performance and caused lots of issues.
 
 When we investigated it turns out that OR queries in a join are really expensive. Consider the following statement.
-
+<!--break-->
 {% highlight sql %}
 Select 
     child.FirstName,

@@ -11,7 +11,7 @@ tags:
 
 
 Self improvement is something I'm always looking at. Over the start of the yea I have given myself a tak every month. For the first month I decided that I would drink No Alcohol.
-
+<!--break-->
 Month 1 - No Alcohol
 ====================
 

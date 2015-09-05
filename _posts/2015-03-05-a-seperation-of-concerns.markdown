@@ -11,7 +11,7 @@ tags:
 ---
 
 
-Another antipattern I come across in legacy codebases is  a lack of a separation of concern.
+Another antipattern I come across in legacy codebases is a lack of a separation of concern.
 
 {% highlight html %}
 <div id="main" style="width: 330px; border: 1px #ccc solid">
@@ -31,7 +31,7 @@ Another antipattern I come across in legacy codebases is  a lack of a separation
 </div>
 {% endhighlight %}
 
-Here we have a few issues, but lets sweep through them one by one. Firstly CSS. Sadly the developer that did this sweep didn't really understand what you can do with CSS so offered this solution.
+Here we have a few issues, <!--break-->but lets sweep through them one by one. Firstly CSS. Sadly the developer that did this sweep didn't really understand what you can do with CSS so offered this solution.
 
 {% highlight css %}
 #main { width: 330px; border: 1px #ccc solid; }

@@ -11,7 +11,7 @@ tags:
 In the last post I introduced the command pattern and showed an example of a command object. In this post I am going into more detail on the concrete command objects and showing how it's important to design the arguments up front so that you can use one command for both redo and undo events.
 
 Firstly I will list out all the basic commands I identified in the app that a user can perform.
-
+<!--break-->
 - "AddTable" - You can add a new table <code>{table}</code>
 - "AddGuest" - You can add a new guest to the app <code>{guest}</code>
 - "MoveTable" - Move table to a new location <code>{table,location}</code>

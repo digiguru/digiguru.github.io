@@ -12,7 +12,7 @@ tags:
 After moving our repos from svn to git, we've need to rename some of the branches - a simple way of grouping up logical branches.
 
 We have the following naming conventions for our branches.
-
+<!--break-->
 - *master* - default branch. This will always have the last released working codebase.
 - *develop* - this is the current QA version after any feature has been merged in. Anything in here is developer tested, and can be released to beta testers.
 - *feature/{ticketName}* - holds all the changes associated to an individual ticket. If anything gets pushed back from beta testing, it should be fixed inside the feature branch before merging back into the develop branch.

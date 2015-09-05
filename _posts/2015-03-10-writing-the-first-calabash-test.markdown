@@ -11,7 +11,7 @@ tags:
 
 Going through the stages of writing my first calabash test. Firstly I went to my project folder, and opened the following file <code>/features/login.feature</code>.
 
-
+<!--break-->
 {% highlight cucumber %}
 Feature: Login
   As a bride

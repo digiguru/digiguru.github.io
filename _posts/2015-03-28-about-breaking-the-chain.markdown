@@ -13,7 +13,7 @@ So yesterday I failed to write a blog post.
 I've been trying to write a blog post. A habit I wanted to fulfil so much I even wrote a post in advance on to post on my wedding anniversary.
 
 So how come I broke the chain yesterday?
-
+<!--break-->
 Visualise your habit
 ====================
 

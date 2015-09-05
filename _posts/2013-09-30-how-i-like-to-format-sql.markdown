@@ -26,7 +26,7 @@ ANSI 89 Equals Syntax
 
 {% endhighlight %}
 
-I hate seeing this written. Firstly you bulk up your "Where" clause area, so it's hard to see what is filtering the data. The more tables that get added to the query the harder it is to see. It's also very hard to convert this sort of join to a Left, Right or Full join because it's all hidden in there where clause. I would always advise people at the very minimum to convert it to the following.
+I hate seeing this written. <!--break-->Firstly you bulk up your "Where" clause area, so it's hard to see what is filtering the data. The more tables that get added to the query the harder it is to see. It's also very hard to convert this sort of join to a Left, Right or Full join because it's all hidden in there where clause. I would always advise people at the very minimum to convert it to the following.
 
 ANSI 92 Join Syntax
 ===================

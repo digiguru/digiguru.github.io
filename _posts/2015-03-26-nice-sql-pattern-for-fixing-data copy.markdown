@@ -10,7 +10,7 @@ tags:
 ---
 
 I came up with a nice straightforward pattern recently to help fix data after a lengthy database refactor.
-
+<!--break-->
 Almost every release we perform has some sort of database migration, and often this will involve changing keys from one table to another, for example - occasionally we will need to change a 1 to many relationship to a many to many relationship. In other cases we are migrating data from one database to another.
 
 After a release we need to monitor the data to ensure that all of the ways data gets input have been fixed. We've done our best to mitigate the risk, but there's always some rouge service that hasn't been documented making silent changes to the database on a nightly basis.

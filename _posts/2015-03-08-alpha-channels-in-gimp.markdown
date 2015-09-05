@@ -11,7 +11,7 @@ tags:
 I have recently been asked to cut some photos up for a friend and put the subjects into new photos.
 
 This is a common request that is often though of as easy. Sadly it's not that straightforward, but one I've been known to do in Photoshop using Alpha Channels.
-
+<!--break-->
 An alpha channel is amazing because you can literally paint a selection by using a white brush, and then "undo" it by using a black brush. If your undo went too far you can paint it back in with white. Shades of grey represent the transparency / opacity of the layer - so you can even paint shadows into the photos. It's very cool.
 
 To do this in GIMP do the following.

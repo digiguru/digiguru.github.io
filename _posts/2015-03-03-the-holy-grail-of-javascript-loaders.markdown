@@ -15,7 +15,7 @@ So I've been watching the world of module loaders in javascript over the past fe
 Just as we started to feel like making the jump, ES6 modules seemed to take the world by storm, offering a fresh new and elegant solution. The fear is - es6 modules are not baked into the browsers yet, so is it too risky to jump into ES6 already?
 
 My answer is no!
-
+<!--break-->
 The reason I can confidently start looking into es6 is because I know there are tools out there that can help me during the transition. Many projects are looking into creating ES6 transpilers that take ES6 as a source and output raw javascript for backwards compatibility. Projects like <a href="https://github.com/esnext/es6-module-transpiler">the es6 module transpiler</a> are a perfect example.
 
 Here is a very simple ES6 module.

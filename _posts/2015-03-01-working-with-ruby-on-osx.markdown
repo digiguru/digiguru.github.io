@@ -13,7 +13,7 @@ tags:
 I've been trying to get my head around how to be productive on OSX. I often come along script commands to facilitate the development process and take alot of the menial tasks off to a short script in a command line. However I'm often stumbling around in the dark. An example of this is using jekyll to compile my blog.
 
 Every time I come to write a blog post (once every 3 months going by history) I have to re-rememeber how to compile. Inevitably I think "How do I compile the site?" and type "Jeckyll" into google (Yes my spelling is atrocious).
-
+<!--break-->
 Then I realise it's a simple case of putting the directory into the command window and running the following 
 
 {% highlight bash %}

@@ -14,7 +14,7 @@ I have recently started programming in a more jquery centric style, to make sure
 I was testing our latest control cross browser and found that IE 8 and lower didn't like my plugin. Digging into developer tools (f12) the following line was throwing an error.
 
 <code>thumbnailImage: $("<span style="color:#ff0000;"><img alt="" /><span style="color:#800000;">&lt;img /&gt;</span></span>", { <span style="color:#0000ff;">class</span>: "<span style="color:#800000;">imgThumb</span>", alt: "<span style="color:#800000;">thumbnail</span>", src: "<span style="color:#800000;">/images/hba/noImage.gif</span>" }),</code>
-
+<!--break-->
 I could see in developer tools that it had written the word "class" in blue in IE Developer tools, meaning it is reserved as a function, not allowed in my jQuery string.
 
 This is easily fixed...

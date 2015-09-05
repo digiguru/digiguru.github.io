@@ -11,7 +11,7 @@ tags:
 ---
 
 Often we have pages that have multiple optional querystrings. Here is a simple function that allows developers to write really clear code to get parameters from the querystring (or any other object that derives from NameValueCollection.
-
+<!--break-->
 {% highlight csharp %}
 
 public static class QuerystringHelper

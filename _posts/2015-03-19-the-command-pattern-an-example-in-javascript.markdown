@@ -12,7 +12,7 @@ tags:
 So in previous article I showed some examples of the command pattern, now I will detail a simple application.
 
 Firstly let's create a simple bit of HTML to help us visualise what we are doing.
-
+<!--break-->
 {% highlight html %}
 <h3>Console</h3>
 <ul id="console"></ul>

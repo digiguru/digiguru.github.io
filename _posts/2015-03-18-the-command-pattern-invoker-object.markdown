@@ -12,7 +12,7 @@ tags:
 When dealing with the command pattern, we have to identify an invoker object.
 
 This object will process our concrete commands and store a list of events that have been applied. What does this invoker object look like. I identified the following interface. Firstly we know we want the ability to "undo" and "redo". 
-
+<!--break-->
 {% highlight javascript %}
 this.UndoActions = [];
 this.RedoActions = [];

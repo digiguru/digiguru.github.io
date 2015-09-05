@@ -12,7 +12,7 @@ tags:
 Our solr search decided to stop working.
 
 It was unusual as it had been working, and there was no known changes in the application to make it stop. 
-
+<!--break-->
 I went into the relevant server and immediately saw the TopCat service had been stopped.
 
 I clicked on the icon and chose the "start service" activity and watched a progress bar go green. - everything back to normal? Not quite - I looked at TomCat and it had stopped again.

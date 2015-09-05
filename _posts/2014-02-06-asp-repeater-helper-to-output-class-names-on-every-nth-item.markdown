@@ -23,7 +23,7 @@ I came across a need to output a "clear" class to every 5th item in an asp:repea
 </ul>
 {% endhighlight %}
 
-I say we could to better. First - let's work out what we want to say. Every 5th item output a new class. 
+I say we could to better. <!--break-->First - let's work out what we want to say. Every 5th item output a new class. 
 To determine if we are the fith item, we need to know the currentIndex and add 1 as it's 0 based.
 
 So let's write pseudo code of what we actually want:

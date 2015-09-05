@@ -12,7 +12,7 @@ tags:
 Apple had the unusual WWDC announcement this week, and definitely came out with something I wasn't expecting. A <a href="https://itunes.apple.com/gb/book/swift-programming-language/id881256329?mt=11">new programming language called swift</a>.
 
 Chris Lattner (<a href="https://twitter.com/clattner_llvm">@clattner_llvm</a>) creator of the language a head of development tools at apple seems to have come up with the philosophy behind the language. On his personal site he <a href="http://www.nondot.org/sabre/">gives a nod</a> to Bret Victor (<a href="https://twitter.com/worrydream">@worrydream</a>) one of the best thinkers on the internet who I have ever had the pleasure of reading is <a href="http://worrydream.com/#!/LearnableProgramming">amazing interactive essays</a> on rich IDEs.
-
+<!--break-->
 I've just started playing with the language, and Apple have supplied the playground. This is a tool that allows you to start playing with swift and get instant feedback on the code you write.
 
 Here's my first demo in swift:

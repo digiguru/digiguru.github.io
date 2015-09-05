@@ -11,7 +11,7 @@ tags:
 
 After recent company changes, it is becoming clear we are migrating some of our SVN repos to git. A collegues was kind enough to push the current codebase up to the shared git space, but sadly the import process lost the full history. 
 
-I was sure this should already be a solved problem and after a little research I found <a href="https://github.com/nirvdrum/svn2git">svn2git</a>.
+I was sure this should already be a solved problem and after a little research I found <!--break--><a href="https://github.com/nirvdrum/svn2git">svn2git</a>.
 
 {% highlight bash %}
 $ gem install svn2git

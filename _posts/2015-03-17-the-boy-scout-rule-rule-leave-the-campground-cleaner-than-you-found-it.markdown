@@ -13,7 +13,7 @@ tags:
 I was uploading a release for an app tonight, but I got a warning on the submission process explaining that I was missing a recommended icon 120x120 pixels.
 
 I thought this should be an easy thing to fix, all I need to do is drop in another icon. Firstly I open the Images.xcassets file to investigate...
-
+<!--break-->
 <img src="/images/2015-03-17-an-example-of-a-missing-icon.png" alt="an example of a missing icon" longdesc="An xcode image asset library file with 17 icons, but one is missing.">
 
 There's the missing image. The job is simple, I just have to rescale the laregest icon down to the right size. Next I open up the file hierarchy to find the larest of the assets, so I can scale it down...

@@ -11,7 +11,7 @@ tags:
 Ajax requests have been one of the brightest things to happen to the web. It enabled richer applications. Finally the web consortium has agreed on an API to simplify the activity of getting data into a document after it has loaded.
 
 Back in the day we used <code>XMLHttpRequest()</code> - but different browsers had different implementations.
-
+<!--break-->
 jQuery then suggested an API to get data from the server, and we had <code>$.ajax()</code>.
 
 This worked well, but every day jQuery is falling out of favour, as it's a library to make browsers behave the same, but most use cases use a fraction of the codebase. This gave rise to Sizzle, the selector engine in jQuery being branched off, and others following suite like <code>Zepto.js</code> - even the browsers added querying with <code>document.querySelectorAll</code>

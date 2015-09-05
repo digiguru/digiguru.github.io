@@ -12,7 +12,7 @@ tags:
 In the previous article we created some commands an ran them through the system.
 
 In this article I will show how easy it is to make these events wait for each other to complete.
-
+<!--break-->
 It really is a case of making each function take a callback.
 
 First we will make the log event take a few moments by performing a jquery slidedown.

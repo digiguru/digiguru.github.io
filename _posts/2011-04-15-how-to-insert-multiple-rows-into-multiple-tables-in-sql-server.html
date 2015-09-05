@@ -12,7 +12,7 @@ meta:
 I had a very bizarre need to insert multiple rows into multiple tables into SQL Server, let me show you a little picture. The concept is a seating plan, imagine a circular table that has 12 possible seats around it.
 
 <a href="http://digiguru69.files.wordpress.com/2011/04/seating-plan.png"><img class="aligncenter size-full wp-image-23" title="Seating Plan" src="http://digiguru69.files.wordpress.com/2011/04/seating-plan.png" alt="" width="480" height="142" /></a>
-
+<!--break-->
 I want to be able to say to the database "Create a table with 12 seats around it". To do this, I would need to insert 1 row into the table called "Table", add 12 rows to "Seat", and then insert the same 12 SeatIDs into "PossibleSeat" table.
 
 I thought this could be done with a simple CTE, but I couldn't figure out how to create all the rows into PossibleSeat and get all the IDs out without re-selecting from the table or by using a loop of some kind.

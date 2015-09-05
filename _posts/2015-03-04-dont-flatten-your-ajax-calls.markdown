@@ -24,7 +24,7 @@ function getInfoByID(id) {
 getInfoByID(1);
 {% endhighlight %}
 
-Of course a better way would be to move the callback to another function (reusable).
+Of course a better way <!--break-->would be to move the callback to another function (reusable).
 
 {% highlight javascript %}
 function getInfoByID(id) {

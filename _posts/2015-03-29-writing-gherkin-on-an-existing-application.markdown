@@ -12,7 +12,7 @@ tags:
 We've been supporting our codebase for many years, but we are starting to look into  describing our core site tests as a load of Gherkin features. This is the first step as we move to a more highly automated testing process.
 
 Now - what is Gherkin? It's a way of describing what your application does in a way that anyone from the business can understand. The way the language has been designed it stands as a template that can be understood by testing frameworks.
-
+<!--break-->
 It looks like the following (this example is found on <a href="https://github.com/cucumber/cucumber/wiki/Feature-Introduction">the wiki description</a>:
 
 {% highlight gherkin %}

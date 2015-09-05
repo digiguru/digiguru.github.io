@@ -11,7 +11,11 @@ meta:
   _elasticsearch_indexed_on: '2010-10-07 16:14:24'
 ---
 <div>Once a month we find the 3 slowest running queries over the last month in our database and see if we can squeeze more performance out of them. We used to have to manually run the queries in query analyzer and watch how long they took, but after sometime, the differences in performance speed were so fractional, you couldn't trust the query speed by just performing an Exec Statement.</div>
+
 <div>More recently I devised a SQL script that could compare two queries and slow the percentage increase (or decrease) in running speed. See the query as follows...</div>
+
+<!--break-->
+
 <div><span style="font-family:Courier New;font-size:10pt;"><span style="color:blue;">DECLARE</span> <span style="color:#8000ff;">@LoopTimes</span> <span style="color:black;font-style:italic;">INT</span><span style="color:silver;">,</span>
 <span style="color:#8000ff;">@MaxLoopTimes</span> <span style="color:black;font-style:italic;">INT</span><span style="color:silver;">,</span>
 <span style="color:#8000ff;">@DateStart</span> <span style="color:black;font-style:italic;">DATETIME</span><span style="color:silver;">,</span>

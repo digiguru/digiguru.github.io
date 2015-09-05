@@ -26,7 +26,7 @@ console.log(i.next());
 console.log(i.next());
 console.log(i.next());
 {% endhighlight %}
-
+<!--break-->
 The output is as follows:
 
 {% highlight javascript %}

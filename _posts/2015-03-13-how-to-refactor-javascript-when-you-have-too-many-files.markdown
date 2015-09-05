@@ -12,7 +12,7 @@ tags:
 You know what I hate? Having to maintain a codebase of thousands of inter-connected javascript files that have layers upon layers of dependencies. Somewhere along the line we thought "It's good to separate concerns" - but I guess not everyone understood what "separate" means.
 
 You know what I love? Refactoring.
-
+<!--break-->
 Here is my step by step list of refactoring just one javascript file in a sea of interconnected files.
 
 Firstly I will show an example javascript file.

@@ -12,7 +12,7 @@ tags:
 Recently i've been sprinting preparing a very exciting new venture that has force me to write code in languages I had little experience in before. The amazing thing I have learnt is that it's fairly striaghtforward to transfer skills from other languages fairly seemlessly once you've invested time in. The fundamental thing I have realised is good code architecture is universal.
 
 What I like to bring to code is simplification, atomicity and structured design. Consider the following java code...
-
+<!--break-->
 {% highlight java %}
 
 public class SearchFragment extends Fragment {

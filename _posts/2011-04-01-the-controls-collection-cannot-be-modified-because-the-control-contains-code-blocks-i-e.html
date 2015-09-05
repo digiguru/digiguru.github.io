@@ -13,7 +13,7 @@ meta:
 Had a really frustrating error in the web project where the following error message appeared...
 
 The Controls collection cannot be modified because the control contains code blocks (i.e. &lt;% ... %&gt;).
-
+<!--break-->
 I looked through my application and saw that I had the following code....
 <pre>&lt;head id="Head1" runat="server"&gt;
     &lt;script language="javascript" type="text/javascript" src="/js/MasterJS.aspx?u=&lt;%=ConfigurationManager.AppSettings("UpdateNumber")%&gt;"&gt;&lt;/script&gt;

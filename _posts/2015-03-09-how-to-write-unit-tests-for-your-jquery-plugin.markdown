@@ -13,7 +13,7 @@ I think alot of people think that javascript is untestable, even less write test
 
 This is a real shame, as there are libraries out there like qUnit that allow test classes to be written for your javascript plugins.
 
-Firstly let's set up your environment. You can use various testing tools or libraries - but I myself prefer to use <a href="http://brackets.io">brackets</a>, and you'll find an extension called <a href="http://brackets-xunit.github.io/">Brackets xUnit</a> that allows you to test javascrit files simply by writing a test and hitting save!
+Firstly let's set up your environment. <!--break-->You can use various testing tools or libraries - but I myself prefer to use <a href="http://brackets.io">brackets</a>, and you'll find an extension called <a href="http://brackets-xunit.github.io/">Brackets xUnit</a> that allows you to test javascrit files simply by writing a test and hitting save!
 
 Firstly you want to put the following at the top of your javascript file...
 

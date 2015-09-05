@@ -13,7 +13,7 @@ tags:
 A question that I sometimes get asked is "Should I render my templates on the client or the server?". The trick answer is "Both".
 
 The best thing I've done in the past year is to make some code that would render my templates on the server in exactly the same way that they would be rendered if they happened to be on the client as well. Why is this? Well firstly - the most important thing for any application is ...
-
+<!--break-->
 Does your site content appear for every user?
 =============================================
 

@@ -66,7 +66,7 @@ and a.company_id= c.company_id and a.subscription_id in (2,3)
 and subscription_date >= (dateadd(year,-1,getdate()))
 Order by county_name, a.subscription_id asc, a.date_fee_paid
 {% endhighlight %}
-
+<!--break-->
 Actually it was within several lines of concatenated text values, and had no formatting whatsoever!. My first intention was try to make it a stored procedure, but doing so I couldn't help but try to optimize it a little. Here's my attempt....
 
 {% highlight sql %}

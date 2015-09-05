@@ -12,7 +12,7 @@ tags:
 One pattern that I love to use in rich javascript applications is the Command Pattern. By embracing it you unlike your program to the ability to have multi-undo events, macro recording, but more and more prevalent in the sort of sites you see today, the way to distribute events to multiple clients (browsers) at once. Another advantage is it makes you app really easy to test - you can fire the Commands at your app and do some very deep tests on rich interfaces.
 
 The pattern is described by having the following objects...
-
+<!--break-->
 - *Client* - Think of this as the page / browser window. You may decide to have multiple clients - thus being able to push events across multiple sessions. 
 - *Command* - Think of this as an abstraction to perform a specific action on your page. If you could pass in the minimum data necessary - what would that need to be? I find it best to setup the command object to have a Name and an args object.
 - *Receiver* - Think of this as an object in your page that knows how to do something. The command object will be running events in a receiver.
