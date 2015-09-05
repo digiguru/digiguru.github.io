@@ -1,0 +1,40 @@
+---
+layout: post
+title: The Controls collection cannot be modified because the control contains code
+  blocks (i.e. ).
+categories: []
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _elasticsearch_indexed_on: '2011-04-01 16:08:50'
+---
+Had a really frustrating error in the web project where the following error message appeared...
+
+The Controls collection cannot be modified because the control contains code blocks (i.e. &lt;% ... %&gt;).
+
+I looked through my application and saw that I had the following code....
+<pre>&lt;head id="Head1" runat="server"&gt;
+    &lt;script language="javascript" type="text/javascript" src="/js/MasterJS.aspx?u=&lt;%=ConfigurationManager.AppSettings("UpdateNumber")%&gt;"&gt;&lt;/script&gt;
+    &lt;asp:ContentPlaceHolder ID="ScriptExtra" runat="server"&gt;&lt;/asp:ContentPlaceHolder&gt;
+&lt;/head&gt;</pre>
+but I also inject into the header Meta information and title pages from my application using a nice little function to keep our Meta information in check.
+
+As a result - I needed to change all references from
+<pre>&lt;%#ConfigurationManager.AppSettings("UpdateNumber")%&gt;</pre>
+to
+<pre>&lt;%=ConfigurationManager.AppSettings("UpdateNumber")%&gt;</pre>
+As I result I needed to change all my headers that are runat="server" to use
+
+I needed to change all references that are found in the head from an equals to a hash.
+
+I used the following regular expression to find all references of a head with a runat server...
+
+[\&lt;]head[^\&gt;]*runat="server"[^\&gt;]*&gt;
+
+152 files.
+
+&nbsp;
+
+&nbsp;

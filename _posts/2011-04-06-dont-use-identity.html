@@ -1,0 +1,66 @@
+---
+layout: post
+title: Don't use @@Identity
+categories: []
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _elasticsearch_indexed_on: '2011-04-06 20:28:13'
+---
+Okay, I just got burned by an @@Identity bug in SQL Server. What is that?
+
+I had a written a spec that made it necessary for the developer to create a row in a database and return the ID to the application, then this ID would trigger an email to be sent in the site.
+
+Suddenly it breaks, why? Check out the @@Identity anti-pattern
+
+<span style="font-family:'Courier New';font-size:x-small;"><span style="color:blue;">CREATE</span> <span style="color:blue;">TABLE</span> <span style="color:maroon;">main</span></span>
+
+<span style="font-family:'Courier New';font-size:x-small;"> <span style="color:maroon;">(</span>
+<span style="color:maroon;">id</span> <span style="color:black;"><em>INT</em></span> <span style="color:blue;">IDENTITY</span><span style="color:maroon;">(</span><span style="color:black;">1</span><span style="color:silver;">,</span> <span style="color:black;">1</span><span style="color:maroon;">)</span><span style="color:silver;">,</span>
+<span style="color:maroon;">name</span> <span style="color:black;"><em>VARCHAR</em></span><span style="color:maroon;">(</span><span style="color:black;">50</span><span style="color:maroon;">)</span>
+<span style="color:maroon;">)</span>
+<span style="color:blue;">CREATE</span> <span style="color:blue;">TABLE</span> <span style="color:maroon;">audit</span>
+<span style="color:maroon;">(</span>
+<span style="color:maroon;">id</span> <span style="color:black;"><em>INT</em></span> <span style="color:blue;">IDENTITY</span><span style="color:maroon;">(</span><span style="color:black;">1</span><span style="color:silver;">,</span> <span style="color:black;">1</span><span style="color:maroon;">)</span><span style="color:silver;">,</span>
+<span style="color:maroon;">name</span> <span style="color:black;"><em>VARCHAR</em></span><span style="color:maroon;">(</span><span style="color:black;">50</span><span style="color:maroon;">)</span>
+<span style="color:maroon;">)</span></span>
+
+<span style="font-family:'Courier New';font-size:x-small;"><span style="color:blue;">INSERT</span> <span style="color:blue;">INTO</span> <span style="color:maroon;">main</span><span style="color:maroon;"> </span><span style="color:maroon;">(</span><span style="color:maroon;">name</span><span style="color:maroon;">) </span><span style="color:blue;">VALUES</span><span style="color:blue;"> </span><span style="color:maroon;">(</span><span style="color:red;">'Hello'</span><span style="color:maroon;">)</span>
+<span style="color:blue;">SELECT</span> <span style="color:red;">'Number 1'</span><span style="color:silver;">,</span><span style="color:fuchsia;"><em>@@IDENTITY</em></span>
+<span style="color:blue;">INSERT</span> <span style="color:blue;">INTO</span> <span style="color:maroon;">main </span><span style="color:maroon;">(</span><span style="color:maroon;">name</span><span style="color:maroon;">)</span><span style="color:maroon;"> </span><span style="color:blue;">VALUES</span><span style="color:blue;"> </span><span style="color:maroon;">(</span><span style="color:red;">'World'</span><span style="color:maroon;">)</span>
+<span style="color:blue;">SELECT</span> <span style="color:red;">'Number 2'</span><span style="color:silver;">,</span><span style="color:fuchsia;"><em>@@IDENTITY</em></span>
+<span style="color:blue;">GO</span></span>
+
+Output is correctly showing "Number 1, 1", "Number 2, 2"
+
+So a new development requires the data to be transformed for some fast access audit tables elsewhere in the site. So we put in a trigger to deal with this new requirement.
+
+<span style="font-family:'Courier New';font-size:x-small;"><span style="color:blue;">CREATE</span> <span style="color:blue;">TRIGGER</span> <span style="color:maroon;">trig</span>
+<span style="color:blue;">ON</span> <span style="color:maroon;">main</span>
+<span style="color:blue;">FOR</span> <span style="color:blue;">INSERT</span>
+<span style="color:blue;">AS</span>
+<span style="color:blue;">INSERT</span> <span style="color:blue;">INTO</span> <span style="color:maroon;">audit</span>
+<span style="color:maroon;">(</span><span style="color:maroon;">name</span><span style="color:maroon;">)</span>
+<span style="color:blue;">VALUES</span> <span style="color:maroon;">(</span><span style="color:red;">'Please ignore this item'</span><span style="color:maroon;">)</span>
+<span style="color:blue;">GO</span>
+<span style="color:blue;">INSERT</span> <span style="color:blue;">INTO</span> <span style="color:maroon;">main</span><span style="color:maroon;"> </span><span style="color:maroon;">(</span><span style="color:maroon;">name</span><span style="color:maroon;">) </span><span style="color:blue;">VALUES</span><span style="color:blue;"> </span><span style="color:maroon;">(</span><span style="color:red;">'ID number 3'</span><span style="color:maroon;">)</span>
+<span style="color:blue;">SELECT</span> <span style="color:red;">'Number 3'</span><span style="color:silver;">,</span><span style="color:silver;"> </span><span style="color:#ff00ff;"><em>@@IDENTITY</em></span></span>
+
+Output is "Number 3, 1" - not "Number 3, 3", WHY? Well the @@Identity function returns the Last inserted Identity. Because the trigger has caused another ID to be inserted in the database before the next line is run.
+
+<span style="font-family:'Courier New';font-size:x-small;"> <span style="color:blue;">INSERT</span> <span style="color:blue;">INTO</span> <span style="color:maroon;">main</span><span style="color:maroon;"> </span><span style="color:maroon;">(</span><span style="color:maroon;">name</span><span style="color:maroon;">)</span><span style="color:maroon;"> </span><span style="color:blue;">VALUES</span><span style="color:blue;"> </span><span style="color:maroon;">(</span><span style="color:red;">'ID number 4'</span><span style="color:maroon;">)</span>
+<span style="color:blue;">SELECT</span> <span style="color:red;">'I expect ID number 4'</span><span style="color:silver;">,</span><span style="color:fuchsia;"><em>Scope_identity</em></span><span style="color:maroon;">(</span><span style="color:maroon;">)</span>
+</span>
+
+Output is "Number 4, 4". Scope_identity only includes the last identity from the scope you are running in. I fixed the rouge procedure, and then ran the excellent <a href="http://sqlcop.lessthandot.com/">SQL Cop</a> tool which is a small executable that searches your database to find common SQL issues. We had another 78 procedures in the database using the bad Identity syntax. Oh well, long evening for me, and a nice educational email to all the Devs.
+
+You know - I cannot think of a reason when you would want to get the ID of a value outside the scope, sounds like some crazy coding if you ask me!
+
+Now cleanup after yourself.
+
+<span style="font-family:'Courier New';font-size:x-small;"><span style="color:blue;">DROP</span> <span style="color:blue;">TRIGGER</span> <span style="color:maroon;">trig</span>
+<span style="color:blue;">DROP</span> <span style="color:blue;">TABLE</span> <span style="color:maroon;">main</span>
+<span style="color:blue;">DROP</span> <span style="color:blue;">TABLE</span> <span style="color:maroon;">audit</span>
+</span>

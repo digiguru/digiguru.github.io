@@ -1,0 +1,25 @@
+---
+layout: post
+title: 'click image'
+categories: []
+tags: []
+status: draft
+type: post
+published: false
+meta: {}
+---
+{% highlight javascript %}
+var justClickedThisImage;
+
+function clickImage(image) {        
+    justClickedThisImage = image;        
+    $.ajax({        	  
+        type: "POST",        	  
+        contentType: "application/json; charset=utf-8",        	  
+        dataType: "text",              
+        data: "{id=" &amp; image.attr("id") &amp; "}",              url: "UpdateService.asmx/Disable",          
+        success: CallBackFunction        	  
+    });
+}
+function CallBackFunction() {         $(justClickedThisImage).addClass("disabled");          $(justClickedThisImage).parents("div").html("Updated");     }
+{% endhighlight %}

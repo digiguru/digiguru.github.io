@@ -1,0 +1,86 @@
+---
+layout: post
+title: How to compare sql queries to analyse real time run speed
+categories: []
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _wp_old_slug: ''
+  _elasticsearch_indexed_on: '2010-10-07 16:14:24'
+---
+<div>Once a month we find the 3 slowest running queries over the last month in our database and see if we can squeeze more performance out of them. We used to have to manually run the queries in query analyzer and watch how long they took, but after sometime, the differences in performance speed were so fractional, you couldn't trust the query speed by just performing an Exec Statement.</div>
+<div>More recently I devised a SQL script that could compare two queries and slow the percentage increase (or decrease) in running speed. See the query as follows...</div>
+<div><span style="font-family:Courier New;font-size:10pt;"><span style="color:blue;">DECLARE</span> <span style="color:#8000ff;">@LoopTimes</span> <span style="color:black;font-style:italic;">INT</span><span style="color:silver;">,</span>
+<span style="color:#8000ff;">@MaxLoopTimes</span> <span style="color:black;font-style:italic;">INT</span><span style="color:silver;">,</span>
+<span style="color:#8000ff;">@DateStart</span> <span style="color:black;font-style:italic;">DATETIME</span><span style="color:silver;">,</span>
+<span style="color:#8000ff;">@TestQueryTime1</span> <span style="color:black;font-style:italic;">BIGINT</span><span style="color:silver;">,</span>
+<span style="color:#8000ff;">@TestQueryTime2</span> <span style="color:black;font-style:italic;">BIGINT</span></span></div>
+<span style="font-family:Courier New;font-size:10pt;">
+<div><span style="color:blue;">SELECT</span> <span style="color:#8000ff;">@MaxLoopTimes</span> <span style="color:silver;">=</span> <span style="color:black;">2</span></div>
+<div><span style="color:blue;">SELECT</span> <span style="color:#8000ff;">@LoopTimes</span> <span style="color:silver;">=</span> <span style="color:#8000ff;">@MaxLoopTimes</span><span style="color:silver;">,</span>
+<span style="color:#8000ff;">@DateStart</span> <span style="color:silver;">=</span> <span style="color:fuchsia;font-style:italic;">Getdate</span><span style="color:maroon;">(</span><span style="color:maroon;">)</span></div>
+<div><span style="color:blue;">WHILE</span> <span style="color:#8000ff;">@LoopTimes</span> <span style="color:silver;">&gt;</span> <span style="color:black;">0</span>
+<span style="color:blue;">BEGIN</span>
+<span style="color:red;">&lt;INSERT YOUR FIRST STAEMENT HERE&gt;</span></div>
+<div><span style="color:blue;">SELECT</span> <span style="color:#8000ff;">@LoopTimes</span> <span style="color:silver;">=</span> <span style="color:#8000ff;">@LoopTimes</span> <span style="color:silver;">-</span> <span style="color:black;">1</span>
+<span style="color:blue;">END</span></div>
+<div><span style="color:blue;">SELECT</span> <span style="color:#8000ff;">@TestQueryTime1</span> <span style="color:silver;">=</span> <span style="color:fuchsia;font-style:italic;">Datediff</span><span style="color:maroon;">(</span><span style="color:maroon;">millisecond</span><span style="color:silver;">,</span> <span style="color:#8000ff;">@DateStart</span><span style="color:silver;">,</span> <span style="color:fuchsia;font-style:italic;">Getdate</span><span style="color:maroon;">(</span><span style="color:maroon;">)</span><span style="color:maroon;">)</span></div>
+<div><span style="color:blue;">SELECT</span> <span style="color:#8000ff;">@LoopTimes</span> <span style="color:silver;">=</span> <span style="color:#8000ff;">@MaxLoopTimes</span><span style="color:silver;">,</span>
+<span style="color:#8000ff;">@DateStart</span> <span style="color:silver;">=</span> <span style="color:fuchsia;font-style:italic;">Getdate</span><span style="color:maroon;">(</span><span style="color:maroon;">)</span></div>
+<div><span style="color:blue;">WHILE</span> <span style="color:#8000ff;">@LoopTimes</span> <span style="color:silver;">&gt;</span> <span style="color:black;">0</span>
+<span style="color:blue;">BEGIN<span style="color:#c0c0c0;">
+</span></span><span style="color:red;">&lt;INSERT SECOND STATEMENT HERE&gt;</span>
+<span style="color:blue;">SELECT</span> <span style="color:#8000ff;">@LoopTimes</span> <span style="color:silver;">=</span> <span style="color:#8000ff;">@LoopTimes</span> <span style="color:silver;">-</span> <span style="color:black;">1</span>
+<span style="color:blue;">END</span></div>
+<div><span style="color:blue;">SELECT</span> <span style="color:#8000ff;">@TestQueryTime2</span> <span style="color:silver;">=</span> <span style="color:fuchsia;font-style:italic;">Datediff</span><span style="color:maroon;">(</span><span style="color:maroon;">millisecond</span><span style="color:silver;">,</span> <span style="color:#8000ff;">@DateStart</span><span style="color:silver;">,</span> <span style="color:fuchsia;font-style:italic;">Getdate</span><span style="color:maroon;">(</span><span style="color:maroon;">)</span><span style="color:maroon;">)</span></div>
+<div><span style="color:blue;">SELECT</span> <span style="color:red;">'First'</span> <span style="color:blue;">AS</span> <span style="color:maroon;">procname</span><span style="color:silver;">,</span>
+<span style="color:#8000ff;">@TestQueryTime1</span> <span style="color:silver;">+</span> <span style="color:#8000ff;">@TestQueryTime2</span> <span style="color:blue;">AS</span> <span style="color:maroon;">totalruntime</span><span style="color:silver;">,</span>
+<span style="color:#8000ff;">@TestQueryTime1</span> <span style="color:blue;">AS</span> <span style="color:maroon;">totalprocspeed</span><span style="color:silver;">,</span>
+<span style="color:#8000ff;">@TestQueryTime1</span> <span style="color:silver;">/</span> <span style="color:#8000ff;">@MaxLoopTimes</span> <span style="color:blue;">AS</span> <span style="color:maroon;">averageprocspeed</span><span style="color:silver;">,</span>
+<span style="color:maroon;">(</span> <span style="color:fuchsia;font-style:italic;">CAST</span><span style="color:maroon;">(</span><span style="color:#8000ff;">@TestQueryTime1</span> <span style="color:blue;">AS</span> <span style="color:black;font-style:italic;">DECIMAL</span><span style="color:maroon;">)</span> <span style="color:silver;">/</span> <span style="color:maroon;">(</span> <span style="color:#8000ff;">@TestQueryTime1</span> <span style="color:silver;">+</span> <span style="color:#8000ff;">@TestQueryTime2</span>
+<span style="color:maroon;">)</span> <span style="color:maroon;">)</span> <span style="color:silver;">*</span>
+<span style="color:black;">100</span> <span style="color:blue;">AS</span> <span style="color:maroon;">procpercentage</span>
+<span style="color:blue;">UNION</span> <span style="color:blue;">ALL</span>
+<span style="color:blue;">SELECT</span> <span style="color:red;">'Second'</span><span style="color:silver;">,</span>
+<span style="color:#8000ff;">@TestQueryTime1</span> <span style="color:silver;">+</span> <span style="color:#8000ff;">@TestQueryTime2</span><span style="color:silver;">,</span>
+<span style="color:#8000ff;">@TestQueryTime2</span><span style="color:silver;">,</span>
+<span style="color:#8000ff;">@TestQueryTime2</span> <span style="color:silver;">/</span> <span style="color:#8000ff;">@MaxLoopTimes</span><span style="color:silver;">,</span>
+<span style="color:maroon;">(</span> <span style="color:fuchsia;font-style:italic;">CAST</span><span style="color:maroon;">(</span><span style="color:#8000ff;">@TestQueryTime2</span> <span style="color:blue;">AS</span> <span style="color:black;font-style:italic;">DECIMAL</span><span style="color:maroon;">)</span> <span style="color:silver;">/</span> <span style="color:maroon;">(</span> <span style="color:#8000ff;">@TestQueryTime1</span> <span style="color:silver;">+</span> <span style="color:#8000ff;">@TestQueryTime2</span>
+<span style="color:maroon;">)</span> <span style="color:maroon;">)</span> <span style="color:silver;">*</span>
+<span style="color:black;">100</span> <span style="color:blue;">AS</span> <span style="color:maroon;">procpercentage</span></div>
+</span>
+<div>Run that around two different queries, and you will be output with all the query results, then finally a table...</div>
+<table>
+<thead>
+<tr>
+<td></td>
+<td>ProcName</td>
+<td>TotalRunTime</td>
+<td>TotalProcSpeed</td>
+<td>AverageProcSpeed</td>
+<td>ProcPercentage</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>First</td>
+<td>17006</td>
+<td>1420</td>
+<td>710</td>
+<td>8.3499941197224509</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Second</td>
+<td>17006</td>
+<td>15586</td>
+<td>7793</td>
+<td>91.6500058802775491</td>
+</tr>
+</tbody>
+</table>
+
+You can increase the amount of repetitions by amending the property @MaxLoopTimes to a higher number.

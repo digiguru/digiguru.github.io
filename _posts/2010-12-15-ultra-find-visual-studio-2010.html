@@ -1,0 +1,32 @@
+---
+layout: post
+title: Setting up Ultra find for Visual Studio 2010
+categories: []
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _elasticsearch_indexed_on: '2010-12-15 12:34:13'
+---
+<p>If you use Visual Studio 2010 you should install "ultra find" and set it up properly to index your solutions, and you'll have accurate search results in seconds.</p>
+
+<h3>Why?</h3>
+
+<p>I am often looking at ways to improve my development speed, and I realised that I spent too much time waiting for a "Find" to be performed on out large website folder.</p>
+
+<p>After upgrading to Visual Studio 2010 I quickly installed loads of great extension, but by far my favourite is <a href="http://visualstudiogallery.msdn.microsoft.com/en-us/9fa9fdd7-1c06-45e3-a9f3-0381caab8f94">Ultra Find</a>.</p>
+
+<p>Ulta Find takes advantage of your windows indexing service to give you instant search results. I found searching for the text "MPU" took less than a second using ultra find whereas it takes alot longer in the normal find box, which took just under 3 minutes</p>
+<h3>It didn't find my (insert filetype here) files</h3> 
+<p>There are some caveats to using ultra find. It uses Windows Indexing Service, so only items that appear in your windows index will appear in UltraFind. By default this doesn't include all of your ASP.NET solution files. This caused issues, as I would search for text in our website and change it, telling my boss that yes, that spelling of Stationary is now Stationery everywhere, but some files weren't "found" by Ultra Find.</p>
+
+<p>There is an <a href="http://blog.arainia.com/2010/08/ultra-find-setup-windows-search.html">easy fix</a>. Go into Control Panel &gt; Indexing Options &gt; Advanced &gt; File Types and you'll see a list of all files indexing properties. You'll want to go through this list and ensure that all the files you care about are in this list, and have been set to "Index Properties and File Contents". The list of files you need is personal to you, but I use the following...<i>asa, asax, ascx, asmx, asp, aspx, config, cs, csproj, css, csv, disco, dtd, htm, html, inc, ini, js, log, master, resx, vb, vcproj, wsdl, xaml, xml, xsd, xsl, xslt</i></p>
+<h3>But it didn't find text within my markup!?</h3>
+<p>Now you should have indexing on all the important files in your solution, but you will find that there are portions of individual files that aren't appearing in the search results. An example we have was some text within markup of HTML files didn't appear. Why?</p>
+<p>The windows indexing service is trying to be clever. For most users, they don't need to know the markup contents in a file. If an average user was searching a load of documents for the existence of the word "Meta", they would be confused by the existence of it in every HTML document. They don't need to know "Meta" exists, but us developers could do with it appearing in our search results.</p>
+<p>You may have noticed in the Index Options a column called "Filter Description" for each file type. HTML Filter will ignore all markup. We can fix this but unfortunately, we need to attack the Registery in windows, but it's <a href="http://news.office-watch.com/t/n.aspx?articleid=1502&amp;zoneid=5">very easy</a>.Windows-r &gt; type RegEdit and hit return to boot up your Registery Editor. In <i>Computer\HKey_CLASSES_ROOT</i> you will see a load of files, eg .htm. Inside that node you get PersistentHandler. The value for this is probably <i>{eec97550-47a9-11cf-b952-00aa0051fe20}</i>. That setting means "This is an HTML file, ignore the markup". Now go into .txt and you'll see it's PersistentHandler is <i>{5e941d80-bf96-11cd-b579-08002b30bfeb}</i>. All you have to do is manually go into each filetype that is not indexing properly and change it from <i>{eec97550-47a9-11cf-b952-00aa0051fe20}</i> to <i>{5e941d80-bf96-11cd-b579-08002b30bfeb}</i>. Now go back into Control Panel &gt; Indexing Options &gt; Advanced &gt; Rebuild.</p>
+
+<p>There you go, fast and accurate search results.</p>
+
+

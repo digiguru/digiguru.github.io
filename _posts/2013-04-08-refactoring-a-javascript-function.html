@@ -1,0 +1,86 @@
+---
+layout: post
+title: Refactoring a javascript function
+categories: []
+tags:
+- javascript
+- refactoring
+status: draft
+type: post
+published: false
+meta: {}
+---
+Here is a function from my javascript:
+<pre>function CallbackTodoSummary (result) {
+   var todoSummaryObj;
+   if (result.d !== null) {
+      todoSummaryObj = result.d;
+      if (parseInt(todoSummaryObj.HowManyTasks) === 0) {
+         this.Setnotodosummary();
+      } else {
+         if (parseInt(todoSummaryObj.HowManyTasks) === parseInt(todoSummaryObj.TasksComplete)) {
+            this.SetCompleteTodoStatus(todoSummaryObj);
+         } else {
+            if ((parseInt(todoSummaryObj.TasksOverdue) &gt; 0)) {
+               this.SetOverDue(todoSummaryObj);
+            } else {
+               this.SetOutstandingStatus(todoSummaryObj);
+            }
+         }
+      }
+   } else {
+      this.Setnotodosummary();
+   }
+};</pre>
+I thought it would be fun to refactor.
+
+1) make the function public, not global:
+<pre>this.CallbackTodoSummary = function (result) {</pre>
+2) Simplify the null check
+<pre>if (result.d) {</pre>
+3) Simplify the variable setting
+<pre>var todoSummaryObj = result.d;
+if (todoSummaryObj ) {</pre>
+4) Remove duplication
+<pre>var todoSummaryObj = result.d,
+    howManyTasks,
+    tasksComplete,
+    tasksOverdue;
+...
+howManyTasks = parseInt(todoSummaryObj.HowManyTasks, 10);
+tasksComplete = parseInt(todoSummaryObj.TasksComplete, 10);
+tasksOverdue = parseInt(todoSummaryObj.TasksOverdue, 10);</pre>
+5) Simplify boolean logic
+<pre>if (!howManyTasks) {
+   this.Setnotodosummary();
+} else if (howManyTasks === tasksComplete) {
+   this.SetCompleteTodoStatus(todoSummaryObj);
+} else if (tasksOverdue) {
+   this.SetOverDue(todoSummaryObj);
+} else {
+   this.SetOutstandingStatus(todoSummaryObj);
+}</pre>
+So this results in:
+<pre>this.CallbackTodoSummary = function (result) {
+  var todoSummaryObj = result.d,
+      howManyTasks,
+      tasksComplete,
+      tasksOverdue;
+  if (todoSummaryObj) {
+      howManyTasks = parseInt(todoSummaryObj.HowManyTasks, 10);
+      tasksComplete = parseInt(todoSummaryObj.TasksComplete, 10);
+      tasksOverdue = parseInt(todoSummaryObj.TasksOverdue, 10);
+      if (!howManyTasks) {
+         this.Setnotodosummary();
+      } else if (howManyTasks === tasksComplete) {
+         this.SetCompleteTodoStatus(todoSummaryObj);
+      } else if (tasksOverdue &gt; 0) {
+         this.SetOverDue(todoSummaryObj);
+      } else {
+         this.SetOutstandingStatus(todoSummaryObj);
+      }
+   } else {
+      this.Setnotodosummary();
+   }
+};</pre>
+I think that's nicer to read, what about you?
