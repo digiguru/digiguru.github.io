@@ -51,7 +51,7 @@ Which now seemed to work from an IDE, but had issues when talking to a build ser
 
 We opted for <a href="http://gulpjs.com">Gulp</a>
 
-h2. package.json
+## package.json
 {% highlight json %}
 {
     "name": "mywebsite",
@@ -64,7 +64,7 @@ h2. package.json
 } 
 {% endhighlight %}
 
-h2. gulpfile.js
+## gulpfile.js
 {% highlight javascript %}
 var gulp = require('gulp');
 var sass = require('gulp-sass');
@@ -78,7 +78,7 @@ gulp.task('sass', function () {
 
 This got us the behaviour we wanted. Time to go further, could we minify the css as well?
 
-h2. package.json
+## package.json
 {% highlight json %}
 {
     "name": "mywebsite",
@@ -93,7 +93,7 @@ h2. package.json
 } 
 {% endhighlight %}
 
-h2. gulpfile.js
+## gulpfile.js
 {% highlight javascript %}
 var gulp = require('gulp');
 var sass = require('gulp-sass');
@@ -116,7 +116,7 @@ Looking good, but then we realised it was doing some compilation in areas we did
 
 We decided to include gulp-filter to fix this.
 
-h2. package.json
+## package.json
 {% highlight json %}
 {
     "name": "mywebsite",
@@ -132,7 +132,7 @@ h2. package.json
 } 
 {% endhighlight %}
 
-h2. gulpfile.js
+## gulpfile.js
 {% highlight javascript %}
 var gulp = require('gulp');
 var sass = require('gulp-sass');
