@@ -7,7 +7,7 @@ tags:
 - vb
 - csharp
 - net
-- querstring
+- querystring
 ---
 
 Often we have pages that have multiple optional querystrings. Here is a simple function that allows developers to write really clear code to get parameters from the querystring <!--break-->(or any other object that derives from NameValueCollection.
