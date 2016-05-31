@@ -1,7 +1,12 @@
 name: Digiguru.co.uk
 highlighter: rouge
-safe: true
+##safe: true
 lsi: false
 comments: false
+gems: 
+    - jekyll-paginate
+    ##- octopress-paginate
 paginate: 5
-paginate_path: "/page:num/"
+paginate_path: "page:num"
+
+future: true
