@@ -83,7 +83,7 @@ Now let's find the application name installed on the device..
 adb shell pm list packages
 {% endhighlight %}
 
-Somewhere in the list you will see GSAM like {{com.gsamlabs.bbm}} or {{com.gsamlabs.bbm.pro}}
+Somewhere in the list you will see GSAM like <code>com.gsamlabs.bbm</code> or <code>com.gsamlabs.bbm.pro</code>
 
 Take that text and run this next line to enable the hidden permission for this app to monitor battery information.
 
