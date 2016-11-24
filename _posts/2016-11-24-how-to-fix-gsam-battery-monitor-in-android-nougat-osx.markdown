@@ -17,7 +17,7 @@ GSAM kidly request that <a href="https://code.google.com/p/android/issues/detail
 
 Until this request is brought into the OS (I don't think it will be any time soon) there IS actually a way to enable the functionality. It's hidden in comment number #27 on the page...
 
-<code>
+{% highlight bash %}
  > #27 rjkmadi...
  > In the interim, you can give permissions through an adb shell.
  > pm grant com.gsamlabs.bbm android.permission.BATTERY_STATS
@@ -25,7 +25,7 @@ Until this request is brought into the OS (I don't think it will be any time soo
  > 
  > (Thanks for flindaman on Reddit.)
  > Oct 3, 2016
-</code>
+{% endhighlight %}
 
 Excellent! But what does that even mean?
 
