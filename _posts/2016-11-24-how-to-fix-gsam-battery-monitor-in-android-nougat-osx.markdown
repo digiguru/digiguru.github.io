@@ -3,7 +3,7 @@ layout: post
 title:  "How to fix GSAM Battery Monitor in Android Nougat (Using OSX)"
 date:   2016-11-24 22:00:00
 categories: blog
-tags: 
+tags:
 - android
 - battery
 - adb
@@ -22,7 +22,7 @@ Until this request is brought into the OS (I don't think it will be any time soo
  > In the interim, you can give permissions through an adb shell.
  > pm grant com.gsamlabs.bbm android.permission.BATTERY_STATS
  > or pm grant com.gsamlabs.bbm.pro android.permission.BATTERY_STATS
- > 
+ >
  > (Thanks for flindaman on Reddit.)
  > Oct 3, 2016
 {% endhighlight %}
@@ -90,7 +90,7 @@ Somewhere in the list you will see GSAM like <code>com.gsamlabs.bbm</code> or <c
 Take that text and run this next line to enable the hidden permission for this app to monitor battery information.
 
 {% highlight bash %}
-pm grant com.gsamlabs.bbm android.permission.BATTERY_STATS
+adb shell pm grant com.gsamlabs.bbm android.permission.BATTERY_STATS
 {% endhighlight %}
 
 Then next time you restart your Android, GSAM Battery monitor will have what it needs to monitor all the apps running on your device.
