@@ -8,13 +8,7 @@ plugins:
     - jekyll-paginate
     - jekyll-feed
     - jekyll-sitemap
-    - jekyll-analytics
     ##- octopress-paginate
 paginate: 5
 paginate_path: "page:num"
-jekyll_analytics:
-  GoogleAnalytics:          # Add, if you want to track with Google Analytics
-    id: UA-123008-9         # Required - replace with your tracking id
-    anonymizeIp: false      # Optional - Default: false - set to true for anonymized tracking
-
 future: true
