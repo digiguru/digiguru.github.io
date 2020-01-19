@@ -1,11 +1,33 @@
+# Getting started
+
 How to compile the site.
 
-<code>
+```bash
 jekyll build
-</code>
+```
 
 Things arn't working?
-<code>
- gem install bundler jekyll
- bundle exec jekyll serve
-</code>
+
+```bash
+gem install bundler jekyll
+```
+
+or with brew...
+
+```bash
+brew install brew-gem
+brew gem install bundler
+brew gem install jekyll
+```
+
+then
+
+```bash
+bundle update
+```
+
+Finally
+
+```bash
+bundle exec jekyll serve
+```
