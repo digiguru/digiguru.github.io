@@ -10,6 +10,7 @@ Things arn't working?
 
 ```bash
 gem install bundler jekyll
+bundle add webrick
 ```
 
 or with brew...
