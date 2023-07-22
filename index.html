@@ -14,7 +14,9 @@ paginate: true
 ---
 
 <div id="home">
+  {% include logo.html %}
   <h1>Random musings</h1>
+  
   <ul class="posts">
       
     {% for post in paginator.posts %}

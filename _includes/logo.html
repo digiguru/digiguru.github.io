@@ -1,0 +1,29 @@
+
+
+<img id="logo" width="100%" height="100%" class="header-logo" src="images/logo.webp" />
+
+
+<style>
+.header-logo {
+    height: 650px;
+    width: 650px;
+    transition: 0.5s;
+    max-width: none;
+}  
+.header-logo.header-shrink {
+    height: 120px;
+    width: 120px;
+}
+</style>
+<script>
+    // When the user scrolls down 50px from the top of the document, resize the header's font size
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+    document.getElementById("logo").classList.add("header-shrink");
+  } else {
+    document.getElementById("logo").classList.remove("header-shrink");
+  }
+}
+</script>
