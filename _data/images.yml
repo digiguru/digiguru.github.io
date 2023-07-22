@@ -1,0 +1,13 @@
+
+- name: The Guardian
+  url: https://i.mj.run/3adbcfca-67b2-407b-ab68-70f57a905fae/0_3.webp
+  prompt: skeletons with wings hanging by the neck in a crumbling attic, in the style of evocative environmental portraits, photobashing, sculptural costumes, roger deakins, supernatural creatures, reimagined religious art, uhd image --ar 85:128
+
+- name: Happy Birthday Nick St Pierre
+  url: https://i.mj.run/1ec13b34-bbf0-4de3-b262-7736c353e1fd/0_1.webp
+  prompt: birthday celebrations with lots of balloons and skeletons with wings hanging by the neck in a crumbling attic, in the style of evocative environmental portraits, photobashing, sculptural costumes, roger deakins, supernatural creatures, reimagined religious art, uhd image --ar 85:128
+
+- name: The Beetle Mech
+  url: https://i.mj.run/ad4e3fcc-1e8c-487b-9a45-728ec6f18f06/0_2.webp
+  prompt: tiltshift 35mm closeup of family of victorian workers looking up at a giant behemouth mechanoid beetle in the clouds in a valley beneath them, background ancient desert in the mountains, city landscape, in the style of soviet, detailed environments, bold structural designs, ilford delta, packed with hidden details, distillation of forms --ar 16:9
+  

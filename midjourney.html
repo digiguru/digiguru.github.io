@@ -1,0 +1,20 @@
+---
+layout: default
+title: Digiguru Images
+paginate: true
+---
+
+<div id="home">
+  <h1>Images</h1>
+  <ul class="posts">
+    {% for image in site.data.images %}
+        <li>
+        <img src="{{ image.url }}" />
+        <h1>{{image.name}}</h1>
+        <pre class="prompt">{{image.prompt}}</pre>
+        </li>
+    {% endfor %}
+
+  </ul>
+</div>
+
