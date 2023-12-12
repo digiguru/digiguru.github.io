@@ -66,49 +66,49 @@ ul.posts span {
   width: 42em;
   margin: 3em auto 2em;
   line-height: 1.5em;
-}
-.site .header {
-  font-family: 'Audiowide', cursive;
-  font-size: 200%;  
-  display: flex;
-  align-items: center; 
-  width: 100%;
-  margin-bottom: 1em;
-}
-.site .header h1.title{
-  margin: 0px;
-  padding: 0px;
-}
-.site .header a {
-  font-weight: bold;
-  text-decoration: none;
+  .header {
+    font-family: 'Audiowide', cursive;
+    font-size: 200%;  
+    display: flex;
+    align-items: center; 
+    width: 100%;
+    margin-bottom: 1em;
+
+    h1.title {
+      margin: 0px;
+      padding: 0px;
+      display: inline-block;
+      a {
+        color: #a00;
+      }
+      
+      a:hover {
+        color: #000;
+      }
+
+    }
+    a {
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-grow: 1; 
+      padding-left: 20px;
+      justify-content: space-between; 
+      a.extra {
+        color: #aaa;
+        font-size: 52%;
+      }
+      a.extra:hover {
+        color: #000;
+      }
+    }
+  }
+
 }
 
-.site .header h1.title {
-  display: inline-block;
-}
-
-.site .header h1.title a {
-  color: #a00;
-}
-
-.site .header h1.title a:hover {
-  color: #000;
-}
-.site .header .nav-links {
-  display: flex;
-  flex-grow: 1; 
-  padding-left: 20px;
-  justify-content: space-between; 
-}
-.site .header .nav-links a.extra {
-  color: #aaa;
-  font-size: 52%;
-}
-
-.site .header .nav-links a.extra:hover {
-  color: #000;
-}
 
 .site .meta {
   color: #aaa;
