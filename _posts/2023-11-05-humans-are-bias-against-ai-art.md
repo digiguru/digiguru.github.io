@@ -15,7 +15,7 @@ Humans are bias against AI art, and that's been scientifically proven.
 
 
 In a study this year called "Bias against AI art can enhance perceptions of human creativity." 2,965 participants were shown a mix of AI art and non AI art. They were asked to rate them across a number of dimensions ...
-
+<!--break-->
 
 - Liking
 - Skill
