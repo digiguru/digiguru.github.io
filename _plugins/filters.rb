@@ -4,7 +4,7 @@ module Jekyll
       require 'date'
       def date_sort(collection)
         collection.sort_by do |el|
-        Date.parse(el.data['date'], '%d-%m-%Y')
+        Date.parse(el['date'], '%d-%m-%Y')
       end
     end
   end
