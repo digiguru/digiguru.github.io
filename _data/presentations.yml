@@ -1,0 +1,89 @@
+- name: Agile Reading
+  version: v3.0
+  date: 15/03/2023
+  url: agile-reading.html
+  attendance: 59
+
+- name: Financial Services
+  version: v3.1
+  date: 22/03/2023
+  url: nationwide.html
+  attendance: 120
+
+- name: Lightning Talk
+  version: v3.2
+  date: 23/03/2023
+  url: lightning.html
+  attendance: 10
+
+- name: UX Cop
+  version: v3.3
+  date: 21/04/2023
+  url: ux.html
+  attendance: 50
+
+- name: Recruitment
+  version: v3.4
+  date: 30/05/2023
+  url: recruitment.html
+  attendance: 55
+
+- name: .Net
+  version: v3.5
+  date: 12/07/2023
+  url: dotnet.html
+  attendance: 50
+
+- name: Tenzing
+  version: v3.6
+  date: 13/07/2023
+  url: tenzing.html
+  attendance: 50
+
+- name: Agnostic Agile
+  version: v3.7
+  date: 27/09/2023
+  url: anti-ai.html
+  attendance: 30
+
+- name: IAG
+  version: v3.8
+  date: 28/09/2023
+  url: iag.html
+  attendance: 23
+
+- name: Product
+  version: v3.9
+  date: 25/10/2023
+  url: product.html
+  attendance: 20
+
+- name: European Product Guild
+  version: v3.10
+  date: 15/11/2023
+  url: eu-product.html
+  attendance: 15
+
+- name: "Empowering Tomorrow's Teams: Upgrading Workforce Skills"
+  version: v3.11
+  date: 21/11/2023
+  url: dfe.html
+  attendance: 38
+
+- name: A Guide to Using AI to Optimise Your Time
+  version: v3.12
+  date: 30/11/2023
+  url: and-chat.html
+  attendance: 40
+
+- name: Are Robots Replacing Us?
+  version: v3.13
+  date: 06/12/2023
+  url: aviva.html
+  attendance: 10
+
+- name: King's College London
+  version: v4.1
+  date: 25/01/2024
+  url: kcl.html
+  

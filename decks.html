@@ -1,0 +1,43 @@
+---
+layout: default
+title: Digiguru Presentations
+paginate: true
+---
+
+<div id="home">
+  <h1>Presentations</h1>
+  <p>In 2020 I started running presentations regarding how AI was going to change the way we work.<br /><br />
+  In 2023 I created a way of delivering them that conjoined dynamic prompting with multiple AI services to make them easier to customise and upgrade.</p>
+  <table class="posts">
+    {% assign sorted = site.data.presentations | date_sort | reverse  %}
+    {% for presentation in sorted %}
+        <tr>
+          <td>{{presentation.version}}
+            </td>
+            <td>{{presentation.date | date: "%-d %B %Y"}}</td> 
+            <td><a href="presentation-ai-2023/{{presentation.url}}">{{presentation.name}}</a></td>
+            <td>{% if presentation.attendance %}
+            {{presentation.attendance}} attendees
+            {% endif %}</td>
+        </tr>
+    {% endfor %}
+
+      </table>
+
+
+  <div class="pagination">
+    {% if paginator.previous_page %}
+      <a href="{{ paginator.previous_page_path }}" class="previous">Previous</a>
+    {% else %}
+      <span class="previous">Previous</span>
+    {% endif %}
+    <span class="page_number ">Page: {{ paginator.page }} of {{ paginator.total_pages }}</span>
+    {% if paginator.next_page %}
+      <a href="{{ paginator.next_page_path }}" class="next">Next</a>
+    {% else %}
+      <span class="next ">Next</span>
+    {% endif %}
+  </div>  
+
+</div>
+

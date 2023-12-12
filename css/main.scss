@@ -22,7 +22,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 100%; 
 }
 
-h1 { margin-bottom: 1em; }
+/*h1 { margin-bottom: 1em; }*/
 p { margin: 1em 0; }
 
 a         { color: #00a; }
@@ -68,11 +68,18 @@ ul.posts span {
   line-height: 1.5em;
 }
 .site .header {
- font-family: 'Audiowide', cursive;
-font-size: 200%;   
+  font-family: 'Audiowide', cursive;
+  font-size: 200%;  
+  display: flex;
+  align-items: center; 
+  width: 100%;
+  margin-bottom: 1em;
+}
+.site .header h1.title{
+  margin: 0px;
+  padding: 0px;
 }
 .site .header a {
-  
   font-weight: bold;
   text-decoration: none;
 }
@@ -88,14 +95,18 @@ font-size: 200%;
 .site .header h1.title a:hover {
   color: #000;
 }
-
-.site .header a.extra {
+.site .header .nav-links {
+  display: flex;
+  flex-grow: 1; 
+  padding-left: 20px;
+  justify-content: space-between; 
+}
+.site .header .nav-links a.extra {
   color: #aaa;
-  margin-left: 1em;
   font-size: 52%;
 }
 
-.site .header a.extra:hover {
+.site .header .nav-links a.extra:hover {
   color: #000;
 }
 
