@@ -3,6 +3,7 @@ layout: post
 title:  "AI Dumbs People Down"
 date:   2023-11-21 22:00:00
 categories: blog
+published: false
 tags:
 - ai
 - knowledge
