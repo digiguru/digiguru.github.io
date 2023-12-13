@@ -77,9 +77,9 @@ There's nothing like a team "win" to get a feeling of momentum. Momentum builds 
 Look at the teams you work with. If they haven't released anything to production in the last week consider sharing some articles on Walking Skeletons and evolutionary design and see if you can get into the habit of releasing to production.
 
 ## Further reading
-[Walking Skeleton](https://wiki.c2.com/?WalkingSkeleton) by Ward Cunningham
-[Evolutionary Design Animated](https://www.youtube.com/watch?v=QJRAeoOHewo) by James Shore
-[Using Walking Skeleton Approach in Software Development](https://medium.com/kayvan-kaseb/using-walking-skeleton-approach-in-software-development-943c3d69a8c0) by Kayvan K.
-[Using A 'Walking Skeleton' To Reduce Risk In Software Innovation](https://www.forbes.com/sites/forbestechcouncil/2020/01/02/using-a-walking-skeleton-to-reduce-risk-in-software-innovation/?sh=566c6a233b1c) by Dave Todaro
-[Growing Object-Oriented Software Guided by Tests](http://www.growing-object-oriented-software.com/) by Steve Freeman and Nat Pryce
-[Zombie Scrum](https://www.scrum.org/resources/blog/zombie-scrum-symptoms-causes-and-treatment) - Symptoms, Causes and Treatment by Barry Overeem
+- [Walking Skeleton](https://wiki.c2.com/?WalkingSkeleton) by Ward Cunningham
+- [Evolutionary Design Animated](https://www.youtube.com/watch?v=QJRAeoOHewo) by James Shore
+- [Using Walking Skeleton Approach in Software Development](https://medium.com/kayvan-kaseb/using-walking-skeleton-approach-in-software-development-943c3d69a8c0) by Kayvan K.
+- [Using A 'Walking Skeleton' To Reduce Risk In Software Innovation](https://www.forbes.com/sites/forbestechcouncil/2020/01/02/using-a-walking-skeleton-to-reduce-risk-in-software-innovation/?sh=566c6a233b1c) by Dave Todaro
+- [Growing Object-Oriented Software Guided by Tests](http://www.growing-object-oriented-software.com/) by Steve Freeman and Nat Pryce
+- [Zombie Scrum](https://www.scrum.org/resources/blog/zombie-scrum-symptoms-causes-and-treatment) - Symptoms, Causes and Treatment by Barry Overeem
