@@ -12,7 +12,10 @@ tags:
 I have a secret: I hate Gantt Charts.
 I hate the way they look. I hate the way people interact with them. I hate the time it takes to build one. I hate the way it encourages people to behave.
 
-Think back to the last Gantt chart you saw. <!--break-->
+![A gantt chart showing far too much information](/assets/hate-gantt-0.png)
+
+Think back to the last Gantt chart you saw. 
+<!--break-->
 
 It probably looked like a sprawl of boxes where your “resources” were happily delivering packages of work to set schedules.
 
@@ -76,9 +79,11 @@ If we’re not going to use Gantt charts, what should we use instead? Well, ther
  
 ## Burnup
  
-You only get an understanding of how much work there is after you start to actually do the work. To deal with this, Agile teams use a visualisation called a burnup.
+You only get an understanding of how much work there is after you start to actually do the work. To deal with this, Agile teams use a visualisation called a burnup. It's so easy a kid can do it. This is an example my child used to measure progress towards unlocking a skin in fortnite (the target) before the season ended (the deadline)
 
-In a burnup, the tasks are comparatively sized against each other.As we make progress towards delivering the work required we ‘burn’ everything we’ve completed. As we discover more work, we add it. This can be visualised thanks to a dynamic graph that will shift over time, but what’s important is that a pattern will start to form. This is good news - humans are usually very good at pattern detection. This means teams will gradually be able to better predict the future and accurately forecast deliveries.
+![A childs drawing of a burnup](/assets/hate-gantt-1-5.png)
+
+In a burnup, the tasks are comparatively sized against each other. As we make progress towards delivering the work required we ‘burn’ everything we’ve completed. As we discover more work, we add it. This can be visualised thanks to a dynamic graph that will shift over time, but what’s important is that a pattern will start to form. This is good news - humans are usually very good at pattern detection. This means teams will gradually be able to better predict the future and accurately forecast deliveries. (You can see faint lines drawn where my son forecast his progress)
  
 ## A network diagram for dependencies
  
