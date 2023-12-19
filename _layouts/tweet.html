@@ -11,7 +11,7 @@ comments: false
     
     {% for tweet in page.tweets %}
             <blockquote class="twitter-tweet">
-                <a href="https://twitter.com/thedigiguru/status/{{tweet.id}}?ref_src=twsrc%5Etfw">{{tweet.date}}</a>
+                <a href="https://twitter.com/thedigiguru/status/{{tweet.id}}?ref_src=twsrc%5Etfw">{{tweet.date | 'No date'}}</a>
             </blockquote>
         {% if tweet.prompt %}
             <pre class="prompt">{{tweet.prompt}}</pre>

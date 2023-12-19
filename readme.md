@@ -51,3 +51,10 @@ let text = `
 copy(text)
 console.log("Copied" + text);
 ```
+
+To find relevant tweets use this url
+https://twitter.com/search?q=(from%3Athedigiguru)%20until%3A2023-03-01%20since%3A2023-02-01&src=typed_query
+
+```
+(from:thedigiguru)  until:2023-05-01 since:2023-04-01 min_faves:20
+```
