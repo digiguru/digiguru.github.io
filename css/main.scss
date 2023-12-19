@@ -195,6 +195,7 @@ ul.posts span {
 /* Twitter
 /*
 /*****************************************************************************/
+
 .twitter-menu {
   display: flex;
   flex-wrap: wrap;
@@ -204,25 +205,31 @@ ul.posts span {
   margin: 0;
 }
 
-.twitter-menu li {
+.twitter-menu > * {
   margin-right: 10px; /* Right margin for spacing between items */
   margin-bottom: 10px; /* Bottom margin for spacing between rows */
   flex: 1 1 90px; /* Flex grow, shrink, and basis */
-}
-
-.twitter-menu a {
   display: block;
   padding: 5px 10px;
+  text-align: center; /* Center-align text */
+  background-color: #f4f4f4;
+}
+
+.twitter-menu .disabled {
+  color: #888;
+}
+
+
+.twitter-menu a {
   text-decoration: none;
   color: #333;
-  background-color: #f4f4f4; /* Optional: background color for visibility */
-  text-align: center; /* Center-align text */
+   /* Optional: background color for visibility */
   /* Add more styling as needed */
 }
 
 /* Responsive adjustments (optional) */
 @media screen and (max-width: 600px) {
-  .twitter-menu li {
+  .twitter-menu > * {
       flex-basis: 32%; /* Full width on small screens */
   }
 }

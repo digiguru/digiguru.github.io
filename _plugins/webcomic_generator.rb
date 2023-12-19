@@ -17,6 +17,8 @@ module Jekyll
             comic["prev_comic"] = comics_data[index - 1] if index > 0
             comic["next_comic"] = comics_data[index + 1] if index < comics_data.length - 1
             comic["image"] = comic["url"]
+            comic["index"] = index+1
+            
             site.pages << ComicPage.new(site, site.source, comic)
         end
         
@@ -39,6 +41,7 @@ module Jekyll
         self.read_yaml(File.join(base, '_layouts'), 'comic.html')
         self.data['title'] = "Comics for #{comic['name']}"
         self.data['image'] = comic['image']
+        self.data['index'] = comic['index']
         
         #self.data['tweets'] = comic['tweets']
         

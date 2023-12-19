@@ -6,26 +6,26 @@ comments: false
 
 <div id="home">
 
-    <div class="pagination">
+    <div class="pagination twitter-menu">
         {% if page.first_comic_url %}
             <a href="{{ page.first_comic_url }}" class="previous">First</a>
         {% else %}
-            <span class="previous">First</span>
+            <span class="previous disabled">First</span>
         {% endif %}
         {% if page.prev_comic_url %}
             <a href="{{ page.prev_comic_url }}" class="previous">Previous</a>
         {% else %}
-            <span class="previous">Previous</span>
+            <span class="previous disabled">Previous</span>
         {% endif %}
         {% if page.next_comic_url %}
             <a href="{{ page.next_comic_url }}" class="next">Next</a>
         {% else %}
-            <span class="next ">Next</span>
+            <span class="next disabled">Next</span>
         {% endif %}
         {% if page.last_comic_url %}
             <a href="{{ page.last_comic_url }}" class="previous">Most Recent</a>
         {% else %}
-            <span class="previous">Most Recent</span>
+            <span class="previous disabled">Most Recent</span>
         {% endif %}
         
         </div>  
@@ -44,9 +44,7 @@ comments: false
     {% endif %}
 
 
-    
-
-    {% include comic-menu.html %}
+    {% include comic-menu.html index=page.index %}
 
   </div>
 

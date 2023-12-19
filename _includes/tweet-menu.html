@@ -2,7 +2,7 @@
     {% for period in site.data.tweets %}
         {% assign period_slug = period.name | slugify %}
         <li>
-        <a href="/tweets/{{ period_slug }}.html">{{ period.name }}</a>
+            <a href="/tweets/{{ period_slug }}.html">{{ period.name }}</a>
         </li>
     {% endfor %}
 </ul>
