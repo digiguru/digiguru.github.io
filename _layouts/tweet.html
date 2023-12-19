@@ -1,0 +1,26 @@
+---
+layout: default
+comments: false
+---
+
+
+<div id="home">
+    <h1>{{page.title}}</h1>
+   
+    {% include tweet-menu.html %}
+    
+    {% for tweet in page.tweets %}
+            <blockquote class="twitter-tweet">
+                <a href="https://twitter.com/thedigiguru/status/{{tweet.id}}?ref_src=twsrc%5Etfw">{{tweet.date}}</a>
+            </blockquote>
+        {% if tweet.prompt %}
+            <pre class="prompt">{{tweet.prompt}}</pre>
+        {% endif %}
+    {% endfor %}
+
+
+  </div>
+
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  
+  
