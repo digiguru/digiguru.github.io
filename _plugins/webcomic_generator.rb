@@ -39,7 +39,7 @@ module Jekyll
 
         self.process(@name)
         self.read_yaml(File.join(base, '_layouts'), 'comic.html')
-        self.data['title'] = "Comics for #{comic['name']}"
+        self.data['title'] = comic['name']
         self.data['image'] = comic['image']
         self.data['index'] = comic['index']
         

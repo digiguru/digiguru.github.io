@@ -6,7 +6,6 @@ comments: false
 
 <div id="home">
 
-    <br />
     <ul class="pagination inline-menu">
         {% if page.first_comic_url %}
             <li><a href="{{ page.first_comic_url }}" class="previous">First</a></li>
@@ -36,7 +35,7 @@ comments: false
    
     
     <img src="{{ page.image }}" />
-    <h1>{{page.name}}</h1>
+
     {% if page.likes %}
     <p>{{page.likes}} likes</p>
     {% endif %}
