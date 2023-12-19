@@ -1,12 +1,22 @@
 
 - name: Jan 2023
+  description:
   tweets:
+  - id: 1613684995054338048
+    prompt: "romantic cinematic still | a beautiful ballerina dancing beneath a giant towering, galactic terror monster with razorwire | 8k, cinema composition shot, professional color grading, incredibly detailed, epic lighting | DIRECTOR: Guillermo Del Toro | Deep Forest | SIMILARS : The Fly, Alien, Pan's Labyrinth, Crafted from the very essence of nightmares"
+  - id: 1613785423242739721
+    prompt: "walking the sausage"
+  - id: 1612183556251389956
+    prompt: 'apartment footage of “sicko patient talking to a horrific amorphous giant meat locust man” directed by Cameron'
   - id: 1618700105594376193
     date: 2023-01-26
+    prompt: "(blend)"
   - id: 1614593390191968256
     date: 2023-01-15
+    prompt: "GENRE: sci-fi | SCENE: falling into a gravity prison | 8k image, shot from a movie, cinema composition shot, professional color grading, incredibly detailed, epic lighting, cinematography award | DIRECTOR: Tim Burton | TIME: Early morning"
   - id: 1615883462321356802
-    date: 2023-01-19
+    description: I created this from a single prompt - I was quite surprised how well it came out.
+    prompt: "GENRE: Action | SCENE: Tetsuo's epic transformation into a massive, powerful being | TAGS: Cyberpunk, post-apocalyptic, transformation, high-speed photography, 8k image, shot from a movie, cinema composition shot, professional color grading, incredibly detailed, epic lighting, cinematography award | ACTORS: John Boyega, Michael B Jordan | TIME: Night | LOCATION TYPE: Exterior | STYLE: Cyberpunk | SIMILAR: Akira | DIRECTOR: Jordan Peele | CINEMATOGRAPHER: Roger Deakins | ART DIRECTOR: William Cameron Menzies | COLORIST: John Toll | PERIOD: Future | COUNTRY: Japan | VIEW: Third-person view | FRAMING: Close-up (CU) | FOCAL LENGTH: Standard | SHOT ANGLE: Low Angle Shot | LENS: Panavision Primo 70 | LIGHTING: Artificial lighting::1"
 - name: Feb 2023
   tweets:
   - id: 1629831174779486210

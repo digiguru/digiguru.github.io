@@ -10,12 +10,16 @@ comments: false
     {% include tweet-menu.html %}
     
     {% for tweet in page.tweets %}
-            <blockquote class="twitter-tweet">
-                <a href="https://twitter.com/thedigiguru/status/{{tweet.id}}?ref_src=twsrc%5Etfw">{{tweet.date | 'No date'}}</a>
-            </blockquote>
+        <blockquote class="twitter-tweet">
+            <a href="https://twitter.com/thedigiguru/status/{{tweet.id}}?ref_src=twsrc%5Etfw">{{tweet.date}}</a>
+        </blockquote>
+        {% if tweet.description %}
+            <p class="prompt">{{tweet.description}}</p>
+        {% endif %}
         {% if tweet.prompt %}
             <pre class="prompt">{{tweet.prompt}}</pre>
         {% endif %}
+        <hr class="hr" />
     {% endfor %}
 
 
