@@ -1,0 +1,53 @@
+---
+layout: default
+comments: false
+---
+
+
+<div id="home">
+
+    <div class="pagination">
+        {% if page.first_comic_url %}
+            <a href="{{ page.first_comic_url }}" class="previous">First</a>
+        {% else %}
+            <span class="previous">First</span>
+        {% endif %}
+        {% if page.prev_comic_url %}
+            <a href="{{ page.prev_comic_url }}" class="previous">Previous</a>
+        {% else %}
+            <span class="previous">Previous</span>
+        {% endif %}
+        {% if page.next_comic_url %}
+            <a href="{{ page.next_comic_url }}" class="next">Next</a>
+        {% else %}
+            <span class="next ">Next</span>
+        {% endif %}
+        {% if page.last_comic_url %}
+            <a href="{{ page.last_comic_url }}" class="previous">Most Recent</a>
+        {% else %}
+            <span class="previous">Most Recent</span>
+        {% endif %}
+        
+        </div>  
+
+    <h1>{{page.title}}</h1>
+   
+   
+    
+    <img src="{{ page.image }}" />
+    <h1>{{page.name}}</h1>
+    {% if page.likes %}
+    <p>{{page.likes}} likes</p>
+    {% endif %}
+    {% if page.description %}
+    <p>{{page.description}}</p>
+    {% endif %}
+
+
+    
+
+    {% include comic-menu.html %}
+
+  </div>
+
+  

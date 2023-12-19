@@ -1,0 +1,8 @@
+<ul class="twitter-menu">
+    {% for comic in site.data.comics %}
+        {% assign comic_slug = comic.name | slugify %}
+        <li>
+        <a href="/comics/{{ comic_slug }}.html" title="{{ comic.name }}">{{ forloop.index }}</a>
+        </li>
+    {% endfor %}
+</ul>
