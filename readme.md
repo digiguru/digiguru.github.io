@@ -32,3 +32,22 @@ Finally
 ```bash
 bundle exec jekyll serve
 ```
+
+
+Want to grab a tweet and turn it into a YML node?
+
+You need the tweet ID and a date.
+
+To do that do to a tweet page and run this function
+
+```
+let data = {
+    id: $("[property='al:ios:url']").attributes["content"].value.split("=")[1],
+    date: $("time").attributes["datetime"].value.split("T")[0]
+}
+let text = `
+  - id: ${data.id}
+    date: ${data.date}`
+copy(text)
+console.log("Copied" + text);
+```
