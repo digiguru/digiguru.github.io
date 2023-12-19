@@ -1,4 +1,4 @@
-<ul class="twitter-menu">
+<ul class="inline-menu">
     {% for comic in site.data.comics %}
         {% assign comic_slug = comic.name | slugify %}
         {% if forloop.index == include.index %}

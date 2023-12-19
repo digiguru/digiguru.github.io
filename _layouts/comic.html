@@ -6,29 +6,30 @@ comments: false
 
 <div id="home">
 
-    <div class="pagination twitter-menu">
+    <br />
+    <ul class="pagination inline-menu">
         {% if page.first_comic_url %}
-            <a href="{{ page.first_comic_url }}" class="previous">First</a>
+            <li><a href="{{ page.first_comic_url }}" class="previous">First</a></li>
         {% else %}
-            <span class="previous disabled">First</span>
+        <li><span class="previous disabled">First</span></li>
         {% endif %}
         {% if page.prev_comic_url %}
-            <a href="{{ page.prev_comic_url }}" class="previous">Previous</a>
+        <li><a href="{{ page.prev_comic_url }}" class="previous">Previous</a></li>
         {% else %}
-            <span class="previous disabled">Previous</span>
+        <li><span class="previous disabled">Previous</span></li>
         {% endif %}
         {% if page.next_comic_url %}
-            <a href="{{ page.next_comic_url }}" class="next">Next</a>
+        <li><a href="{{ page.next_comic_url }}" class="next">Next</a></li>
         {% else %}
-            <span class="next disabled">Next</span>
+        <li><span class="next disabled">Next</span></li>
         {% endif %}
         {% if page.last_comic_url %}
-            <a href="{{ page.last_comic_url }}" class="previous">Most Recent</a>
+        <li><a href="{{ page.last_comic_url }}" class="previous">Most Recent</a></li>
         {% else %}
-            <span class="previous disabled">Most Recent</span>
+        <li><span class="previous disabled">Most Recent</span></li>
         {% endif %}
         
-        </div>  
+    </ul>  
 
     <h1>{{page.title}}</h1>
    

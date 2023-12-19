@@ -74,6 +74,7 @@ ul.posts span {
     width: 100%;
     margin-bottom: 1em;
     position: relative;
+    float: none;
     h1.title {
       margin: 0px;
       padding: 0px;
@@ -196,40 +197,39 @@ ul.posts span {
 /*
 /*****************************************************************************/
 
-.twitter-menu {
+.inline-menu {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start; /* Align items to the start */
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.twitter-menu > * {
-  margin-right: 10px; /* Right margin for spacing between items */
-  margin-bottom: 10px; /* Bottom margin for spacing between rows */
-  flex: 1 1 90px; /* Flex grow, shrink, and basis */
-  display: block;
-  padding: 5px 10px;
-  text-align: center; /* Center-align text */
-  background-color: #f4f4f4;
+.inline-menu > * {
+  flex: 1 1 20%; /* The basis is 25%, but it can grow or shrink */
+  height: 60px; /* Fixed height for each li */
+  display: flex; /* Makes each li a flex container */
+  justify-content: center; /* Horizontally center the content */
+  align-items: center; /* Vertically center the content */
+  margin: 5px; /* Optional: Adds some space between the boxes */
+  background-color: #f4f4f4; /* Background color for the list items */
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
 }
 
-.twitter-menu .disabled {
-  color: #888;
-}
-
-
-.twitter-menu a {
+.inline-menu a {
+  width: 100%; /* Makes the anchor fill the entire li */
+  height: 100%; /* Makes the anchor fill the entire li */
+  display: flex; /* Makes the anchor a flex container */
+  justify-content: center; /* Horizontally center the content within the anchor */
+  align-items: center; /* Vertically center the content within the anchor */
   text-decoration: none;
   color: #333;
-   /* Optional: background color for visibility */
-  /* Add more styling as needed */
 }
 
-/* Responsive adjustments (optional) */
+/* Responsive adjustments */
 @media screen and (max-width: 600px) {
-  .twitter-menu > * {
-      flex-basis: 32%; /* Full width on small screens */
+  .inline-menu > * {
+    flex-basis: 40%; /* Full width on small screens */
   }
 }
+
