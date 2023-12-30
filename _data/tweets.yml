@@ -3,29 +3,59 @@
   description:
   tweets:
   - id: 1613684995054338048
+    likes: 70
+    midjourney: b4f34162-5a5d-4c4b-bc10-4dfcd4137c64
     prompt: "romantic cinematic still | a beautiful ballerina dancing beneath a giant towering, galactic terror monster with razorwire | 8k, cinema composition shot, professional color grading, incredibly detailed, epic lighting | DIRECTOR: Guillermo Del Toro | Deep Forest | SIMILARS : The Fly, Alien, Pan's Labyrinth, Crafted from the very essence of nightmares"
   - id: 1613785423242739721
     prompt: "walking the sausage"
+    midjourney: 8018d52f-eb54-4e4c-924d-c04d005a4557
+    likes: 68
   - id: 1612183556251389956
     prompt: 'apartment footage of “sicko patient talking to a horrific amorphous giant meat locust man” directed by Cameron'
+    likes: 58
+    midjourney: 6b1ff155-79e3-47be-985b-3a88d2bbe957
   - id: 1618700105594376193
     date: 2023-01-26
     prompt: "(blend)"
+    likes: 61
   - id: 1614593390191968256
     date: 2023-01-15
+    likes: 62
     prompt: "GENRE: sci-fi | SCENE: falling into a gravity prison | 8k image, shot from a movie, cinema composition shot, professional color grading, incredibly detailed, epic lighting, cinematography award | DIRECTOR: Tim Burton | TIME: Early morning"
   - id: 1615883462321356802
     description: I created this from a single prompt - I was quite surprised how well it came out.
+    likes: 52
     prompt: "GENRE: Action | SCENE: Tetsuo's epic transformation into a massive, powerful being | TAGS: Cyberpunk, post-apocalyptic, transformation, high-speed photography, 8k image, shot from a movie, cinema composition shot, professional color grading, incredibly detailed, epic lighting, cinematography award | ACTORS: John Boyega, Michael B Jordan | TIME: Night | LOCATION TYPE: Exterior | STYLE: Cyberpunk | SIMILAR: Akira | DIRECTOR: Jordan Peele | CINEMATOGRAPHER: Roger Deakins | ART DIRECTOR: William Cameron Menzies | COLORIST: John Toll | PERIOD: Future | COUNTRY: Japan | VIEW: Third-person view | FRAMING: Close-up (CU) | FOCAL LENGTH: Standard | SHOT ANGLE: Low Angle Shot | LENS: Panavision Primo 70 | LIGHTING: Artificial lighting::1"
 - name: Feb 2023
   tweets:
   - id: 1629831174779486210
+    likes: 46
+    midjourney: cf4e7c4e-5135-4970-8f70-42d260e594f9
+    prompt: "cinematic shot | GENRE: Horror | EMOTION: creepy | SCENE: The Exorcist scene with a micky mouse as the possessed girl, similar to the original. | TAGS: peeling paint, rotary fan, shadows, gothic architecture, creepy, 8k image, shot from a movie, cinema composition shot, professional color grading, incredibly detailed, epic lighting --ar 3:2"
   - id: 1630020277160517632
+    midjourney: 9c2d29e7-6a34-4622-bd1d-df37eb8315a0
+    prompt: "GENRE: Drama | SCENE: Cthulhu sits in a therapist's office. He is wearing an elegant suit and looking straight ahead. | TAGS: creature, therapy, horror, psychological disorder | 8k image, shot from a movie, cinema composition shot, professional color grading, incredibly detailed, epic lighting | ACTORS: Robert Englund | TIME: Daytime | LOCATION TYPE: Interior ::1 discord.redsquid.art ::0 --ar 3:2 --v 4"
+    likes: 50
   - id: 1622389454538170369
+    midjourney: a9831d0b-483f-48c3-8df8-786909b8977b
+    prompt: "cinematic footage from “minbending alien creature crowd” (2020) directed by Wes Anderson, shot on Arri Alexa Mini, award costume design, Lucasfilm"
+    likes: 81
   - id: 1621898963107315714
+    prompt: "genre: sci-fi | scene: tribe of reptilian in nature, oviparous, with smooth bodies, cyclopean eyes, tails, and tentacled limbs, award winning colour grading, cinematic landscape | Director: Christopher Nolan"
+    midjourney: ba61b64d-0a85-4efc-b5ab-c79cb9be9720
+    likes: 81
   - id: 1623112830047199234
+    midjourney: ad4c4a20-a6fa-4817-8e72-6a1c75f11445
+    prompt: "cinematic shot | GENRE: Action | EMOTION: Suspenseful | SCENE: A mech crawling over the mountains of human waste, in the background we can see a distant city knocked down to ruins by the war. | TAGS: post-apocalyptic, ruins, wreckage, sci-fi, 8k image, shot from a movie, cinema composition shot, professional color grading, incredibly detailed, epic lighting | DIRECTOR: James Cameron | CINEMATOGRAPHER: Dariusz Wolski | ART DIRECTOR: James Clyne and Ed Verreaux | COLORIST: Rob Pizzey and Tom Poole | PERIOD: Post-Apocalyptic | COUNTRY: United States --ar 3:2"
+    likes: 139
   - id: 1625870609237389314
+    midjourney: 231ad2b2-4a3e-4b15-a536-54d81714678d
+    prompt: "selfie of Micky Mouse Darth Vader taken on a GoPro at Disney"
+    likes: 42
   - id: 1623805430739701762
+    likes: 51
+    prompt: (blend)
+    midjourney: b65fffa5-4a24-4eea-911a-34423b3f5ed9
 - name: Mar 2023
   tweets: 
   - id: 1636476575972569091
