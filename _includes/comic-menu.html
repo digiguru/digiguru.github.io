@@ -1,6 +1,6 @@
 <ul class="inline-menu">
     {% for comic in site.data.comics %}
-        {% assign comic_slug = comic.name | slugify %}
+        {% assign comic_slug = comic.name | urlify %}
         {% if forloop.index == include.index %}
             <li class="disabled">
                 {{ forloop.index }}
