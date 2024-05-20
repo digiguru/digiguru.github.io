@@ -8,5 +8,15 @@ module Jekyll
       end
     end
   end
+  module URLFilter
+      def urlify(item)
+        if item['name'].nil? || item['name'].strip.empty?
+          ""
+        else
+          item['name'].downcase.strip.gsub(/[ ']/, '-').gsub(/[^\w-]/, '') + ".html"
+        end
+      end
+  end
 end
 Liquid::Template.register_filter(Jekyll::DateFilter)
+Liquid::Template.register_filter(Jekyll::URLFilter)

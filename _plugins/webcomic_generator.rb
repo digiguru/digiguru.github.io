@@ -31,11 +31,12 @@ module Jekyll
   
     # A new Page subclass specific for Tweets
     class ComicPage < Page
+      include URLFilter
       def initialize(site, base, comic)
         @site = site
         @base = base
         @dir  = "comics/" # Directory where the pages should be generated
-        @name = formatURL(comic)
+        @name = urlify(comic)
 
         self.process(@name)
         self.read_yaml(File.join(base, '_layouts'), 'comic.html')

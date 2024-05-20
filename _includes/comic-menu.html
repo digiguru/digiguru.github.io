@@ -1,13 +1,13 @@
 <ul class="inline-menu">
     {% for comic in site.data.comics %}
-        {% assign comic_slug = comic.name | urlify %}
+        {% assign comic_slug = comic | urlify %}
         {% if forloop.index == include.index %}
             <li class="disabled">
                 {{ forloop.index }}
             </li>
         {% else %}
             <li>
-                <a href="/comics/{{ comic_slug }}.html" title="{{ comic.name }}">{{ forloop.index }}</a>
+                <a href="/comics/{{ comic_slug }}" title="{{ comic.name }}">{{ forloop.index }}</a>
             </li>
         {% endif %}
        
