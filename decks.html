@@ -15,7 +15,7 @@ paginate: true
           <td>{{presentation.version}}
             </td>
             <td>{{presentation.date | date_to_string}}</td> 
-            <td><a href="presentation-ai-2023/{{presentation.url}}">{{presentation.name}}</a></td>
+            <td><a href="presentation/{{presentation.url}}">{{presentation.name}}</a></td>
             <td>{% if presentation.attendance %}
             {{presentation.attendance}} attendees
             {% endif %}</td>
