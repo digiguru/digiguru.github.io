@@ -1,0 +1,6 @@
+version: 2
+updates:
+  - package-ecosystem: "bundler" # Monitors your Gemfile / Jekyll dependencies
+    directory: "/"
+    schedule:
+      interval: "daily"
