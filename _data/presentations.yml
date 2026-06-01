@@ -1,3 +1,11 @@
+# Presentations Registry
+# Every new presentation should be added to this file with the following fields:
+# - name: The event or presentation title (from page title or HTML)
+# - version: Format is vX.Y where X is last digit of year (3=2023, 4=2024, 5=2025) and Y is index of that year's talks
+# - date: When the presentation was given (DD/MM/YYYY format)
+# - url: The HTML filename
+# - attendance: Number of attendees (use ? if unknown)
+
 - name: Agile Reading
   version: v3.0
   date: 15/03/2023
@@ -64,7 +72,7 @@
   url: eu-product.html
   attendance: 15
 
-- name: "Empowering Tomorrow's Teams: Upgrading Workforce Skills"
+- name: Empowering Tomorrow's Teams
   version: v3.11
   date: 21/11/2023
   url: dfe.html
@@ -82,21 +90,62 @@
   url: aviva.html
   attendance: 10
 
+- name: Christmas Lego Movie Sets
+  version: v3.14
+  date: 21/11/2023
+  url: christmas-lego-movie-sets.html
+  attendance: ?
+
 - name: King's College London
   version: v4.1
   date: 25/01/2024
   url: kcl.html
   attendance: 108
-  
+
+- name: Intro to Adam Hall
+  version: v4.1
+  date: 11/07/2024
+  url: adam-hall.html
+  attendance: ?
+
 - name: Centrica
   version: v4.2
   date: 24/06/2024
   url: centrica.html
   attendance: 33
-  
+
+- name: Intro to Adam Hall
+  version: v4.2
+  date: 09/08/2024
+  url: william-king-hack.html
+  attendance: 30
+
+- name: AI Accelerator
+  version: v4.2
+  date: 02/10/2024
+  url: ai-accelerator.html
+  attendance: 30
+
 - name: Tech West Midlands
   version: v4.3
   date: 01/07/2024
   url: tech-wm.html
   attendance: 30
-  
+
+- name: Connecting the AIs with LBG
+  version: v5.1
+  date: 21/05/2025
+  url: ai-connections.html
+  attendance: 120
+
+- name: AI Fundamentals
+  version: v5.2
+  date: 13/10/2025
+  url: sebastians-action-trust.html
+  attendance: 30
+
+- name: Being the Human in the Loop
+  version: v5.3
+  date: 16/09/2025
+  url: thames-valley-ai.html
+  attendance: 88
