@@ -13,10 +13,3 @@ paginate: 5
 paginate_path: "page-:num/"
 future: true
 theme: jekyll-theme-minimal
-
-# The jekyll-theme-minimal gem (and our css/main.scss that pulls it in) still use
-# Sass `@import`, which Dart Sass deprecated. The theme is unmaintained, so silence
-# just this one deprecation rather than forking the theme's stylesheets.
-sass:
-  silence_deprecations:
-    - import
