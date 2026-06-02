@@ -1,3 +1,7 @@
 _site
 .DS_Store
 *.scssc
+.jekyll-cache
+.jekyll-metadata
+.bundle
+vendor
