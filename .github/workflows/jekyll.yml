@@ -28,6 +28,23 @@ jobs:
           ref: master
           path: presentation-source
 
+      - name: Capture release metadata
+        shell: bash
+        run: |
+          WEBSITE_SHA="$(git rev-parse HEAD)"
+          PRESENTATION_SHA="$(git -C presentation-source rev-parse HEAD)"
+          BUILT_AT="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+
+          {
+            printf 'website_sha: "%s"\n' "$WEBSITE_SHA"
+            printf 'presentation_sha: "%s"\n' "$PRESENTATION_SHA"
+            printf 'built_at: "%s"\n' "$BUILT_AT"
+            printf 'workflow_run_id: "%s"\n' "$GITHUB_RUN_ID"
+            printf 'workflow_run_attempt: "%s"\n' "$GITHUB_RUN_ATTEMPT"
+          } > _data/release.yml
+
+          echo "Release website=$WEBSITE_SHA presentations=$PRESENTATION_SHA"
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -57,6 +74,9 @@ jobs:
       - name: Export presentations into Pages artifact
         run: node presentation-source/scripts/presentations.mjs --export _site/presentation
 
+      - name: Stamp release metadata into presentations
+        run: node scripts/stamp-release.mjs _site/presentation _site/release.json
+
       - name: Verify generated presentation links
         run: |
           ruby -ryaml -e '
@@ -65,6 +85,29 @@ jobs:
             abort("Missing generated presentations: #{missing.map { |p| p["url"] }.join(", ")}") unless missing.empty?
             puts "Verified #{presentations.length} generated presentation links"
           '
+
+      - name: Verify release metadata
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFile } from 'node:fs/promises';
+
+          const release = JSON.parse(await readFile('_site/release.json', 'utf8'));
+          const websiteSha = release.website?.sha;
+          const presentationSha = release.presentations?.sha;
+          const shaPattern = /^[0-9a-f]{40}$/;
+
+          if (!shaPattern.test(websiteSha) || !shaPattern.test(presentationSha)) {
+            throw new Error('release.json does not contain valid full commit SHAs');
+          }
+
+          const home = await readFile('_site/index.html', 'utf8');
+          const expectedFlag = `w:${websiteSha.slice(0, 7)} p:${presentationSha.slice(0, 7)}`;
+          if (!home.includes(websiteSha) || !home.includes(presentationSha) || !home.includes(expectedFlag)) {
+            throw new Error('Homepage does not expose the deployed release metadata');
+          }
+
+          console.log(`Verified release ${expectedFlag}`);
+          NODE
 
       - name: Validate generated site
         run: bundle exec htmlproofer ./_site --disable-external --checks Links,Images,Scripts
