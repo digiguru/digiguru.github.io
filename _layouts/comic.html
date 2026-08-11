@@ -33,8 +33,8 @@ comments: false
     <h1>{{page.title}}</h1>
    
    
-    
-    <img src="{{ page.image }}" />
+    {% assign comic_image_path = '/comics/' | append: page.image %}
+    <img src="{{ comic_image_path | relative_url }}" alt="{{ page.title | escape }}" />
 
     {% if page.likes %}
     <p>{{page.likes}} likes</p>

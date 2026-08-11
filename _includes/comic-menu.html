@@ -7,7 +7,8 @@
             </li>
         {% else %}
             <li>
-                <a href="/comics/{{ comic_slug }}" title="{{ comic.name }}">{{ forloop.index }}</a>
+                {% assign comic_path = '/comics/' | append: comic_slug %}
+                <a href="{{ comic_path | relative_url }}" title="{{ comic.name }}">{{ forloop.index }}</a>
             </li>
         {% endif %}
        
