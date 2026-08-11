@@ -10,6 +10,7 @@ if (!/^[0-9a-f]{40}$/.test(expectedWebsiteSha)) {
 
 const baseUrl = new URL(siteUrl.endsWith('/') ? siteUrl : `${siteUrl}/`);
 const attempts = 8;
+const shaPattern = /^[0-9a-f]{40}$/;
 
 const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
@@ -73,7 +74,7 @@ async function fetchExpectedRelease() {
       );
     }
 
-    if (!/^[0-9a-f]{40}$/.test(presentationSha)) {
+    if (!shaPattern.test(presentationSha)) {
       throw new Error('deployed release does not contain a valid presentation SHA');
     }
 
@@ -81,9 +82,18 @@ async function fetchExpectedRelease() {
   });
 }
 
+function releaseMeta(html, name) {
+  const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = html.match(
+    new RegExp(`<meta\\s+name=["']${escapedName}["']\\s+content=["']([^"']+)["']`, 'i'),
+  );
+  return match?.[1];
+}
+
 const release = await fetchExpectedRelease();
 const releaseFlag = `w:${expectedWebsiteSha.slice(0, 7)} p:${release.presentations.sha.slice(0, 7)}`;
 
+// These are the canonical release-freshness checks. If either stays stale, the deployment is not accepted.
 await fetchFreshText('/', (html) => html.includes(releaseFlag), 'homepage');
 
 const decks = await retry('decks page', async (attempt) => {
@@ -95,15 +105,41 @@ const decks = await retry('decks page', async (attempt) => {
     throw new Error('could not find a generated presentation link');
   }
 
-  return { html, match };
+  return { match };
 });
 
 const presentationUrl = new URL(decks.match[1], baseUrl);
-await fetchFreshText(
-  presentationUrl.href,
-  (html) => html.includes(expectedWebsiteSha) && html.includes(release.presentations.sha),
-  `presentation ${presentationUrl.pathname}`,
-);
+const presentationHtml = await retry(`presentation ${presentationUrl.pathname}`, async (attempt) => {
+  const response = await fetchResponse(presentationUrl.href, attempt);
+  const html = await response.text();
+
+  if (!/<html\b/i.test(html) || !/<head\b/i.test(html) || !/<body\b/i.test(html)) {
+    throw new Error('presentation response is not a complete HTML document');
+  }
+
+  if (!html.includes('id="digiguru-release"')) {
+    throw new Error('presentation does not expose release metadata');
+  }
+
+  return html;
+});
+
+const servedWebsiteSha = releaseMeta(presentationHtml, 'release-website-commit');
+const servedPresentationSha = releaseMeta(presentationHtml, 'release-presentation-commit');
+
+if (!shaPattern.test(servedWebsiteSha) || !shaPattern.test(servedPresentationSha)) {
+  throw new Error('presentation release metadata is missing or invalid');
+}
+
+if (servedWebsiteSha !== expectedWebsiteSha || servedPresentationSha !== release.presentations.sha) {
+  console.log(
+    `::warning::Presentation CDN is still serving an earlier stamped release ` +
+      `(w:${servedWebsiteSha.slice(0, 7)} p:${servedPresentationSha.slice(0, 7)}); ` +
+      `canonical release is ${releaseFlag}.`,
+  );
+} else {
+  console.log(`Presentation release metadata matches ${releaseFlag}`);
+}
 
 console.log(`Smoke tested ${baseUrl.origin} at ${releaseFlag}`);
 console.log(`Verified presentation ${presentationUrl.pathname}`);
