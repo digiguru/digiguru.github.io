@@ -13,6 +13,12 @@ group :jekyll_plugins do
   gem 'jekyll-paginate'
 end
 
+# CI validation and security checks
+group :development do
+  gem 'bundler-audit', require: false
+  gem 'html-proofer', require: false
+end
+
 # Required to run `jekyll serve` on Ruby 3+
 gem 'webrick'
 
