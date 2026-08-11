@@ -15,6 +15,11 @@ function isExternalOrDynamic(value = '') {
     || /^[a-z][a-z0-9+.-]*:/i.test(value);
 }
 
+function looksLikeAsset(value, attribute) {
+  if (!attribute.startsWith('data-background')) return true;
+  return value.startsWith('/') || value.includes('/') || /\.[a-z0-9]{2,8}(?:[?#]|$)/i.test(value);
+}
+
 function normaliseReference(value = '') {
   const withoutFragment = value.split('#', 1)[0].split('?', 1)[0].trim();
   if (!withoutFragment) return undefined;
@@ -40,8 +45,9 @@ function htmlReferences(html) {
   const attributePattern = /\b(src|href|poster|data-src|data-background|data-background-image|data-background-video)\s*=\s*["']([^"']+)["']/gi;
 
   for (const match of html.matchAll(attributePattern)) {
+    const attribute = match[1].toLowerCase();
     const value = match[2].trim();
-    if (!isExternalOrDynamic(value)) references.push(value);
+    if (!isExternalOrDynamic(value) && looksLikeAsset(value, attribute)) references.push(value);
   }
 
   for (const match of html.matchAll(/\bsrcset\s*=\s*["']([^"']+)["']/gi)) {
