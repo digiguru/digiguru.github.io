@@ -20,18 +20,18 @@ jobs:
           github-token: "${{ github.token }}"
 
       - name: Leave GitHub Actions updates for manual review
-        if: steps.metadata.outputs.package-ecosystem == 'github-actions'
+        if: steps.metadata.outputs.package-ecosystem == 'github_actions'
         run: echo "GitHub Actions dependency updates are intentionally excluded from auto-merge."
 
       - name: Approve an ordinary dependency PR
-        if: steps.metadata.outputs.package-ecosystem != 'github-actions'
+        if: steps.metadata.outputs.package-ecosystem != 'github_actions'
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ github.token }}
 
       - name: Enable auto-merge for ordinary dependency PRs
-        if: steps.metadata.outputs.package-ecosystem != 'github-actions'
+        if: steps.metadata.outputs.package-ecosystem != 'github_actions'
         run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
