@@ -50,6 +50,9 @@ jobs:
         with:
           node-version: 24
 
+      - name: Test Node build scripts
+        run: node --test test/build_scripts.test.mjs
+
       - name: Generate presentation metadata
         run: node presentation-source/scripts/presentations.mjs --check --manifest _data/presentations.yml
 
@@ -61,6 +64,9 @@ jobs:
 
       - name: Audit Ruby dependencies
         run: bundle exec bundle-audit check --update
+
+      - name: Test Ruby plugins
+        run: bundle exec ruby test/ruby_plugins_test.rb
 
       - name: Configure GitHub Pages
         id: pages
