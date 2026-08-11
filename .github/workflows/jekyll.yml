@@ -110,7 +110,19 @@ jobs:
           NODE
 
       - name: Validate generated site
-        run: bundle exec htmlproofer ./_site --disable-external --checks Links,Images,Scripts
+        run: |
+          set -o pipefail
+          bundle exec htmlproofer ./_site \
+            --disable-external \
+            --checks Links,Images,Scripts 2>&1 | tee htmlproofer.log
+
+      - name: Upload HTMLProofer failure log
+        if: ${{ failure() && github.event_name == 'pull_request' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: htmlproofer-log
+          path: htmlproofer.log
+          retention-days: 1
 
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'
