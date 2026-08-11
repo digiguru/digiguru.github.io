@@ -19,9 +19,7 @@ jobs:
         with:
           ruby-version: '3.3'
       - name: Refresh lockfile
-        run: |
-          bundle config set path vendor/bundle
-          bundle update bundler-audit html-proofer
+        run: bundle install
       - name: Validate
         run: |
           bundle exec bundle-audit check --update
