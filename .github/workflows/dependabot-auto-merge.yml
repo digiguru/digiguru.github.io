@@ -11,6 +11,7 @@ permissions:
 jobs:
   dependabot:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'digiguru/digiguru.github.io'
     steps:
       - name: Fetch Dependabot metadata
@@ -22,6 +23,45 @@ jobs:
       - name: Leave GitHub Actions updates for manual review
         if: steps.metadata.outputs.package-ecosystem == 'github_actions'
         run: echo "GitHub Actions dependency updates are intentionally excluded from auto-merge."
+
+      - name: Wait for build-and-validate
+        if: steps.metadata.outputs.package-ecosystem != 'github_actions'
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          for attempt in $(seq 1 60); do
+            state="$(
+              gh pr checks "$PR_URL" \
+                --json name,state \
+                --jq '.[] | select(.name == "build-and-validate") | .state' \
+                2>/dev/null | head -n 1 || true
+            )"
+
+            case "$state" in
+              SUCCESS)
+                echo "build-and-validate succeeded"
+                exit 0
+                ;;
+              FAILURE|CANCELLED|TIMED_OUT|ACTION_REQUIRED|ERROR)
+                echo "build-and-validate finished with $state"
+                exit 1
+                ;;
+              ""|PENDING|QUEUED|IN_PROGRESS|EXPECTED)
+                echo "Waiting for build-and-validate (attempt $attempt/60; state: ${state:-not-created-yet})"
+                ;;
+              *)
+                echo "Waiting for build-and-validate (attempt $attempt/60; state: $state)"
+                ;;
+            esac
+
+            sleep 10
+          done
+
+          echo "Timed out waiting for build-and-validate"
+          exit 1
 
       - name: Approve an ordinary dependency PR
         if: steps.metadata.outputs.package-ecosystem != 'github_actions'
