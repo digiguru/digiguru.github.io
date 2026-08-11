@@ -6,6 +6,11 @@ on:
   push:
     branches: ["main"]
   workflow_dispatch:
+    inputs:
+      presentation_sha:
+        description: "Exact presentation commit SHA to deploy (leave blank for master)"
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -25,15 +30,28 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: digiguru/presentation
-          ref: master
+          ref: ${{ inputs.presentation_sha || 'master' }}
           path: presentation-source
 
       - name: Capture release metadata
         shell: bash
+        env:
+          REQUESTED_PRESENTATION_SHA: ${{ inputs.presentation_sha }}
         run: |
           WEBSITE_SHA="$(git rev-parse HEAD)"
           PRESENTATION_SHA="$(git -C presentation-source rev-parse HEAD)"
           BUILT_AT="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+
+          if [[ -n "$REQUESTED_PRESENTATION_SHA" ]]; then
+            if [[ ! "$REQUESTED_PRESENTATION_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+              echo "presentation_sha must be a full 40-character lowercase commit SHA" >&2
+              exit 1
+            fi
+            if [[ "$PRESENTATION_SHA" != "$REQUESTED_PRESENTATION_SHA" ]]; then
+              echo "Presentation checkout mismatch: requested $REQUESTED_PRESENTATION_SHA but checked out $PRESENTATION_SHA" >&2
+              exit 1
+            fi
+          fi
 
           {
             printf 'website_sha: "%s"\n' "$WEBSITE_SHA"
