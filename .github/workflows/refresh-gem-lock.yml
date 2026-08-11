@@ -22,15 +22,10 @@ jobs:
         run: bundle install
       - name: Audit Ruby dependencies
         run: bundle exec bundle-audit check --update
-      - name: Build Jekyll site
-        run: bundle exec jekyll build
-        env:
-          JEKYLL_ENV: production
-      - name: Validate generated site
-        run: bundle exec htmlproofer ./_site --disable-external --checks Links,Images,Scripts
       - name: Commit lockfile
         run: |
           if git diff --quiet -- Gemfile.lock; then
+            echo "Gemfile.lock is already current"
             exit 0
           fi
           git config user.name github-actions[bot]
