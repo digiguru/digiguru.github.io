@@ -80,7 +80,6 @@ tweet_periods = load_yaml('tweets.yml', errors)
 if require_array(tweet_periods, 'tweets.yml', errors)
   names = Set.new
   urls = Set.new
-  tweet_ids = Set.new
 
   tweet_periods.each_with_index do |period, period_index|
     label = "tweets.yml period #{period_index + 1}"
@@ -114,12 +113,7 @@ if require_array(tweet_periods, 'tweets.yml', errors)
       end
 
       id = tweet['id']
-      unless id.is_a?(Integer) && id.positive?
-        errors << "#{tweet_label}: id must be a positive integer"
-        next
-      end
-
-      validate_unique(id, tweet_ids, "#{tweet_label} id", errors)
+      errors << "#{tweet_label}: id must be a positive integer" unless id.is_a?(Integer) && id.positive?
     end
   end
 end
