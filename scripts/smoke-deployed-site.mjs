@@ -13,90 +13,97 @@ const attempts = 8;
 
 const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
-async function fetchOk(pathname) {
+async function retry(label, operation) {
   let lastError;
 
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     try {
-      const url = new URL(pathname, baseUrl);
-      const response = await fetch(url, {
-        redirect: 'follow',
-        headers: { 'cache-control': 'no-cache' },
-      });
-
-      if (!response.ok) {
-        throw new Error(`${url} returned HTTP ${response.status}`);
-      }
-
-      return response;
+      return await operation(attempt);
     } catch (error) {
       lastError = error;
       if (attempt < attempts) {
+        console.log(`${label} not ready (attempt ${attempt}/${attempts}): ${error.message}`);
         await sleep(attempt * 2_000);
       }
     }
   }
 
   throw lastError;
+}
+
+async function fetchResponse(pathname, attempt = 1) {
+  const url = new URL(pathname, baseUrl);
+  url.searchParams.set('_smoke_release', expectedWebsiteSha);
+  url.searchParams.set('_smoke_attempt', String(attempt));
+
+  const response = await fetch(url, {
+    redirect: 'follow',
+    headers: { 'cache-control': 'no-cache, no-store' },
+  });
+
+  if (!response.ok) {
+    throw new Error(`${url} returned HTTP ${response.status}`);
+  }
+
+  return response;
+}
+
+async function fetchFreshText(pathname, predicate, label) {
+  return retry(label, async (attempt) => {
+    const response = await fetchResponse(pathname, attempt);
+    const text = await response.text();
+
+    if (!predicate(text)) {
+      throw new Error('content is still from an earlier deployment');
+    }
+
+    return text;
+  });
 }
 
 async function fetchExpectedRelease() {
-  let lastError;
+  return retry('release metadata', async (attempt) => {
+    const response = await fetchResponse('/release.json', attempt);
+    const release = await response.json();
+    const presentationSha = release.presentations?.sha;
 
-  for (let attempt = 1; attempt <= attempts; attempt += 1) {
-    try {
-      const response = await fetchOk('/release.json');
-      const release = await response.json();
-      const presentationSha = release.presentations?.sha;
-
-      if (release.website?.sha !== expectedWebsiteSha) {
-        throw new Error(
-          `Deployed website SHA is ${release.website?.sha || 'missing'}, expected ${expectedWebsiteSha}`,
-        );
-      }
-
-      if (!/^[0-9a-f]{40}$/.test(presentationSha)) {
-        throw new Error('Deployed release does not contain a valid presentation SHA');
-      }
-
-      return release;
-    } catch (error) {
-      lastError = error;
-      if (attempt < attempts) {
-        await sleep(attempt * 2_000);
-      }
+    if (release.website?.sha !== expectedWebsiteSha) {
+      throw new Error(
+        `deployed website SHA is ${release.website?.sha || 'missing'}, expected ${expectedWebsiteSha}`,
+      );
     }
-  }
 
-  throw lastError;
+    if (!/^[0-9a-f]{40}$/.test(presentationSha)) {
+      throw new Error('deployed release does not contain a valid presentation SHA');
+    }
+
+    return release;
+  });
 }
-
-const homeResponse = await fetchOk('/');
-const home = await homeResponse.text();
-await fetchOk('/decks.html');
 
 const release = await fetchExpectedRelease();
 const releaseFlag = `w:${expectedWebsiteSha.slice(0, 7)} p:${release.presentations.sha.slice(0, 7)}`;
 
-if (!home.includes(releaseFlag)) {
-  throw new Error(`Homepage does not expose expected release flag ${releaseFlag}`);
-}
+await fetchFreshText('/', (html) => html.includes(releaseFlag), 'homepage');
 
-const decksResponse = await fetchOk('/decks.html');
-const decks = await decksResponse.text();
-const presentationMatch = decks.match(/href=["']([^"']*\/presentation\/[^"']+\.html)["']/i);
+const decks = await retry('decks page', async (attempt) => {
+  const response = await fetchResponse('/decks.html', attempt);
+  const html = await response.text();
+  const match = html.match(/href=["']([^"']*\/presentation\/[^"']+\.html)["']/i);
 
-if (!presentationMatch) {
-  throw new Error('Could not find a generated presentation link on /decks.html');
-}
+  if (!match) {
+    throw new Error('could not find a generated presentation link');
+  }
 
-const presentationUrl = new URL(presentationMatch[1], baseUrl);
-const presentationResponse = await fetchOk(presentationUrl.href);
-const presentationHtml = await presentationResponse.text();
+  return { html, match };
+});
 
-if (!presentationHtml.includes(expectedWebsiteSha) || !presentationHtml.includes(release.presentations.sha)) {
-  throw new Error('Generated presentation does not contain the expected release metadata');
-}
+const presentationUrl = new URL(decks.match[1], baseUrl);
+await fetchFreshText(
+  presentationUrl.href,
+  (html) => html.includes(expectedWebsiteSha) && html.includes(release.presentations.sha),
+  `presentation ${presentationUrl.pathname}`,
+);
 
 console.log(`Smoke tested ${baseUrl.origin} at ${releaseFlag}`);
 console.log(`Verified presentation ${presentationUrl.pathname}`);
