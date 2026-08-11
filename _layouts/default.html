@@ -5,6 +5,12 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>{{ page.title }}</title>
         <meta name="viewport" content="width=device-width">
+        {% if site.data.release.website_sha and site.data.release.presentation_sha %}
+        <meta name="release-website-commit" content="{{ site.data.release.website_sha }}">
+        <meta name="release-presentation-commit" content="{{ site.data.release.presentation_sha }}">
+        <meta name="release-built-at" content="{{ site.data.release.built_at }}">
+        <meta name="release-flag" content="w:{{ site.data.release.website_sha | slice: 0, 7 }} p:{{ site.data.release.presentation_sha | slice: 0, 7 }}">
+        {% endif %}
         {% feed_meta %}
         <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
         
@@ -25,7 +31,7 @@
 </script>
     </head>
 
-    <body>
+    <body{% if site.data.release.website_sha and site.data.release.presentation_sha %} data-release="w:{{ site.data.release.website_sha | slice: 0, 7 }} p:{{ site.data.release.presentation_sha | slice: 0, 7 }}"{% endif %}>
 
         <div class="container">
           <div class="site">
@@ -61,6 +67,16 @@
                 </p>
               </div>
             </div>
+            {% if site.data.release.website_sha and site.data.release.presentation_sha %}
+            <p class="release-info" style="clear: both; margin-top: 8px; font: 11px/1.4 monospace; opacity: .55;">
+              Release
+              <a href="https://github.com/digiguru/digiguru.github.io/commit/{{ site.data.release.website_sha }}">w:{{ site.data.release.website_sha | slice: 0, 7 }}</a>
+              ·
+              <a href="https://github.com/digiguru/presentation/commit/{{ site.data.release.presentation_sha }}">p:{{ site.data.release.presentation_sha | slice: 0, 7 }}</a>
+              ·
+              <a href="{{ '/release.json' | relative_url }}">details</a>
+            </p>
+            {% endif %}
           </div>
         </div> <!-- /container -->
 

@@ -15,3 +15,4 @@ future: true
 theme: jekyll-theme-minimal
 exclude:
     - presentation-source
+    - scripts
