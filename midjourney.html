@@ -9,7 +9,7 @@ paginate: true
   <ul class="posts">
     {% for image in site.data.images %}
         <li>
-        <img src="{{ image.url }}" />
+        <img src="{{ image.url }}" alt="{{ image.name | escape }}" />
         <h1>{{image.name}}</h1>
         <pre class="prompt">{{image.prompt}}</pre>
         </li>

@@ -34,7 +34,7 @@ comments: false
    
    
     
-    <img src="{{ page.image }}" />
+    <img src="{{ page.image }}" alt="{{ page.title | escape }}" />
 
     {% if page.likes %}
     <p>{{page.likes}} likes</p>
