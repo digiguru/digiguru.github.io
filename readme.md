@@ -1,60 +1,182 @@
-# Getting started
+# digiguru.github.io
 
-How to compile the site.
+Personal Jekyll site deployed to GitHub Pages.
+
+The production site is assembled from **two repositories**:
+
+- `digiguru/digiguru.github.io` — Jekyll pages, posts, layouts, plugins and the Pages deployment workflow.
+- `digiguru/presentation` — Reveal.js presentation decks, presentation metadata and presentation assets.
+
+The website repository deliberately does **not** keep a second presentation registry. During CI it checks out `digiguru/presentation`, discovers the decks there, builds the Jekyll site and then exports the presentation site into the final Pages artifact.
+
+## Tool versions
+
+Use the same runtime families as CI:
+
+- Ruby 3.4 (`.ruby-version`)
+- Node.js 24 (`.node-version`)
+
+Ruby dependencies are locked in `Gemfile.lock`. There is no website npm dependency tree; Node is used for repository build/validation scripts and for the scripts supplied by the presentation repository.
+
+## Local setup
+
+Clone the website and install its Ruby dependencies:
 
 ```bash
-jekyll build
+git clone https://github.com/digiguru/digiguru.github.io.git
+cd digiguru.github.io
+bundle install
 ```
 
-Things arn't working?
-
-```bash
-gem install bundler jekyll
-bundle add webrick
-```
-
-or with brew...
-
-```bash
-brew install brew-gem
-brew gem install bundler
-brew gem install jekyll
-```
-
-then
-
-```bash
-bundle update
-```
-
-Finally
+For a normal Jekyll-only development server:
 
 ```bash
 bundle exec jekyll serve
 ```
 
+That is enough for editing ordinary website pages, layouts, posts and styles, but it does **not** reproduce the presentation portion of the production artifact.
 
-Want to grab a tweet and turn it into a YML node?
+## Reproducing the presentation-aware build
 
-You need the tweet ID and a date.
+Clone the presentation repository into the same path used by CI:
 
-To do that do to a tweet page and run this function
-
-```
-let data = {
-    id: $("[property='al:ios:url']").attributes["content"].value.split("=")[1],
-    date: $("time").attributes["datetime"].value.split("T")[0]
-}
-let text = `
-  - id: ${data.id}
-    date: ${data.date}`
-copy(text)
-console.log("Copied" + text);
+```bash
+git clone https://github.com/digiguru/presentation.git presentation-source
 ```
 
-To find relevant tweets use this url
-https://twitter.com/search?q=(from%3Athedigiguru)%20until%3A2023-03-01%20since%3A2023-02-01&src=typed_query
+Generate the presentation manifest before Jekyll builds:
 
+```bash
+node presentation-source/scripts/presentations.mjs \
+  --check \
+  --manifest _data/presentations.yml
 ```
-(from:thedigiguru)  until:2023-05-01 since:2023-04-01 min_faves:20
+
+Build Jekyll:
+
+```bash
+JEKYLL_ENV=production bundle exec jekyll build
 ```
+
+Export presentations into the built site and validate their local assets:
+
+```bash
+node presentation-source/scripts/presentations.mjs --export _site/presentation
+node scripts/check-exported-presentation-assets.mjs _site _site/presentation
+```
+
+The production workflow also stamps release metadata into exported decks. That step expects the generated `release.json` to contain full website and presentation commit SHAs, so it is normally run by CI after release metadata has been generated.
+
+## How deployment works
+
+`.github/workflows/jekyll.yml` runs for pull requests to `main`, pushes to `main`, and manual `workflow_dispatch` requests.
+
+The build job performs these high-level steps:
+
+1. Check out this repository.
+2. Check out `digiguru/presentation` from its `master` branch into `presentation-source`.
+3. Record the website SHA, presentation SHA, build time and workflow identifiers in generated release data.
+4. Generate `_data/presentations.yml` from the presentation repository.
+5. Audit Ruby dependencies with `bundler-audit`.
+6. Build the Jekyll site.
+7. Export presentations into `_site/presentation`.
+8. Stamp release metadata into the exported presentation HTML.
+9. Verify generated presentation URLs and local presentation assets.
+10. Validate release metadata.
+11. Run HTMLProofer over the normal Jekyll site.
+12. Upload and deploy the Pages artifact for non-PR runs.
+
+Pull requests run the same build/validation path but do not upload or deploy a Pages artifact.
+
+### Presentation-triggered rebuilds
+
+`digiguru/presentation` is the source repository for deck changes. Its CI validates presentation metadata/assets, linting, build, tests and smoke tests. After a successful push to `presentation/master`, that workflow dispatches this repository's `jekyll.yml` workflow on `main`.
+
+The source repository stores a scoped Actions secret named `WEBSITE_DISPATCH_TOKEN` for that cross-repository dispatch. The token value must never be committed or copied into documentation; only the secret name and purpose are relevant here.
+
+`workflow_dispatch` remains enabled in this repository as a manual fallback when a rebuild needs to be requested directly.
+
+## Release metadata
+
+Production builds expose the exact commits used to create the artifact:
+
+- website commit SHA
+- presentation commit SHA
+- build timestamp
+- GitHub Actions run ID and attempt
+
+The public representation is `/release.json`, and the layouts also expose a short `w:<sha> p:<sha>` release marker. This is useful when checking whether the deployed site contains the expected version of each repository.
+
+## Deliberate CI exceptions and non-obvious validation
+
+There are a few intentional exceptions in the Pages workflow. These are not accidental gaps:
+
+### `/personal-growth` is intentionally ignored by HTMLProofer
+
+The navigation contains `/personal-growth` with `data-proofer-ignore`. It is an intentional route outside the files generated by this Jekyll build, so treating it as a missing local file would incorrectly fail CI.
+
+### External URLs are not release-blocking
+
+HTMLProofer runs with `--disable-external` and `--no-enforce-https`. Historical posts contain many old third-party URLs, and network availability or a remote site's redirect/TLS policy should not make this site's deployment nondeterministic. Internal links, images and scripts remain checked.
+
+### Presentation HTML is excluded from the main HTMLProofer pass
+
+The workflow passes:
+
+```text
+--ignore-files '/\/presentation\//'
+```
+
+This is deliberate. The presentation export contains a complete Reveal.js tree, including supporting HTML/runtime files that are different from the Jekyll site's normal page structure. Presentation output is therefore checked separately by:
+
+- the presentation repository's own metadata, asset and smoke checks before it requests a website rebuild;
+- the website workflow's generated-presentation URL check; and
+- `scripts/check-exported-presentation-assets.mjs`, which verifies local references in the exported presentation tree.
+
+Running the ordinary Jekyll HTMLProofer rules over that tree would duplicate some checks while also producing false positives on presentation-specific files.
+
+### `_data/presentations.yml` is generated, not authoritative
+
+Do not manually maintain a website copy of presentation metadata. The manifest is generated from `digiguru/presentation` during the build. A new presentation should be added and validated in the presentation repository.
+
+### Release data is generated during CI
+
+The workflow creates `_data/release.yml` during a run so Jekyll can render `/release.json` and the release markers. It represents the commits used by that build rather than hand-maintained site content.
+
+## Useful validation commands
+
+Ruby dependency audit:
+
+```bash
+bundle exec bundle-audit check --update
+```
+
+Build the site:
+
+```bash
+JEKYLL_ENV=production bundle exec jekyll build
+```
+
+Validate the ordinary generated site in the same spirit as CI:
+
+```bash
+bundle exec htmlproofer ./_site \
+  --disable-external \
+  --no-enforce-https \
+  --ignore-files '/\/presentation\//' \
+  --checks Links,Images,Scripts
+```
+
+Validate presentation assets after exporting them:
+
+```bash
+node scripts/check-exported-presentation-assets.mjs _site _site/presentation
+```
+
+## Troubleshooting
+
+If Bundler reports a version mismatch, check that Ruby 3.4 is active and install the Bundler version recorded at the bottom of `Gemfile.lock` rather than running an unrestricted dependency update.
+
+If presentation generation fails, update `presentation-source` to the current `master` branch and run its own CI-equivalent checks in that repository first. The website build assumes the presentation source has already passed its metadata/assets/build/test/smoke pipeline.
+
+If a Pages run succeeds but the visible release appears stale, inspect `/release.json` and compare its two SHAs with the website and presentation commits you expected to deploy.
