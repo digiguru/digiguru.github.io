@@ -18,8 +18,23 @@ jobs:
   build-and-validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout website
         uses: actions/checkout@v4
+
+      - name: Checkout presentations
+        uses: actions/checkout@v4
+        with:
+          repository: digiguru/presentation
+          ref: master
+          path: presentation-source
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Generate presentation metadata
+        run: node presentation-source/scripts/presentations.mjs --check --manifest _data/presentations.yml
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -38,6 +53,18 @@ jobs:
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
+
+      - name: Export presentations into Pages artifact
+        run: node presentation-source/scripts/presentations.mjs --export _site/presentation
+
+      - name: Verify generated presentation links
+        run: |
+          ruby -ryaml -e '
+            presentations = YAML.load_file("_data/presentations.yml")
+            missing = presentations.reject { |p| File.exist?(File.join("_site", "presentation", p.fetch("url"))) }
+            abort("Missing generated presentations: #{missing.map { |p| p["url"] }.join(", ")}") unless missing.empty?
+            puts "Verified #{presentations.length} generated presentation links"
+          '
 
       - name: Validate generated site
         run: bundle exec htmlproofer ./_site --disable-external --checks Links,Images,Scripts
