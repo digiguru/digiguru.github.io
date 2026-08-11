@@ -17,7 +17,7 @@ jobs:
           ref: agent/improve-pages-ci-cd
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3'
+          ruby-version: '3.4'
       - name: Refresh lockfile
         run: bundle install
       - name: Validate
