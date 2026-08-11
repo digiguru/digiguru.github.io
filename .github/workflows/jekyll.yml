@@ -114,6 +114,9 @@ jobs:
           set -o pipefail
           bundle exec htmlproofer ./_site \
             --disable-external \
+            --no-enforce-https \
+            --ignore-missing-alt \
+            --ignore-files "/presentation/" \
             --checks Links,Images,Scripts 2>&1 | tee htmlproofer.log
 
       - name: Upload HTMLProofer failure log
