@@ -50,7 +50,6 @@ module Jekyll
         self.data["next_comic_url"] = comic["next_comic"] ? urlify(comic["next_comic"]) : nil
         self.data["first_comic_url"] = comic["first_comic"] ? urlify(comic["first_comic"]) : nil
         self.data["last_comic_url"] = comic["last_comic"] ? urlify(comic["last_comic"]) : nil
-        pp self.inspect
       end
     end
   end
