@@ -10,7 +10,7 @@ paginate: true
   <ul class="posts">
     {% for comic in site.data.comics %}
         <li>
-        <img src="{{ comic.url }}" />
+        <img src="{{ comic.url }}" alt="{{ comic.name | escape }}" />
         <h1>{{comic.name}}</h1>
         {% if comic.likes %}
         <p>{{comic.likes}} likes</p>
