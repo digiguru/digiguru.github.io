@@ -86,6 +86,9 @@ jobs:
             puts "Verified #{presentations.length} generated presentation links"
           '
 
+      - name: Validate exported presentation assets
+        run: node scripts/check-exported-presentation-assets.mjs _site _site/presentation
+
       - name: Verify release metadata
         run: |
           node --input-type=module <<'NODE'
@@ -115,8 +118,7 @@ jobs:
           bundle exec htmlproofer ./_site \
             --disable-external \
             --no-enforce-https \
-            --ignore-missing-alt \
-            --ignore-files "/presentation/" \
+            --ignore-files '/\/presentation\//' \
             --checks Links,Images,Scripts 2>&1 | tee htmlproofer.log
 
       - name: Upload HTMLProofer failure log
