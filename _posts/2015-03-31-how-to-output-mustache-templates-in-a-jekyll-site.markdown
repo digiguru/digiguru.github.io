@@ -46,17 +46,17 @@ So you write the above in a markdown file, and try wrapping it in <code>{% raw %
 And the output looks on the page as follows...
 
 {% highlight html %}
-{{#.}}
+{% raw %}{{#.}}{% endraw %}
 
 <p>Hello, my name is {{name}}.</p>
 <p>I am from {{hometown}}.</p>
 <p>I have {{kids.length}} kids:</p>
 <ul>
-{{#kids}}
+{% raw %}{{#kids}}{% endraw %}
     <li>{{name}} is {{age}}</li>
-{{/kids}}
+{% raw %}{{/kids}}{% endraw %}
 </ul>
-{{#.}}
+{% raw %}{{#.}}{% endraw %}
 {% endhighlight %}
 
 Hmm - not right. Perhaps I need a different highlighter - mustache?
