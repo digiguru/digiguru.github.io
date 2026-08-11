@@ -1,0 +1,21 @@
+---
+layout: null
+permalink: /release.json
+sitemap: false
+---
+{
+  "release": "w:{{ site.data.release.website_sha | slice: 0, 7 }} p:{{ site.data.release.presentation_sha | slice: 0, 7 }}",
+  "website": {
+    "repository": "digiguru/digiguru.github.io",
+    "sha": "{{ site.data.release.website_sha }}"
+  },
+  "presentations": {
+    "repository": "digiguru/presentation",
+    "sha": "{{ site.data.release.presentation_sha }}"
+  },
+  "built_at": "{{ site.data.release.built_at }}",
+  "workflow": {
+    "run_id": "{{ site.data.release.workflow_run_id }}",
+    "run_attempt": "{{ site.data.release.workflow_run_attempt }}"
+  }
+}
