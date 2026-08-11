@@ -62,6 +62,9 @@ jobs:
           ruby-version: '3.4'
           bundler-cache: true
 
+      - name: Validate site data
+        run: ruby scripts/validate-site-data.rb
+
       - name: Audit Ruby dependencies
         run: bundle exec bundle-audit check --update
 
