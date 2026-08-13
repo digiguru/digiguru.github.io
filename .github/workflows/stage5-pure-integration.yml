@@ -95,3 +95,17 @@ jobs:
 
           console.log(`Verified ${manifest.length} Pure Pages presentations with direct production GPT API configuration.`);
           NODE
+
+      - name: Verify production GPT CORS preflight
+        run: |
+          headers="$(mktemp)"
+          curl --fail --silent --show-error \
+            --request OPTIONS \
+            --header 'Origin: https://art.digiguru.co.uk' \
+            --header 'Access-Control-Request-Method: POST' \
+            --header 'Access-Control-Request-Headers: content-type' \
+            --dump-header "$headers" \
+            --output /dev/null \
+            https://ai-prompt-writer.vercel.app/api/raw
+          tr -d '\r' < "$headers" | grep -i '^access-control-allow-origin: https://art\.digiguru\.co\.uk$'
+          echo 'Verified ai-prompt-writer CORS for https://art.digiguru.co.uk'
