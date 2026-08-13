@@ -22,7 +22,7 @@ async function runScript(script, args) {
   });
 }
 
-test('stamp-release adds release metadata and badge to presentation HTML', async (t) => {
+test('stamp-release adds release metadata, GPT API configuration and badge to presentation HTML', async (t) => {
   const root = await makeTempDir(t);
   const presentationDir = path.join(root, 'presentation');
   const releaseFile = path.join(root, 'release.json');
@@ -49,6 +49,7 @@ test('stamp-release adds release metadata and badge to presentation HTML', async
   assert.match(stdout, /Stamped 1 presentation decks/);
   assert.match(html, new RegExp(websiteSha));
   assert.match(html, new RegExp(presentationSha));
+  assert.match(html, /name="pure-gpt-api-base" content="https:\/\/ai-prompt-writer\.vercel\.app\/api"/);
   assert.match(html, /id="digiguru-release"/);
   assert.match(html, /release w:aaaaaaa p:bbbbbbb/);
 });

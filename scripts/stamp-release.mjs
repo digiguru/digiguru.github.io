@@ -2,6 +2,7 @@ import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const [presentationDir, releaseFile] = process.argv.slice(2);
+const productionGptApiBase = 'https://ai-prompt-writer.vercel.app/api';
 
 if (!presentationDir || !releaseFile) {
   throw new Error('Usage: node scripts/stamp-release.mjs <presentation-dir> <release.json>');
@@ -26,6 +27,7 @@ const releaseHead = `
     <meta name="release-presentation-commit" content="${presentationSha}">
     <meta name="release-built-at" content="${builtAt}">
     <meta name="release-flag" content="${releaseFlag}">
+    <meta name="pure-gpt-api-base" content="${productionGptApiBase}">
     <style id="digiguru-release-style">
       #digiguru-release { position: fixed; left: 8px; bottom: 8px; z-index: 2147483647; padding: 4px 6px; border-radius: 4px; background: rgba(0, 0, 0, .72); color: #fff; font: 10px/1.2 monospace; text-decoration: none; opacity: .28; transition: opacity .15s ease; }
       #digiguru-release:hover, #digiguru-release:focus { opacity: 1; }
@@ -55,7 +57,12 @@ for (const filename of deckFiles) {
   html = html.replace(/<\/head>/i, `${releaseHead}\n  </head>`);
   html = html.replace(/<\/body>/i, `${releaseBadge}\n  </body>`);
 
-  if (!html.includes(websiteSha) || !html.includes(presentationSha) || !html.includes('id="digiguru-release"')) {
+  if (
+    !html.includes(websiteSha)
+    || !html.includes(presentationSha)
+    || !html.includes(`name="pure-gpt-api-base" content="${productionGptApiBase}"`)
+    || !html.includes('id="digiguru-release"')
+  ) {
     throw new Error(`Failed to stamp release metadata into ${filename}`);
   }
 
