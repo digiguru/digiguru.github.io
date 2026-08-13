@@ -28,6 +28,10 @@ jobs:
         with:
           node-version: 24
 
+      - name: Validate staged Pure runtime
+        working-directory: presentation-source
+        run: npm run pure:check
+
       - name: Test website build scripts
         run: node --test test/build_scripts.test.mjs
 
