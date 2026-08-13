@@ -11,6 +11,7 @@ if (!/^[0-9a-f]{40}$/.test(expectedWebsiteSha)) {
 const baseUrl = new URL(siteUrl.endsWith('/') ? siteUrl : `${siteUrl}/`);
 const attempts = 8;
 const shaPattern = /^[0-9a-f]{40}$/;
+const productionGptApiBase = 'https://ai-prompt-writer.vercel.app/api';
 
 const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
@@ -126,6 +127,13 @@ const presentationHtml = await retry(`presentation ${presentationUrl.pathname}`,
 
 const servedWebsiteSha = releaseMeta(presentationHtml, 'release-website-commit');
 const servedPresentationSha = releaseMeta(presentationHtml, 'release-presentation-commit');
+const servedGptApiBase = releaseMeta(presentationHtml, 'pure-gpt-api-base');
+
+if (servedGptApiBase !== productionGptApiBase) {
+  throw new Error(
+    `presentation GPT API base is ${servedGptApiBase || 'missing'}, expected ${productionGptApiBase}`,
+  );
+}
 
 if (shaPattern.test(servedWebsiteSha) && shaPattern.test(servedPresentationSha)) {
   if (servedWebsiteSha !== expectedWebsiteSha || servedPresentationSha !== release.presentations.sha) {
@@ -145,4 +153,4 @@ if (shaPattern.test(servedWebsiteSha) && shaPattern.test(servedPresentationSha))
 }
 
 console.log(`Smoke tested ${baseUrl.origin} at ${releaseFlag}`);
-console.log(`Verified presentation ${presentationUrl.pathname}`);
+console.log(`Verified presentation ${presentationUrl.pathname} with direct GPT API ${productionGptApiBase}`);
