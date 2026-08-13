@@ -82,8 +82,14 @@ jobs:
             if (!html.includes('name="pure-gpt-api-base" content="https://ai-prompt-writer.vercel.app/api"')) {
               throw new Error(`${presentation.url} is missing the direct production GPT API base`);
             }
-            if (!html.includes('data-pure-source=')) {
-              throw new Error(`${presentation.url} is not a Pure presentation artifact`);
+            if (!/meta name="build-commit" content="[0-9a-f]{40}"/i.test(html)) {
+              throw new Error(`${presentation.url} is missing the Pure build commit marker`);
+            }
+            if (!/_runtime\/presentation-[^"']+\.js/.test(html)) {
+              throw new Error(`${presentation.url} does not load the Pure Vite runtime`);
+            }
+            if (/src=["'](?:\.\/)?dist\/reveal(?:\.esm)?\.js/i.test(html)) {
+              throw new Error(`${presentation.url} still loads the inherited Reveal runtime`);
             }
           }
 
