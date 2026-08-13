@@ -122,18 +122,18 @@ const presentationHtml = await retry(`presentation ${presentationUrl.pathname}`,
     throw new Error('presentation response does not look like a Reveal deck');
   }
 
+  const servedGptApiBase = releaseMeta(html, 'pure-gpt-api-base');
+  if (servedGptApiBase !== productionGptApiBase) {
+    throw new Error(
+      `presentation GPT API base is ${servedGptApiBase || 'missing'}, expected ${productionGptApiBase}`,
+    );
+  }
+
   return html;
 });
 
 const servedWebsiteSha = releaseMeta(presentationHtml, 'release-website-commit');
 const servedPresentationSha = releaseMeta(presentationHtml, 'release-presentation-commit');
-const servedGptApiBase = releaseMeta(presentationHtml, 'pure-gpt-api-base');
-
-if (servedGptApiBase !== productionGptApiBase) {
-  throw new Error(
-    `presentation GPT API base is ${servedGptApiBase || 'missing'}, expected ${productionGptApiBase}`,
-  );
-}
 
 if (shaPattern.test(servedWebsiteSha) && shaPattern.test(servedPresentationSha)) {
   if (servedWebsiteSha !== expectedWebsiteSha || servedPresentationSha !== release.presentations.sha) {
