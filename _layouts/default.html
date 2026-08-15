@@ -8,7 +8,7 @@
         <meta name="description" content="{{ page.description | default: site.description | strip_html | normalize_whitespace | escape }}">
         <link rel="canonical" href="{{ page.url | absolute_url }}">
         <link rel="icon" href="/images/logo.webp" type="image/webp">
-        {% if page.url == '/' %}
+        {% if page.title == 'Digiguru Home' %}
         <link rel="preload" as="image" href="/images/logo.webp" type="image/webp" fetchpriority="high">
         {% endif %}
         {% if site.data.release.website_sha and site.data.release.presentation_sha %}
@@ -29,14 +29,35 @@
         <!-- Custom CSS -->
         <link rel="stylesheet" href="/css/main.css">
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-RZP8CG4KLJ"></script>
+<!-- Google tag (gtag.js): queue analytics immediately, load the library after the page is usable. -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-RZP8CG4KLJ');
+
+  function loadGoogleAnalytics() {
+    if (document.querySelector('script[data-google-analytics]')) return;
+    var script = document.createElement('script');
+    script.async = true;
+    script.dataset.googleAnalytics = 'true';
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-RZP8CG4KLJ';
+    document.head.appendChild(script);
+  }
+
+  function scheduleGoogleAnalytics() {
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(loadGoogleAnalytics, { timeout: 3000 });
+    } else {
+      setTimeout(loadGoogleAnalytics, 0);
+    }
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleGoogleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleGoogleAnalytics, { once: true });
+  }
 </script>
     </head>
 
