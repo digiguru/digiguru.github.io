@@ -27,7 +27,7 @@ p { margin: 1em 0; }
 
 a         { color: #00a; }
 a:hover   { color: #000; }
-a:visited { color: #a0a; }
+a:visited { color: #707; }
 
 table {
   font-size: inherit;
@@ -39,19 +39,29 @@ table {
 /* Home
 /*
 /*****************************************************************************/
-ul.posts {
-  list-style-type: none;
+.posts {
   margin-bottom: 2em;
 }
 
-ul.posts li {
-  line-height: 1.75em;
+.post-preview {
+  margin-bottom: 2.5em;
 }
 
-ul.posts span {
-  color: #aaa;
+.posts .date {
+  color: #666;
   font-family: Monaco, "Courier New", monospace;
   font-size: 80%;
+}
+
+.read-more {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.pagination a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
 }
 
 /*****************************************************************************/
@@ -64,13 +74,15 @@ ul.posts span {
   font-size: 115%;
   text-align: justify;
   width: 42em;
+  max-width: calc(100% - 2rem);
   margin: 3em auto 2em;
   line-height: 1.5em;
   .header {
-    font-family: 'Audiowide', cursive;
+    font-family: 'Audiowide', Helvetica, Arial, sans-serif;
     font-size: 200%;  
     display: flex;
     align-items: center; 
+    flex-wrap: wrap;
     width: 100%;
     margin-bottom: 1em;
     position: relative;
@@ -96,11 +108,16 @@ ul.posts span {
     .nav-links {
       display: flex;
       flex-grow: 1; 
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
       padding-left: 20px;
       justify-content: space-between; 
       a.extra {
-        color: #aaa;
+        color: #666;
         font-size: 52%;
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
       }
       a.extra:hover {
         color: #000;
@@ -112,7 +129,7 @@ ul.posts span {
 
 
 .site .meta {
-  color: #aaa;
+  color: #666;
 }
 
 .site .footer {
@@ -129,7 +146,10 @@ ul.posts span {
 }
 
 .site .footer .contact a {
-  color: #8085C1;
+  color: #4b4f8f;
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
 }
 
 .site .footer .rss {
@@ -140,6 +160,20 @@ ul.posts span {
 
 .site .footer .rss img {
   border: 0;
+}
+
+.release-info {
+  clear: both;
+  margin-top: 8px;
+  font: 11px/1.5 monospace;
+  color: #666;
+}
+
+.release-info a {
+  color: #4b4f8f;
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
 }
 
 /*****************************************************************************/
@@ -189,7 +223,11 @@ ul.posts span {
   white-space: pre-wrap;
 }
 
-
+.content img,
+.post img {
+  max-width: 100%;
+  height: auto;
+}
 
 /*****************************************************************************/
 /*
@@ -228,6 +266,16 @@ ul.posts span {
 
 /* Responsive adjustments */
 @media screen and (max-width: 600px) {
+  .site {
+    margin-top: 1.5em;
+  }
+
+  .site .header .nav-links {
+    width: 100%;
+    padding-left: 0;
+    margin-top: 0.5rem;
+  }
+
   .inline-menu > * {
     flex-basis: 40%; /* Full width on small screens */
   }
