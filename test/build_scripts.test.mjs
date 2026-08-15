@@ -6,6 +6,10 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
+import {
+  optimizedPreviewPath,
+  rewriteImageTag,
+} from '../scripts/optimize-homepage-images.mjs';
 
 const execFileAsync = promisify(execFile);
 const repoRoot = fileURLToPath(new URL('..', import.meta.url));
@@ -116,4 +120,32 @@ test('presentation asset validator reports missing local references', async (t) 
       return true;
     },
   );
+});
+
+test('homepage image optimizer creates deterministic WebP preview paths', () => {
+  assert.equal(
+    optimizedPreviewPath('/assets/future-learn.png'),
+    '/assets/future-learn.homepage.webp',
+  );
+  assert.equal(
+    optimizedPreviewPath('/assets/example.photo.jpg'),
+    '/assets/example.photo.homepage.webp',
+  );
+});
+
+test('homepage image optimizer rewrites source and intrinsic dimensions without losing lazy loading', () => {
+  const original = '<img loading="lazy" decoding="async" src="/assets/example.png" alt="Example">';
+  const rewritten = rewriteImageTag(
+    original,
+    '/assets/example.homepage.webp',
+    720,
+    405,
+  );
+
+  assert.match(rewritten, /src="\/assets\/example\.homepage\.webp"/);
+  assert.match(rewritten, /width="720"/);
+  assert.match(rewritten, /height="405"/);
+  assert.match(rewritten, /loading="lazy"/);
+  assert.match(rewritten, /decoding="async"/);
+  assert.match(rewritten, /alt="Example"/);
 });
