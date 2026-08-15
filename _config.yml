@@ -1,9 +1,10 @@
 name: Digiguru.co.uk
+description: AI, technology, creativity and personal growth articles, experiments and presentations from Adam Hall.
 highlighter: rouge
 ##safe: true
 lsi: false
 comments: false
-url: "https://www.digiguru.co.uk"
+url: "https://art.digiguru.co.uk"
 plugins: 
     - jekyll-paginate
     - jekyll-feed
