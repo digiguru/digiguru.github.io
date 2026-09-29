@@ -180,3 +180,27 @@ If Bundler reports a version mismatch, check that Ruby 3.4 is active and install
 If presentation generation fails, update `presentation-source` to the current `master` branch and run its own CI-equivalent checks in that repository first. The website build assumes the presentation source has already passed its metadata/assets/build/test/smoke pipeline.
 
 If a Pages run succeeds but the visible release appears stale, inspect `/release.json` and compare its two SHAs with the website and presentation commits you expected to deploy.
+
+
+## Analytics and privacy
+
+The GitHub Pages site uses Google Analytics 4 only after explicit analytics-cookie consent. The Google tag is not present as an unconditional external script in generated HTML; `assets/js/analytics-consent.js` loads it dynamically only after consent.
+
+The GitHub Actions repository variable is:
+
+```text
+GA_MEASUREMENT_ID=G-RZP8CG4KLJ
+```
+
+During CI, `.github/workflows/jekyll.yml` validates the variable and writes it to generated `_data/analytics.yml` before the Jekyll build. Local builds default to an empty measurement ID.
+
+The consent loader:
+
+- strips query strings and fragments before sending page locations;
+- sends manual page views with an empty referrer;
+- leaves Google Signals, ad storage, ad-user-data consent and ad personalisation disabled;
+- respects Global Privacy Control / Do Not Track;
+- stores the choice in `art-google-analytics-consent-v1`;
+- disables collection and removes reachable `_ga` cookies when consent is revoked.
+
+The persistent **Analytics & privacy** button lets visitors change the choice later.
