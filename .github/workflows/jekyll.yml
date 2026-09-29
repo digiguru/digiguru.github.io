@@ -63,6 +63,17 @@ jobs:
 
           echo "Release website=$WEBSITE_SHA presentations=$PRESENTATION_SHA"
 
+      - name: Configure Google Analytics build variable
+        shell: bash
+        env:
+          GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
+        run: |
+          if [[ -n "$GA_MEASUREMENT_ID" && ! "$GA_MEASUREMENT_ID" =~ ^G-[A-Za-z0-9]+$ ]]; then
+            echo "GA_MEASUREMENT_ID must look like a GA4 measurement ID (G-XXXXXXXXXX)" >&2
+            exit 1
+          fi
+          printf 'ga_measurement_id: "%s"\n' "$GA_MEASUREMENT_ID" > _data/analytics.yml
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
@@ -122,6 +133,19 @@ jobs:
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
+
+      - name: Verify analytics consent boundary
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFile } from 'node:fs/promises';
+          const html = await readFile('_site/index.html', 'utf8');
+          if (!html.includes('/assets/js/analytics-consent.js')) {
+            throw new Error('Built site is missing analytics consent loader');
+          }
+          if (/googletagmanager\.com\/gtag\/js\?id=/.test(html)) {
+            throw new Error('Google Analytics must not be loaded unconditionally in generated HTML');
+          }
+          NODE
 
       - name: Ensure ImageMagick is available
         run: |
