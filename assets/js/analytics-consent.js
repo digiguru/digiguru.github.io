@@ -4,6 +4,8 @@
   const script = document.currentScript;
   const measurementId = String(script?.dataset?.measurementId || "").trim();
   const CONSENT_KEY = "art-google-analytics-consent-v1";
+  const NOTICE_DISMISSED_KEY = "art-analytics-notice-dismissed-v1";
+  const NOTICE_SESSION_KEY = "art-analytics-notice-session-v1";
   const GOOGLE_SCRIPT_ID = "art-google-analytics";
   const configured = /^G-[A-Z0-9]+$/i.test(measurementId);
 
@@ -29,6 +31,46 @@
     } catch {
       return false;
     }
+  }
+
+  function persistentNoticeDismissed() {
+    try {
+      return localStorage.getItem(NOTICE_DISMISSED_KEY) === "1";
+    } catch {
+      return true;
+    }
+  }
+
+  function sessionNoticeDismissed() {
+    try {
+      return sessionStorage.getItem(NOTICE_SESSION_KEY) === "1";
+    } catch {
+      return true;
+    }
+  }
+
+  function rememberPersistentDismissal() {
+    try {
+      localStorage.setItem(NOTICE_DISMISSED_KEY, "1");
+      sessionStorage.removeItem(NOTICE_SESSION_KEY);
+    } catch {
+      // Storage failure leaves the privacy-safe provider choice in force.
+    }
+  }
+
+  function rememberSessionDismissal() {
+    try {
+      localStorage.removeItem(NOTICE_DISMISSED_KEY);
+      sessionStorage.setItem(NOTICE_SESSION_KEY, "1");
+    } catch {
+      // Storage failure simply means the prompt can reappear later.
+    }
+  }
+
+  function shouldAutoOpenAnalyticsNotice() {
+    return !persistentNoticeDismissed()
+      && !sessionNoticeDismissed()
+      && readConsent() !== "granted";
   }
 
   function safeUrl(rawUrl = location.href) {
@@ -146,6 +188,7 @@
     dialog.setAttribute("aria-label", "Analytics and privacy");
     dialog.hidden = true;
     dialog.innerHTML = `
+      <button class="analytics-consent-close" type="button" aria-label="Close analytics preferences and use the defaults" data-close>×</button>
       <strong>Analytics &amp; privacy</strong>
       <p>
         This site can use Google Analytics to understand which pages are useful. Google Analytics uses analytics cookies
@@ -176,20 +219,28 @@
       refresh();
       dialog.hidden = false;
     });
+    dialog.querySelector("[data-close]").addEventListener("click", () => {
+      if (readConsent() === null) writeConsent("denied");
+      disableGoogleAnalytics();
+      rememberPersistentDismissal();
+      dialog.hidden = true;
+    });
     dialog.querySelector("[data-allow]").addEventListener("click", () => {
       if (privacySignal() || !configured || !writeConsent("granted")) return;
+      rememberPersistentDismissal();
       loadGoogleAnalytics();
       dialog.hidden = true;
     });
     dialog.querySelector("[data-deny]").addEventListener("click", () => {
       writeConsent("denied");
+      rememberSessionDismissal();
       disableGoogleAnalytics();
       dialog.hidden = true;
     });
 
     document.body.append(settings, dialog);
     refresh();
-    if (readConsent() === null || privacySignal()) dialog.hidden = false;
+    if (shouldAutoOpenAnalyticsNotice()) dialog.hidden = false;
   }
 
   function initialise() {
