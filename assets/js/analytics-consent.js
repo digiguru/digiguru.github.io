@@ -82,8 +82,8 @@
 
   function installQueue() {
     window.dataLayer = window.dataLayer || [];
-    window.gtag = window.gtag || function (...args) {
-      window.dataLayer.push(args);
+    window.gtag = window.gtag || function () {
+      window.dataLayer.push(arguments);
     };
   }
 
@@ -135,6 +135,7 @@
     }
 
     gtag("event", "page_view", {
+      send_to: measurementId,
       page_title: document.title,
       page_location: safeUrl(),
       page_referrer: ""
