@@ -203,4 +203,4 @@ The consent loader:
 - stores the choice in `art-google-analytics-consent-v1`;
 - disables collection and removes reachable `_ga` cookies when consent is revoked.
 
-The persistent **Analytics & privacy** button lets visitors change the choice later.
+The persistent **Analytics & privacy** button lets visitors change the choice later. Closing the notice accepts the privacy-preserving defaults (Google Analytics remains off) and prevents the notice from appearing automatically again. Choosing **No analytics cookies** hides it for the current browser session only, so the choice can be offered again in a future session.
