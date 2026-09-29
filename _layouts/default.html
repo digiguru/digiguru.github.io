@@ -29,14 +29,11 @@
         <!-- Custom CSS -->
         <link rel="stylesheet" href="/css/main.css">
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-RZP8CG4KLJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-RZP8CG4KLJ');
-</script>
+<script
+  src="/assets/js/analytics-consent.js"
+  data-measurement-id="{{ site.data.analytics.ga_measurement_id | default: '' | escape }}"
+  defer
+></script>
     </head>
 
     <body{% if site.data.release.website_sha and site.data.release.presentation_sha %} data-release="w:{{ site.data.release.website_sha | slice: 0, 7 }} p:{{ site.data.release.presentation_sha | slice: 0, 7 }}"{% endif %}>
