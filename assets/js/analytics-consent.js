@@ -70,7 +70,7 @@
   function shouldAutoOpenAnalyticsNotice() {
     return !persistentNoticeDismissed()
       && !sessionNoticeDismissed()
-      && readConsent() !== "granted";
+      && (privacySignal() || readConsent() !== "granted");
   }
 
   function safeUrl(rawUrl = location.href) {
