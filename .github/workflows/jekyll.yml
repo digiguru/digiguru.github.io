@@ -139,11 +139,18 @@ jobs:
           node --input-type=module <<'NODE'
           import { readFile } from 'node:fs/promises';
           const html = await readFile('_site/index.html', 'utf8');
+          const analytics = await readFile('_site/assets/js/analytics-consent.js', 'utf8');
           if (!html.includes('/assets/js/analytics-consent.js')) {
             throw new Error('Built site is missing analytics consent loader');
           }
           if (/googletagmanager\.com\/gtag\/js\?id=/.test(html)) {
             throw new Error('Google Analytics must not be loaded unconditionally in generated HTML');
+          }
+          if (!analytics.includes('window.dataLayer.push(arguments)')) {
+            throw new Error('Analytics loader must use the canonical gtag arguments queue');
+          }
+          if (!/gtag\("event", "page_view", \{[\s\S]*?send_to:\s*measurementId/.test(analytics)) {
+            throw new Error('Manual GA4 page views must explicitly target the configured measurement ID');
           }
           NODE
 

@@ -194,7 +194,7 @@ GA_MEASUREMENT_ID=G-RZP8CG4KLJ
 
 During CI, `.github/workflows/jekyll.yml` validates the variable and writes it to generated `_data/analytics.yml` before the Jekyll build. Local builds default to an empty measurement ID.
 
-The consent loader performs the standard gtag.js initialisation step before GA4 configuration and page-view events.
+The consent loader uses Google's canonical `dataLayer.push(arguments)` queue, performs the standard gtag.js initialisation step before GA4 configuration, and explicitly routes manual page views to the configured measurement ID.
 
 The consent loader:
 
